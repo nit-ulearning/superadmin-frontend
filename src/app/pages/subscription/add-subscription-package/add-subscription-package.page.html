@@ -1,0 +1,112 @@
+<!-- common header show -->
+<common-header></common-header>
+
+<ion-content>
+  <div class="page-body">
+    <div class="page-wrapper">
+      <div class="form-layout">
+        <div class="card-outer">
+          <div class="card card-box">
+              <div class="card-header">
+                  <div class="card-header-tittle">
+                      Package Add
+                  </div>
+                  <div class="card-header-action">
+                  </div>
+              </div>
+              <div class="card-body">
+                <div class="form-wrapper">
+                  <ion-grid>
+                    <ion-row>
+                      <!-- Package Name -->
+                      <ion-col size-xs="12" size-sm="6" size-md="4"  size-lg="4">
+                        <div class="form-item">
+                          <mat-form-field appearance="outline">
+                            <mat-label>Package Name <sup class="requiredSup">*</sup></mat-label>
+                            <input matInput placeholder="Package Name" type="text" [(ngModel)]="model.packagename">
+                          </mat-form-field>
+                        </div>
+                      </ion-col>
+
+                      <!-- Package Full Name -->
+                      <ion-col size-xs="12" size-sm="6" size-md="4"  size-lg="4">
+                        <div class="form-item">
+                          <mat-form-field appearance="outline">
+                            <mat-label>Package Full Name <sup class="requiredSup">*</sup></mat-label>
+                            <input matInput placeholder="Package Full Name" type="text" [(ngModel)]="model.packagename">
+                          </mat-form-field>
+                        </div>
+                      </ion-col>
+
+                      <!-- No. of users -->
+                      <ion-col size-xs="12" size-sm="6" size-md="4"  size-lg="4">
+                        <div class="form-item">
+                         <mat-form-field appearance="outline">
+                            <mat-label>No. of users <sup class="requiredSup">*</sup></mat-label>
+                            <input matInput placeholder="No. of users" type="number" [(ngModel)]="model.noOfUser">
+                          </mat-form-field>
+                        </div>
+                      </ion-col>
+
+                      <!-- Validity -->
+                      <ion-col size-xs="12" size-sm="6" size-md="4"  size-lg="4">
+                        <div class="form-item">
+                          <mat-form-field appearance="outline">
+                            <mat-label>Validity <sup class="requiredSup">*</sup></mat-label>
+                            <mat-select [(ngModel)]="model.validity" name="food">
+                              <mat-option *ngFor="let item of validity" [value]="item.id">
+                                {{item.name}}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </div>
+                      </ion-col>
+
+                      <!-- Duration -->
+                      <ion-col size-xs="12" size-sm="6" size-md="4"  size-lg="4">
+                        <div class="form-item">
+                          <mat-form-field appearance="outline">
+                            <mat-label>Duration <sup class="requiredSup">*</sup></mat-label>
+                            <input matInput placeholder="Duration" type="number" [(ngModel)]="model.durationyear">
+                          </mat-form-field>
+                        </div>
+                      </ion-col>
+                      <!-- End Date -->
+                      <ion-col size-xs="12" size-sm="6" size-md="4"  size-lg="4">
+                        <div class="form-item readOnly">
+                          <mat-form-field class="example-full-width" appearance="outline">
+                            <mat-label>End Date <sup class="requiredSup">*</sup></mat-label>
+                            <input matInput [matDatepicker]="dob">
+                            <mat-datepicker-toggle matSuffix [for]="dob"></mat-datepicker-toggle>
+                            <mat-datepicker touchUi #dob></mat-datepicker>
+                          </mat-form-field>
+                        </div>
+                      </ion-col>
+                      <!-- Remarks -->
+                      <ion-col size-xs="12" size-sm="12" size-md="12"  size-lg="12">
+                        <div class="form-item">
+                          <mat-form-field appearance="outline">
+                            <mat-label>Remarks</mat-label>
+                            <textarea matInput></textarea>
+                          </mat-form-field>
+                        </div>
+                      </ion-col>
+                    </ion-row>
+                  </ion-grid>
+                </div>
+              </div>
+              <div class="card-footer">
+                  <div>
+                      <button class="border-btn danger btn-md" style="margin-right: 10px;" mat-stroked-button>Cancel</button>
+                      <button class="fill-btn btn-md" (click)="presentToast()" mat-stroked-button [routerLink]="['/', 'subscription-package-list']">Save</button>
+                  </div>
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ion-content>
+
+<!-- common footer show -->
+<common-footer></common-footer>

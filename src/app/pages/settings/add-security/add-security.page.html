@@ -1,0 +1,315 @@
+<!-- common header show -->
+<common-header></common-header>
+
+<ion-content>
+  <div class="page-body">
+    <div class="page-wrapper">
+      <div class="form-layout">
+        <div class="card-outer">
+          <div class="card card-box">
+              <div class="card-header">
+                  <div class="card-header-tittle">
+                      Institute Add
+                  </div>
+                  <div class="card-header-action">
+                  </div>
+              </div>
+              <div class="card-body">
+                <div class="form-wrapper">
+                  <ion-grid>
+                    <p class="form-heading">Institute Details</p>
+                    <ion-row>
+                      <!-- Institute Name -->
+                      <ion-col size-xs="12" size-sm="6" size-md="4"  size-lg="4">
+                        <div class="form-item">
+                          <mat-form-field appearance="outline">
+                            <mat-label>Institute Name <sup class="requiredSup">*</sup></mat-label>
+                            <input matInput placeholder="Institute Name" [(ngModel)]="model.instituteName">
+                          </mat-form-field>
+                        </div>
+                      </ion-col>
+                      <!-- Registration Date -->
+                      <ion-col size-xs="12" size-sm="6" size-md="4"  size-lg="4">
+                        <div class="form-item">
+                          <mat-form-field class="example-full-width" appearance="outline">
+                            <mat-label>Registration Date <sup class="requiredSup">*</sup></mat-label>
+                            <input matInput [matDatepicker]="registration">
+                            <mat-datepicker-toggle matSuffix [for]="registration"></mat-datepicker-toggle>
+                            <mat-datepicker touchUi #registration></mat-datepicker>
+                          </mat-form-field>
+                        </div>
+                      </ion-col>
+                      <!-- Establishment Date -->
+                      <ion-col size-xs="12" size-sm="6" size-md="4"  size-lg="4">
+                        <div class="form-item">
+                          <mat-form-field class="example-full-width" appearance="outline">
+                            <mat-label>Establishment Date</mat-label>
+                            <input matInput [matDatepicker]="establishment">
+                            <mat-datepicker-toggle matSuffix [for]="establishment"></mat-datepicker-toggle>
+                            <mat-datepicker touchUi #establishment></mat-datepicker>
+                          </mat-form-field>
+                        </div>
+                      </ion-col>
+                      <!-- Website/Domain Name -->
+                      <ion-col size-xs="12" size-sm="6" size-md="4"  size-lg="4">
+                        <div class="form-item">
+                          <mat-form-field appearance="outline">
+                            <mat-label>Website/Domain Name <sup class="requiredSup">*</sup></mat-label>
+                            <input matInput placeholder="Website/Domain Name" [(ngModel)]="model.institutewebsite">
+                          </mat-form-field>
+                        </div>
+                      </ion-col>
+                      <!-- Email address -->
+                      <ion-col size-xs="12" size-sm="6" size-md="4"  size-lg="4">
+                        <div class="form-item">
+                          <mat-form-field appearance="outline">
+                            <mat-label>Email Address <sup class="requiredSup">*</sup></mat-label>
+                            <input matInput placeholder="Email Address" [(ngModel)]="model.email">
+                          </mat-form-field>
+                        </div>
+                      </ion-col>
+                      <!-- Contact number -->
+                      <ion-col size-xs="12" size-sm="6" size-md="4"  size-lg="4">
+                        <div class="form-item">
+                          <mat-form-field appearance="outline">
+                            <mat-label>Contact Number <sup class="requiredSup">*</sup></mat-label>
+                            <input matInput placeholder="Contact Number" [(ngModel)]="model.contractNumber">
+                          </mat-form-field>
+                        </div>
+                      </ion-col>
+                      <!-- Country Code-->
+                      <ion-col size-xs="12" size-sm="6" size-md="4"  size-lg="4">
+                        <div class="form-item">
+                          <mat-form-field appearance="outline">
+                            <mat-label>Mobile Country Code <sup class="requiredSup">*</sup></mat-label>
+                            <mat-select [(ngModel)]="model.countryCode" name="food">
+                              <mat-option *ngFor="let item of countryCode" [value]="item.id">
+                                {{item.name}}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </div>
+                      </ion-col>
+                      <!-- Mobile number -->
+                      <ion-col size-xs="12" size-sm="6" size-md="4"  size-lg="4">
+                        <div class="form-item">
+                          <mat-form-field appearance="outline">
+                            <mat-label>Mobile Number <sup class="requiredSup">*</sup></mat-label>
+                            <input matInput placeholder="Mobile Number" [(ngModel)]="model.contractNumber">
+                          </mat-form-field>
+                        </div>
+                      </ion-col>
+                      <!-- GSTIN / UIN No -->
+                      <ion-col size-xs="12" size-sm="6" size-md="4"  size-lg="4">
+                        <div class="form-item">
+                          <mat-form-field appearance="outline">
+                            <mat-label>GSTIN / UIN No <sup class="requiredSup">*</sup></mat-label>
+                            <input matInput placeholder="GSTIN / UIN No" [(ngModel)]="model.contractNumber">
+                          </mat-form-field>
+                        </div>
+                      </ion-col>
+                      <!-- PAN No -->
+                      <ion-col size-xs="12" size-sm="6" size-md="4"  size-lg="4">
+                        <div class="form-item">
+                          <mat-form-field appearance="outline">
+                            <mat-label>PAN No <sup class="requiredSup">*</sup></mat-label>
+                            <input matInput placeholder="PAN No" [(ngModel)]="model.contractNumber">
+                          </mat-form-field>
+                        </div>
+                      </ion-col>
+                      <!-- Institute Logo -->
+                      <ion-col size-xs="12" size-sm="6" size-md="4"  size-lg="4">
+                        <div class="form-item">
+                          <ion-label>Institute Logo</ion-label>
+                          <div class="custom-file">
+                            <input class="custom-file-input" id="singleFileUpload" type="file">
+                            <label class="custom-file-label" for="singleFileUpload">Choose file</label>
+                          </div>
+                        </div>
+                      </ion-col>
+                    </ion-row>
+                    <p class="form-heading">Owner Details</p>
+                    <ion-row>
+                      <!-- Owner Name -->
+                      <ion-col size-xs="12" size-sm="6" size-md="4"  size-lg="4">
+                        <div class="form-item">
+                          <mat-form-field appearance="outline">
+                            <mat-label>Owner Name <sup class="requiredSup">*</sup></mat-label>
+                            <input matInput placeholder="Owner Name" [(ngModel)]="model.instituteowner">
+                          </mat-form-field>
+                        </div>
+                      </ion-col>
+                      <!-- Date of Birth -->
+                      <ion-col size-xs="12" size-sm="6" size-md="4"  size-lg="4">
+                        <div class="form-item">
+                          <mat-form-field class="example-full-width" appearance="outline">
+                            <mat-label>Date of Birth</mat-label>
+                            <input matInput [matDatepicker]="dob">
+                            <mat-datepicker-toggle matSuffix [for]="dob"></mat-datepicker-toggle>
+                            <mat-datepicker touchUi #dob></mat-datepicker>
+                          </mat-form-field>
+                        </div>
+                      </ion-col>
+                      <!-- Country Code-->
+                      <ion-col size-xs="12" size-sm="6" size-md="4"  size-lg="4">
+                        <div class="form-item">
+                          <mat-form-field appearance="outline">
+                            <mat-label>Mobile Country Code <sup class="requiredSup">*</sup></mat-label>
+                            <mat-select [(ngModel)]="model.countryCode" name="food">
+                              <mat-option *ngFor="let item of countryCode" [value]="item.id">
+                                {{item.name}}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </div>
+                      </ion-col>
+                      <!-- Owner Mobile number -->
+                      <ion-col size-xs="12" size-sm="6" size-md="4"  size-lg="4">
+                        <div class="form-item">
+                          <mat-form-field appearance="outline">
+                            <mat-label>Owner Mobile Number <sup class="requiredSup">*</sup></mat-label>
+                            <input matInput placeholder="Mobile Number" [(ngModel)]="model.contractNumber">
+                          </mat-form-field>
+                        </div>
+                      </ion-col>
+                      <!-- Address Line 1 -->
+                      <ion-col size-xs="12" size-sm="6" size-md="4"  size-lg="4">
+                        <div class="form-item">
+                          <mat-form-field appearance="outline">
+                            <mat-label>Address Line 1 <sup class="requiredSup">*</sup></mat-label>
+                            <input matInput placeholder="Address Line 1" [(ngModel)]="model.address1">
+                          </mat-form-field>
+                        </div>
+                      </ion-col>
+                      <!-- Address Line 2 -->
+                      <ion-col size-xs="12" size-sm="6" size-md="4"  size-lg="4">
+                        <div class="form-item">
+                          <mat-form-field appearance="outline">
+                            <mat-label>Address Line 2</mat-label>
+                            <input matInput placeholder="Address Line 2" [(ngModel)]="model.address2">
+                          </mat-form-field>
+                        </div>
+                      </ion-col>
+                      <!-- Country -->
+                      <ion-col size-xs="12" size-sm="6" size-md="4"  size-lg="4">
+                        <div class="form-item">
+                          <mat-form-field appearance="outline">
+                            <mat-label>Country <sup class="requiredSup">*</sup></mat-label>
+                            <mat-select [(ngModel)]="model.country" name="food">
+                              <mat-option *ngFor="let item of country" [value]="item.id">
+                                {{item.name}}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </div>
+                      </ion-col>
+                      <!-- State -->
+                      <ion-col size-xs="12" size-sm="6" size-md="4"  size-lg="4">
+                        <div class="form-item">
+                          <mat-form-field appearance="outline">
+                            <mat-label>State <sup class="requiredSup">*</sup></mat-label>
+                            <mat-select [(ngModel)]="model.state" name="food">
+                              <mat-option *ngFor="let item of state" [value]="item.id">
+                                {{item.name}}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </div>
+                      </ion-col>
+                      <!-- District -->
+                      <ion-col size-xs="12" size-sm="6" size-md="4"  size-lg="4">
+                        <div class="form-item">
+                          <mat-form-field appearance="outline">
+                            <mat-label>District</mat-label>
+                            <mat-select [(ngModel)]="model.district" name="food">
+                              <mat-option *ngFor="let item of district" [value]="item.id">
+                                {{item.name}}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </div>
+                      </ion-col>
+                      <!-- Taluka -->
+                      <ion-col size-xs="12" size-sm="6" size-md="4"  size-lg="4">
+                        <div class="form-item">
+                          <mat-form-field appearance="outline">
+                            <mat-label>Taluka</mat-label>
+                            <mat-select [(ngModel)]="model.taluka" name="food">
+                              <mat-option *ngFor="let item of taluka" [value]="item.id">
+                                {{item.name}}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </div>
+                      </ion-col>
+                      <!-- City -->
+                      <ion-col size-xs="12" size-sm="6" size-md="4"  size-lg="4">
+                        <div class="form-item">
+                          <mat-form-field appearance="outline">
+                            <mat-label>City</mat-label>
+                            <mat-select [(ngModel)]="model.city" name="food">
+                              <mat-option *ngFor="let item of city" [value]="item.id">
+                                {{item.name}}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </div>
+                      </ion-col>
+                      <!-- Pin Code -->
+                      <ion-col size-xs="12" size-sm="6" size-md="4"  size-lg="4">
+                        <div class="form-item">
+                          <mat-form-field appearance="outline">
+                            <mat-label>Pin Code <sup class="requiredSup">*</sup></mat-label>
+                            <input matInput placeholder="Pin Code" [(ngModel)]="model.pin">
+                          </mat-form-field>
+                        </div>
+                      </ion-col>
+                    </ion-row>
+                    <p class="form-heading">Login Details</p>
+                    <ion-row>
+                      <!-- User Name -->
+                      <ion-col size-xs="12" size-sm="6" size-md="4"  size-lg="4">
+                        <div class="form-item">
+                          <mat-form-field appearance="outline">
+                            <mat-label>User Name <sup class="requiredSup">*</sup></mat-label>
+                            <input matInput placeholder="User Name" [(ngModel)]="model.username">
+                          </mat-form-field>
+                        </div>
+                      </ion-col>
+                      <!-- Password -->
+                      <ion-col size-xs="12" size-sm="6" size-md="4"  size-lg="4">
+                        <div class="form-item">
+                          <mat-form-field appearance="outline">
+                            <mat-label>Password <sup class="requiredSup">*</sup></mat-label>
+                            <input matInput placeholder="Password" [(ngModel)]="model.password">
+                          </mat-form-field>
+                        </div>
+                      </ion-col>
+                      <!-- Confirm Password -->
+                      <ion-col size-xs="12" size-sm="6" size-md="4"  size-lg="4">
+                        <div class="form-item">
+                          <mat-form-field appearance="outline">
+                            <mat-label>Confirm Password <sup class="requiredSup">*</sup></mat-label>
+                            <input matInput placeholder="Confirm Password" [(ngModel)]="model.confirmpassword">
+                          </mat-form-field>
+                        </div>
+                      </ion-col>
+                    </ion-row>
+                  </ion-grid>
+                </div>
+              </div>
+              <div class="card-footer">
+                  <div>
+                      <button class="border-btn danger btn-md" style="margin-right: 10px;" mat-stroked-button>Cancel</button>
+                      <button class="fill-btn btn-md" (click)="presentToast()" mat-stroked-button [routerLink]="['/', 'security-list']">Save</button>
+                  </div>
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ion-content>
+
+<!-- common footer show -->
+<common-footer></common-footer>

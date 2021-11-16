@@ -1,0 +1,152 @@
+<!-- common header show -->
+<common-header></common-header>
+
+<ion-content>
+  <div class="page-body">
+    <div class="page-wrapper">
+      <div class="form-layout">
+        <div class="card-outer">
+          <div class="card card-box">
+            <form #addLicenseForm="ngForm" (ngSubmit)="onSubmitForm(addLicenseForm)" (keyup.enter)="onSubmitForm(addLicenseForm)">
+              <div class="card-header">
+                  <div class="card-header-tittle">
+                    License Add
+                  </div>
+                  <div class="card-header-action">
+                  </div>
+              </div>
+              <div class="card-body">
+                <div class="form-wrapper">
+                  <ion-grid>
+                    <ion-row>
+                      <!-- Name -->
+                      <ion-col size-xs="12" size-sm="6" size-md="4"  size-lg="4">
+                        <div class="form-item">
+                          <mat-form-field appearance="outline">
+                            <mat-label>Name <sup class="requiredSup">*</sup></mat-label>
+                            <input matInput placeholder="Name" type="text" name="lcName" [(ngModel)]="model.lcName">
+                          </mat-form-field>
+                        </div>
+                      </ion-col>
+                      <!-- Creation Date -->
+                      <ion-col size-xs="12" size-sm="6" size-md="4"  size-lg="4">
+                        <div class="form-item">
+                          <mat-form-field class="example-full-width" appearance="outline">
+                            <mat-label>Creation Date <sup class="requiredSup">*</sup></mat-label>
+                            <input matInput [matDatepicker]="dob" name="creatDate" [(ngModel)]="model.creatDate" (dateChange)="createDate(model.creatDate)">
+                            <mat-datepicker-toggle matSuffix [for]="dob"></mat-datepicker-toggle>
+                            <mat-datepicker touchUi #dob></mat-datepicker>
+                          </mat-form-field>
+                        </div>
+                      </ion-col>
+                      <input type="hidden" name="lcCreatDate" [(ngModel)]="model.lcCreatDate">
+                      <!-- Institute -->
+                      <ion-col size-xs="12" size-sm="6" size-md="4"  size-lg="4">
+                        <div class="form-item">
+                          <mat-form-field appearance="outline">
+                            <mat-label>Institutes <sup class="requiredSup">*</sup></mat-label>
+                            <mat-select [(ngModel)]="model.instId" name="instId">
+                              <mat-option *ngFor="let Institute of institutes" [value]="Institute.id">
+                                {{Institute.name}}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </div>
+                      </ion-col>
+
+                      <!-- License Type -->
+                      <ion-col size-xs="12" size-sm="6" size-md="4"  size-lg="4">
+                        <div class="form-item">
+                          <mat-form-field appearance="outline">
+                            <mat-label>License Type <sup class="requiredSup">*</sup></mat-label>
+                            <mat-select [(ngModel)]="model.lcType" name="lcType">
+                              <mat-option *ngFor="let package of licenseType" [value]="package.id">
+                                {{package.name}}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </div>
+                      </ion-col>
+
+                      <!-- Server Type -->
+                      <ion-col size-xs="12" size-sm="6" size-md="4"  size-lg="4">
+                        <div class="form-item">
+                          <mat-form-field appearance="outline">
+                            <mat-label>Server Type <sup class="requiredSup">*</sup></mat-label>
+                            <mat-select [(ngModel)]="model.lcStype" name="lcStype">
+                              <mat-option *ngFor="let package of serverType" [value]="package.id">
+                                {{package.name}}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </div>
+                      </ion-col>
+
+                      <!-- Validity -->
+                      <ion-col size-xs="12" size-sm="6" size-md="4"  size-lg="4">
+                        <div class="form-item">
+                          <mat-form-field appearance="outline">
+                            <mat-label>Validity <sup class="requiredSup">*</sup></mat-label>
+                            <mat-select [(ngModel)]="model.lcValidityType" name="lcValidityType" (selectionChange)="endDateCalculate('validity',model.lcValidityType);">
+                              <mat-option *ngFor="let item of validity" [value]="item.id">
+                                {{item.name}}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </div>
+                      </ion-col>
+
+                      <!-- Duration -->
+                      <ion-col size-xs="12" size-sm="6" size-md="4"  size-lg="4">
+                        <div class="form-item">
+                          <mat-form-field appearance="outline">
+                            <mat-label>Duration <sup class="requiredSup">*</sup></mat-label>
+                            <input matInput placeholder="Duration" type="number" name="lcValidityNum" [(ngModel)]="model.lcValidityNum" (change)="endDateCalculate('duration',model.lcValidityNum);">
+                          </mat-form-field>
+                        </div>
+                      </ion-col>
+
+                      <!-- end date -->
+                      <ion-col size-xs="12" size-sm="6" size-md="4"  size-lg="4">
+                        <div class="form-item readOnly">
+                          <mat-form-field appearance="outline">
+                            <mat-label>End Date <sup class="requiredSup">*</sup></mat-label>
+                            <input matInput [matDatepicker]="Endpicker" name="endDate" [(ngModel)]="model.endDate" (dateChange)="endDate(model.endDate)">
+                            <mat-datepicker-toggle matSuffix [for]="Endpicker"></mat-datepicker-toggle>
+                            <mat-datepicker #Endpicker></mat-datepicker>
+                          </mat-form-field>
+                          </div>
+                      </ion-col>
+                      <input type="hidden" name="lcEndDate" [(ngModel)]="model.lcEndDate">
+                      <!-- Remarks -->
+                      <ion-col size-xs="12" size-sm="12" size-md="12"  size-lg="12">
+                        <div class="form-item">
+                          <mat-form-field appearance="outline">
+                            <mat-label>Remarks</mat-label>
+                            <textarea matInput name="lcComment" [(ngModel)]="model.lcComment"></textarea>
+                          </mat-form-field>
+                        </div>
+                      </ion-col>
+                    </ion-row>
+                  </ion-grid>
+                </div>
+              </div>
+              <div class="card-footer">
+                  <div>
+                      <button class="border-btn danger btn-md" style="margin-right: 10px;" mat-stroked-button>Cancel</button>
+                      <button class="fill-btn btn-md" mat-stroked-button type="submit" [disabled]="!addLicenseForm.valid || formLoading">
+                        <ion-spinner *ngIf="formLoading" name="crescent"></ion-spinner> 
+                        Save
+                      </button>
+                  </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ion-content>
+
+<!-- common footer show -->
+<common-footer></common-footer>
