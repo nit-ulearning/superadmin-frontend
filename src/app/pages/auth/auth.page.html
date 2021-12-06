@@ -40,9 +40,9 @@
                         minlenth="2"
                         #passwordCtrl="ngModel"
                         clearInput>
-                        <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+                        <span mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
                           <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
-                        </button>
+                        </span>
                       </mat-form-field>
                       <button type="submit" [disabled]="!loginForm.valid" class="signInBtn" mat-raised-button>Sign In</button>
                     </form>

@@ -75,7 +75,7 @@ export class InterceptorProvider implements HttpInterceptor {
     console.log('newParams >>>>>>>', get_global_params);
     
     if(get_global_params == null || get_global_params.token == null){
-      authorization = 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkZXZlbG9wZXIubml0c29sdXRpb25AZ21haWwuY29tIiwiZXhwIjoxNjM3MDgyOTg4LCJpYXQiOjE2MzcwNDY5ODh9.obWxv-LHi51RJ2J9k4_VdZ7mSkqTj1hFB1Z83lra40Q'
+      authorization = 'Bearer '
       console.log('appkey false');
     }else {
       authorization = 'Bearer '+get_global_params.token;
@@ -99,7 +99,7 @@ export class InterceptorProvider implements HttpInterceptor {
             if(event.body.return_status == 0){
               //this.router.navigateByUrl('/auth');
               // this.authService.logout();
-              this.commonUtils.presentToast('error', event.body.return_message);
+              this.commonUtils.presentToast('error', event.body.message);
             }
 
             //token expire check
@@ -129,7 +129,8 @@ export class InterceptorProvider implements HttpInterceptor {
           }else if(error.status === 404){
             this.commonUtils.presentToast('error', 'Could not sign you up, please try again');
           }else if(error.status === 500){
-            this.commonUtils.presentToast('error', 'Internal Server Error');
+            this.commonUtils.presentToast('error', 'Token not valid');
+            this.authService.logout();
             /* this.commonUtils.presentToast('success', 'Internal Server Error');
             this.commonUtils.presentToast('info', 'Internal Server Error'); */
           }else if(error.status === 401){

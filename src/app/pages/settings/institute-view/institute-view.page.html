@@ -12,72 +12,76 @@
                     Institute View
                   </div>
                   <div class="card-header-action">
-                    <img class="ListingLogo" src="assets/images/lalit_logo.jpeg" alt="">
+                    <img *ngIf="instView?.instLogo" class="ListingLogo" src="{{instView?.instLogo}}" alt="logo">
+                    <img *ngIf="!instView?.instLogo" class="ListingLogo" src="assets/images/noimage.jpg" alt="logo">
                   </div>
               </div>
               <div class="card-body">
                 <ion-grid>
                   <ion-row>
                     <ion-col size-xs="12" size-sm="6" size-md="6"  size-lg="6">
-                      <p class="information-title">Institute Name: <span>Lalit Tutotial</span></p>
+                      <p class="information-title">Institute Name: <span class="">{{instView?.instName}}</span></p>
 
                     </ion-col>
                     <ion-col size-xs="12" size-sm="6" size-md="6"  size-lg="6">
-                      <p class="information-title">Registration Date: <span>29/09/2021</span></p>
+                      <p class="information-title">Registration Date: <span>{{instView?.isntRegDate}}</span></p>
                     </ion-col>
                     <ion-col size-xs="12" size-sm="6" size-md="6"  size-lg="6">
-                      <p class="information-title">Establishment Date: <span>29/09/2021</span></p>
+                      <p class="information-title">Establishment Date: <span>{{instView?.instEndDate}}</span></p>
                     </ion-col>
                     <ion-col size-xs="12" size-sm="6" size-md="6"  size-lg="6">
-                      <p class="information-title">Website/Domain Name: <span>www.lalittutorial.com</span></p>
+                      <p class="information-title">Website/Domain Name: <span>{{instView?.instWebsite}}</span></p>
                     </ion-col>
                     <ion-col size-xs="12" size-sm="6" size-md="6"  size-lg="6">
-                      <p class="information-title">Institute Email: <span>info@lalittutorial.com</span></p>
+                      <p class="information-title">Institute Email: <span>{{instView?.instEmail}}</span></p>
                     </ion-col>
                     <ion-col size-xs="12" size-sm="6" size-md="6"  size-lg="6">
-                      <p class="information-title">Institute Contact Number: <span>033 85566 88988</span></p>
+                      <p class="information-title">Institute Contact Number: <span>{{instView?.instCnum}}</span></p>
                     </ion-col>
                     <ion-col size-xs="12" size-sm="6" size-md="6"  size-lg="6">
-                      <p class="information-title">Institute Mobile Number: <span>+91 98546 78954</span></p>
+                      <p class="information-title">Institute Mobile Number: <span>{{instView?.instMnum}}</span></p>
                     </ion-col>
                     <ion-col size-xs="12" size-sm="6" size-md="6"  size-lg="6">
-                      <p class="information-title">GSTIN / UIN No: <span>27BBEPP1590C1ZS</span></p>
+                      <p class="information-title">GSTIN / UIN No: <span>{{instView?.instGstNum}}</span></p>
                     </ion-col>
                     <ion-col size-xs="12" size-sm="6" size-md="6"  size-lg="6">
-                      <p class="information-title">PAN Number: <span>+91 98546 78954</span></p>
+                      <p class="information-title">PAN Number: <span>{{instView?.instPanNum}}</span></p>
                     </ion-col>
                   </ion-row>
                   <ion-row class="mar-top">
                     <ion-col size-xs="12" size-sm="6" size-md="6"  size-lg="6">
-                      <p class="information-title">Owner Name: <span>Prashant Patel</span></p>
+                      <p class="information-title">Owner Name: <span class="name">{{instView?.instituteAdmin[0].amdFname}} {{instView?.instituteAdmin[0].amdLname}}</span></p>
 
                     </ion-col>
                     <ion-col size-xs="12" size-sm="6" size-md="6"  size-lg="6">
-                      <p class="information-title">Date of Birth: <span>29/09/1990</span></p>
+                      <p class="information-title">Date of Birth: <span>{{instView?.instituteAdmin[0].amdDob}}</span></p>
                     </ion-col>
                     <ion-col size-xs="12" size-sm="6" size-md="6"  size-lg="6">
-                      <p class="information-title">Mobile Number: <span>+91 98546 78954</span></p>
+                      <p class="information-title">Mobile Number: <span>{{instView?.instituteAdmin[0].amdMnum}}</span></p>
                     </ion-col>
                     <ion-col size-xs="12" size-sm="6" size-md="6"  size-lg="6">
-                      <p class="information-title">Address Line 1:<span>Dumdum</span></p>
+                      <p class="information-title">Address Line 1:<span>{{instView?.instituteAddress[0].adrLine1}}</span></p>
                     </ion-col>
                     <ion-col size-xs="12" size-sm="6" size-md="6"  size-lg="6">
-                      <p class="information-title">Address Line 2: <span>New Town</span></p>
+                      <p class="information-title">Address Line 2: <span>{{instView?.instituteAddress[0].adrLine2}}</span></p>
                     </ion-col>
                     <ion-col size-xs="12" size-sm="6" size-md="6"  size-lg="6">
                       <p class="information-title">Country:<span>India</span></p>
                     </ion-col>
                     <ion-col size-xs="12" size-sm="6" size-md="6"  size-lg="6">
+                      <!-- <p class="information-title">State:<span>{{instView?.instName}}</span></p> -->
                       <p class="information-title">State:<span>West Bengal</span></p>
                     </ion-col>
                     <ion-col size-xs="12" size-sm="6" size-md="6"  size-lg="6">
-                      <p class="information-title">District: <span>Hooghly</span></p>
+                      <!-- <p class="information-title">District: <span>{{instView?.instName}}</span></p> -->
+                      <p class="information-title">District: <span>Howrah</span></p>
                     </ion-col>
                     <ion-col size-xs="12" size-sm="6" size-md="6"  size-lg="6">
-                      <p class="information-title">City:<span>Kolkata</span></p>
+                     <!--  <p class="information-title">City:<span>{{instView?.instName}}</span></p> -->
+                     <p class="information-title">City:<span>Howrah</span></p>
                     </ion-col>
                     <ion-col size-xs="12" size-sm="6" size-md="6"  size-lg="6">
-                      <p class="information-title">Pincode: <span>700 012</span></p>
+                      <p class="information-title">Pincode: <span>711401</span></p>
                     </ion-col>
                   </ion-row>
                 </ion-grid>
@@ -90,7 +94,7 @@
                               License List
                             </div>
                             <div class="card-header-action">
-                              <button class="border-btn success" [routerLink]="['/', 'add-license']" mat-stroked-button>
+                              <button class="border-btn success" [routerLink]="['/','add-license', 'add', 'id']"  mat-stroked-button>
                                 <mat-icon>add_circle_outline</mat-icon>
                                 Add License
                               </button>
@@ -310,7 +314,7 @@
                                 Package List
                             </div>
                             <div class="card-header-action">
-                              <button class="border-btn success" [routerLink]="['/', 'add-subscription-package']" mat-stroked-button>
+                              <button class="border-btn success" [routerLink]="['/','add-subscription-package', 'add', 'id']" mat-stroked-button>
                                 <mat-icon>add_circle_outline</mat-icon>
                                 Add Package
                               </button>

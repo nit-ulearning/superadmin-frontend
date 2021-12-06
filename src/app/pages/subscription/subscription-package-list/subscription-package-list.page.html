@@ -12,7 +12,7 @@
                       Package List
                   </div>
                   <div class="card-header-action">
-                    <button class="border-btn success" [routerLink]="['/', 'add-subscription-package']" mat-stroked-button>
+                    <button class="border-btn success" [routerLink]="['/', 'add-subscription-package', 'add', 'id']" mat-stroked-button>
                       <mat-icon>add_circle_outline</mat-icon>
                       Add Package
                     </button>
@@ -24,17 +24,14 @@
                     <ion-item class="record">
                       <span>Records: </span>
                       <mat-form-field>
-                        <mat-select value="10">
-                          <mat-option value="10">10</mat-option>
-                          <mat-option value="25">25</mat-option>
-                          <mat-option value="50">50</mat-option>
-                          <mat-option value="100">100</mat-option>
+                        <mat-select [(ngModel)]="displayRecord" name="record" (selectionChange)="displayRecordChange($event.value)">
+                          <mat-option *ngFor="let record of displayRecords" [value]="record.displayValue">{{record.displayValue}}</mat-option>
                         </mat-select>
                       </mat-form-field>
                     </ion-item>
                   </div>
                   <div class="search-wrapper">
-                    <ion-searchbar showCancelButton="focus" debounce="500" placeholder="Search item ...."></ion-searchbar>
+                    <ion-searchbar showCancelButton="focus" debounce="500" placeholder="Search item ...." [(ngModel)]="searchTerm" (ionChange)="searchList($event)"></ion-searchbar>
                   </div>
                 </div>
                 <div class="table-responsive">
@@ -51,52 +48,12 @@
                                       <ion-checkbox color="primary"></ion-checkbox>
                                   </div>
                                 </th>
-                                <th class="ion-text-center">
+                                <th *ngFor="let th of tableHeaderData" (click)="isSortTableHeader(tableHeaderData, th)" class="ion-text-center">
                                   <div>
-                                    Institute
-                                      <mat-icon>import_export</mat-icon>
-                                  </div>
-                                </th>
-                                <th class="ion-text-center">
-                                  <div>
-                                    Request Date
-                                    <mat-icon>import_export</mat-icon>
-                                  </div>
-                                </th>
-                                <th class="ion-text-center">
-                                  <div>
-                                    Package
-                                    <mat-icon>import_export</mat-icon>
-                                  </div>
-                                </th>
-                                <th class="ion-text-center">
-                                  <div>
-                                    No. of Users
-                                    <mat-icon>import_export</mat-icon>
-                                  </div>
-                                </th>
-                                <th class="ion-text-center">
-                                  <div>
-                                    Request Type
-                                    <mat-icon>import_export</mat-icon>
-                                  </div>
-                                </th>
-                                <th class="ion-text-center">
-                                  <div>
-                                    Request By
-                                    <mat-icon>import_export</mat-icon>
-                                  </div>
-                                </th>
-                                <th class="ion-text-center">
-                                  <div>
-                                    Remarks
-                                    <mat-icon>import_export</mat-icon>
-                                  </div>
-                                </th>
-                                <th class="ion-text-center">
-                                  <div>
-                                    Status
-                                    <mat-icon>import_export</mat-icon>
+                                    {{th.display_name}}
+                                    <mat-icon *ngIf="th.sortingButtonName == ''">import_export</mat-icon>
+                                    <mat-icon *ngIf="th.sortingButtonName == 'ASC'">expand_less</mat-icon>
+                                    <mat-icon *ngIf="th.sortingButtonName == 'DESC'">expand_more</mat-icon>
                                   </div>
                                 </th>
                                 <th class="ion-text-center">
@@ -112,46 +69,45 @@
                               Data is loading...
                             </td>
                           </tr>
-                          <tr  [hidden]="isListLoading" *ngFor="let item of skeleton; let i = index">
-                            <td>1</td>
+                          <tr  [hidden]="isListLoading" *ngFor="let item of tableData?.data; let i = index">
+                            <td>
+                              {{i + 1}}
+                            </td>
                             <td>
                               <ion-checkbox color="primary"></ion-checkbox>
                             </td>
                             <td>
-                              Lalit Tutorial
+                              {{item?.instituteEntity?.instName}}
                             </td>
                             <td>
-                              03/07/2021
+                               {{item?.pkCdate}}
                             </td>
                             <td>
-                              REG10020211009
+                               {{item?.pkName}}
                             </td>
                             <td>
-                              100
+                               {{item?.pkNusers}}
                             </td>
                             <td>
-                              New Package
+                               {{item?.pkValidityType}}
                             </td>
                             <td>
-                              Admin
-                            </td>
-                            <td>
-                              Remark 1Data refreshing...
-                            </td>
-                            <td>
-                              <div class="status success">
-                                Active
+                              <div *ngIf="item?.pkStatus == 'Active'" class="status success">
+                                {{item?.pkStatus}}
+                              </div>
+                              <div *ngIf="item?.pkStatus == 'Suspended'" class="status warning">
+                                {{item?.pkStatus}}
                               </div>
                             </td>
                             <td>
                               <div class="action ion-text-center">
-                                <ion-button matTooltip="Edit" matTooltipPosition="above" size="small" color="secondary" (click)="clickActionBtn('', 'edit')" [routerLink]="['/', 'add-subscription-package']">
+                                <ion-button matTooltip="Edit" matTooltipPosition="above" size="small" color="secondary" (click)="clickActionBtn('', 'edit')" [routerLink]="['/', 'add-subscription-package', 'edit', item.pkId]">
                                   <mat-icon>edit</mat-icon>
                                 </ion-button>
                                 <ion-button matTooltip="Approve" matTooltipPosition="above" size="small" color="success" (click)="clickActionBtn('', 'approve')">
                                     <mat-icon>done_all</mat-icon>
                                 </ion-button>
-                                <ion-button matTooltip="Suspend" matTooltipPosition="above" size="small" color="tertiary" (click)="suspendPackageOpenModal('suspend_package_modal', get_user_dtls, '');">
+                                <ion-button [ngClass]="{'readOnly': item?.pkStatus == 'Suspended'}"  matTooltip="Suspend" matTooltipPosition="above" size="small" color="tertiary" (click)="suspendPackageOpenModal('suspend_package_modal', item.pkId, '');">
                                     <mat-icon>report_off</mat-icon>
                                 </ion-button>
                                 <ion-button matTooltip="Payment" matTooltipPosition="above" size="small" color="secondary">
@@ -172,7 +128,7 @@
               </div>
               <div class="card-footer">
                   <div class="action">
-                    <ion-button matTooltip="Refresh" matTooltipPosition="above" size="small" color="secondary" (click)="clickActionBtn('', 'refresh')">
+                    <ion-button matTooltip="Refresh" matTooltipPosition="above" size="small" color="secondary" (click)="onRefresh()">
                         <mat-icon>refresh</mat-icon>
                     </ion-button>
                     <ion-button matTooltip="Payment" matTooltipPosition="above" size="small" color="secondary">
@@ -181,7 +137,7 @@
                     <ion-button matTooltip="Approve" matTooltipPosition="above" size="small" color="success" (click)="clickActionBtn('', 'approve')">
                         <mat-icon>done_all</mat-icon>
                     </ion-button>
-                    <ion-button matTooltip="Suspend" matTooltipPosition="above" size="small" color="tertiary" (click)="suspendPackageOpenModal('suspend_package_modal', get_user_dtls, '');">
+                    <ion-button matTooltip="Suspend" matTooltipPosition="above" size="small" color="tertiary" (click)="suspendPackageOpenModal('suspend_package_modal', item.pkId, '');">
                         <mat-icon>report_off</mat-icon>
                     </ion-button>
                     <ion-button matTooltip="Restore" matTooltipPosition="above" size="small" color="warning" (click)="RestorePackageOpenModal('restore_package_modal', get_user_dtls, '');">
@@ -193,13 +149,13 @@
                   </div>
                   <div>
                     <ul class="pagination">
-                        <li class="circle-border" matTooltip="First" matTooltipPosition="above">
+                        <li (click)="setPage(0)" [ngClass]="{disabled:tableData?.currentPage === 0}" class="circle-border" matTooltip="First" matTooltipPosition="above">
                             <a>
                               <!-- First -->
                               <ion-icon name="play-skip-back"></ion-icon>
                             </a>
                         </li>
-                        <li class="circle-border" matTooltip="Previous" matTooltipPosition="above">
+                        <li (click)="setPage(tableData.currentPage - 1)" [ngClass]="{disabled:tableData?.currentPage === 0}"  class="circle-border" matTooltip="Previous" matTooltipPosition="above">
                             <a>
                               <!-- Previous -->
                               <ion-icon name="caret-back"></ion-icon>
@@ -210,13 +166,13 @@
                             Page <a>1</a> of 10
                         </li>
                         <li> <span class="ran-separator pull-right margin-top-3"></span> </li>
-                        <li class="circle-border" matTooltip="Next" matTooltipPosition="above">
+                        <li class="circle-border" matTooltip="Next" matTooltipPosition="above" (click)="setPage(tableData.currentPage + 1)" [ngClass]="{disabled:tableData?.currentPage === tableData?.totalPage}">
                             <a>
                               <!-- Next -->
                               <ion-icon name="caret-forward"></ion-icon>
                             </a>
                         </li>
-                        <li class="circle-border" matTooltip="Last" matTooltipPosition="above">
+                        <li (click)="setPage(tableData.totalPage)" [ngClass]="{disabled:tableData?.currentPage === tableData?.totalPage}" class="circle-border" matTooltip="Last" matTooltipPosition="above">
                             <a>
                               <!-- Last -->
                               <ion-icon name="play-skip-forward"></ion-icon>

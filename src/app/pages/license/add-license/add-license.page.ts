@@ -15,20 +15,21 @@ import * as moment from 'moment';
 export class AddLicensePage implements OnInit {
   // Variables start
   model: any = {};
+
   institutes = [
     {
-        id: 43,
+        id: 19,
         name: 'Lalit Tutorial',
         avatar: '//www.gravatar.com/avatar/b0d8c6e5ea589e6fc3d3e08afb1873bb?d=retro&r=g&s=30 2x'
     },
-    { id: 46, name: 'IEM', avatar: '//www.gravatar.com/avatar/ddac2aa63ce82315b513be9dc93336e5?d=retro&r=g&s=15' },
+    { id: 20, name: 'IEM', avatar: '//www.gravatar.com/avatar/ddac2aa63ce82315b513be9dc93336e5?d=retro&r=g&s=15' },
     {
-        id: 48,
+        id: 21,
         name: 'Techno India',
         avatar: '//www.gravatar.com/avatar/6acb7abf486516ab7fb0a6efa372042b?d=retro&r=g&s=15'
     },
     {
-        id: 4,
+        id: 22,
         name: 'JIS',
         avatar: '//www.gravatar.com/avatar/b0d8c6e5ea589e6fc3d3e08afb1873bb?d=retro&r=g&s=30 2x'
     },
@@ -96,7 +97,15 @@ export class AddLicensePage implements OnInit {
   parms_action_name;
   parms_action_id;
   form_api;
+  actionHeaderText;
+  editLoading = false;
+  allEditData;
+  editApi;
+  editForm_api;
+  getInstituteList_api;
   private formSubmitSubscribe: Subscription;
+  private editDataSubscribe: Subscription;
+  private getInstitutes:Subscription;
   // Variables end
 
   constructor(
@@ -117,15 +126,84 @@ export class AddLicensePage implements OnInit {
     this.commonUtils.getPathNameFun(this.router.url.split('/')[1]);
     this.parms_action_name = this.activatedRoute.snapshot.paramMap.get('action');
     this.parms_action_id = this.activatedRoute.snapshot.paramMap.get('id');
-
+    this.getInstituteList_api ="institute/getlist";
+    this.getInstituteList();
     console.log('parms_action_name', this.parms_action_name);
     console.log('parms_action_id', this.parms_action_id);
-    
 
+    // edit api
+    if(this.parms_action_name == 'edit'){
+      this.editApi = 'license/view/'+this.parms_action_id;
+
+      // init call
+      this.init();
+
+      this.editForm_api = 'license/update/'+this.parms_action_id;
+    }
 
     // form_api Api
     this.form_api = 'license/add';
   }
+
+  getInstituteList()
+  {
+    console.log("HHH");
+    this.getInstitutes = this.http.get(this.getInstituteList_api).subscribe(
+        (res:any) => {
+          console.log("Get template for  >", res[0].etAction); 
+          console.log("Get template for length",res.length);
+          this.institutes = res; 
+          console.log("Get template for length",this.institutes);
+
+        },
+        errRes => {
+           console.log("Get template for  >", errRes);  
+        }
+      );
+  }
+  // ---------- init start ----------
+  init(){
+    if( this.parms_action_name == 'edit'){
+      this.actionHeaderText = 'Edit';
+
+      this.editLoading = true;
+      //edit data call
+      this.editDataSubscribe = this.http.get(this.editApi).subscribe(
+        (res:any) => {
+          this.editLoading = false;
+          console.log("Edit data  res >", res.return_data);
+          this.model = {
+            lcName : res.lcName,
+            lcCreatDate : res.lcCreatDate,
+            instId : res.instId,
+            lcType : res.lcType,
+            lcStype : res.lcStype,
+            lcValidityType : res.lcValidityType,
+            lcValidityNum : res.lcValidityNum,
+            lcEndDate : res.lcEndDate,
+            lcComment : res.lcComment,
+          }; 
+          
+          this.model.creatDate = moment(res.lcCreatDate).format('YYYY-MM-DD');
+          console.log('this.model.creatDate', this.model.creatDate);
+          
+
+          // edit data
+          this.allEditData = res;
+          console.log('this.allEditData', this.allEditData);
+          
+        },
+        errRes => {
+          // this.selectLoadingDepend = false;
+          this.editLoading = false;
+        }
+      );
+
+    }else{
+      this.actionHeaderText = 'Add';
+    }
+  }
+  // ---------- init end ----------
   
   async presentToast() {
     const toast = await this.toastController.create({
@@ -142,51 +220,62 @@ export class AddLicensePage implements OnInit {
     
     this.model.lcCreatDate = moment(_date).format('YYYY/MM/DD');
     console.log('model.lcCreatDate', this.model.lcCreatDate);
-  }
-  endDate(_date){
-    console.log('_date', _date);
-    
-    this.model.lcEndDate = moment(_date).format('YYYY/MM/DD');
-    console.log('model.lcEndDate', this.model.lcEndDate);
+
+    this.model.lcValidityType = '';
+    this.model.lcValidityNum = '';
+    this.model.lcEndDate = '';
   }
   // Date format change end
 
   // End date calculation start
   selectCycleDate;
+  licValidity;
+  licDuration;
   endDateCalculate(_identifier, _value){
     console.log('_identifier', _identifier);
     console.log('_value', _value);
     console.log('this.model.lcCreatDate', this.model.lcCreatDate);
 
-    let validity;
-    let duration;
+    
     if(_identifier == 'validity'){
-      validity = _value;
+      this.licValidity = _value;
     }else if(_identifier == 'duration'){
-      duration = _value;
+      this.licDuration = _value;
+    }
+    console.log('licValidity', this.licValidity);
+    console.log('licDuration', this.licDuration);
+    
+    
+    if(this.licValidity && this.licDuration) {
+      let createDate = moment(this.model.lcCreatDate).format('DD/MM/YYYY');
+      // ----- original date format convert start -----
+      let myFormatDate = createDate.split(" ")[0].split("/");
+      let _mynewdate = myFormatDate[2] + "-" + myFormatDate[1] + "-" + myFormatDate[0];
+      // original date format convert end
+
+      console.log('myFormatDate', myFormatDate);
+      console.log('_mynewdate', _mynewdate);
+      
+
+      //---- set day + count add start----
+      this.selectCycleDate = new Date(_mynewdate);
+      // this.selectCycleDate.setDate( this.selectCycleDate.getDate() + 3 );
+      if(this.licValidity == 'Years'){
+        this.selectCycleDate.setDate( this.selectCycleDate.getDate() + (parseInt(this.licDuration) * 365));
+      }else if(this.licValidity == 'Months'){
+        this.selectCycleDate.setDate( this.selectCycleDate.getDate() + (parseInt(this.licDuration) * 30));
+      }else if(this.licValidity == 'Days'){
+        this.selectCycleDate.setDate( this.selectCycleDate.getDate() + parseInt(this.licDuration ));
+      }
+      
+      // alert('this.date >'+this.selectCycleDate);
+
+      this.model.lcEndDate = moment(this.selectCycleDate).format('YYYY/MM/DD');
+
+      console.log('this.model.lcEndDate', this.model.lcEndDate);
+      //---- set day + count add end----
     }
     
-    // ----- original date format convert start -----
-    let myFormatDate = this.model.lcCreatDate.split(" ")[0].split("/");
-    let _mynewdate = myFormatDate[2] + "-" + myFormatDate[1] + "-" + myFormatDate[0];
-    // original date format convert end
-
-    console.log('myFormatDate', myFormatDate);
-    console.log('_mynewdate', _mynewdate);
-    
-
-    //---- set day + count add start----
-    this.selectCycleDate = new Date(_mynewdate);
-    // this.selectCycleDate.setDate( this.selectCycleDate.getDate() + 3 );
-    this.selectCycleDate.setDate( this.selectCycleDate.getDate() + parseInt(duration ));
-    // alert('this.date >'+this.selectCycleDate);
-
-    this.model.end_date = moment(this.selectCycleDate).format('YYYY/MM/DD');
-
-    console.log('this.model.end_date', this.model.end_date);
-    
-
-  //---- set day + count add end----
     
   }
   // End date calculation end
@@ -227,32 +316,60 @@ export class AddLicensePage implements OnInit {
       return;
     }
 
-    this.formSubmitSubscribe = this.http.post(this.form_api, form.value).subscribe(
-      (response:any) => {
-        this.formLoading = false;
-        console.log("add form response >", response);
-
-        if(response.status == 200){
-          this.commonUtils.presentToast('success', response.message);
-          this.router.navigateByUrl('/auth');
-          form.reset();
-        }else {
-          this.commonUtils.presentToast('error', response.message);
+    if(this.parms_action_name == 'edit'){
+      this.formSubmitSubscribe = this.http.put(this.editForm_api, form.value).subscribe(
+        (response:any) => {
+          this.formLoading = false;
+          console.log("add form response >", response);
+  
+          if(response.status == 200){
+            this.commonUtils.presentToast('success', response.message);
+            this.router.navigateByUrl('/license-list');
+            form.reset();
+          }else {
+            this.commonUtils.presentToast('error', response.message);
+          }
+        },
+        errRes => {
+          this.formLoading = false;
         }
-      },
-      errRes => {
-        this.formLoading = false;
-      }
-    );
+      );
+    }else if(this.parms_action_name == 'add'){
+      this.formSubmitSubscribe = this.http.post(this.form_api, form.value).subscribe(
+        (response:any) => {
+          this.formLoading = false;
+          console.log("add form response >", response);
+  
+          if(response.status == 200){
+            this.commonUtils.presentToast('success', response.message);
+            this.router.navigateByUrl('/license-list');
+            form.reset();
+          }else {
+            this.commonUtils.presentToast('error', response.message);
+          }
+        },
+        errRes => {
+          this.formLoading = false;
+        }
+      );
+    }
 
   }
   // form submit end
   
+  // Disable date field start
+  disableDate(){
+    return false;
+  }
+  // Disable date field end
 
   // ----------- destroy subscription start ---------
   ngOnDestroy() {
     if(this.formSubmitSubscribe !== undefined){
       this.formSubmitSubscribe.unsubscribe();
+    }
+    if(this.editDataSubscribe !== undefined ){
+      this.editDataSubscribe.unsubscribe();
     }
   }
   // destroy subscription end

@@ -11,14 +11,14 @@ const routes: Routes = [
   {
     path: 'dashboard',
     loadChildren: () => import('./pages/dashboard/dashboard.module').then( m => m.DashboardPageModule),
-    canLoad: [AuthGuard] 
+    // canLoad: [AuthGuard] 
   },
   {
     path: 'auth',
     loadChildren: () => import('./pages/auth/auth.module').then( m => m.AuthPageModule)
   },
   {
-    path: 'add-security',
+    path: 'add-security/:action/:id',
     loadChildren: () => import('./pages/settings/add-security/add-security.module').then( m => m.AddSecurityPageModule),
     canLoad: [AuthGuard] 
   },
@@ -28,7 +28,7 @@ const routes: Routes = [
     canLoad: [AuthGuard] 
   },
   {
-    path: 'add-subscription-package',
+    path: 'add-subscription-package/:action/:id',
     loadChildren: () => import('./pages/subscription/add-subscription-package/add-subscription-package.module').then( m => m.AddSubscriptionPackagePageModule),
     canLoad: [AuthGuard] 
   },
@@ -38,8 +38,9 @@ const routes: Routes = [
     canLoad: [AuthGuard] 
   },
   {
-    path: 'add-license',
-    loadChildren: () => import('./pages/license/add-license/add-license.module').then( m => m.AddLicensePageModule)
+    path: 'add-license/:action/:id',
+    loadChildren: () => import('./pages/license/add-license/add-license.module').then( m => m.AddLicensePageModule),
+    canLoad: [AuthGuard] 
   },
   {
     path: 'license-list',
@@ -69,7 +70,7 @@ const routes: Routes = [
   {
     path: 'email-notification-list',
     loadChildren: () => import('./pages/notification/email-notification-list/email-notification-list.module').then( m => m.EmailNotificationListPageModule),
-    canLoad: [AuthGuard] 
+    canLoad: [AuthGuard]                                                                                                                                                                                                                                                                                                                                                                                                                                                                  
   },
   {
     path: 'sms-notification-list',
@@ -77,12 +78,12 @@ const routes: Routes = [
     canLoad: [AuthGuard] 
   },
   {
-    path: 'add-email-notification',
+    path: 'add-email-notification/:action/:id',
     loadChildren: () => import('./pages/notification/add-email-notification/add-email-notification.module').then( m => m.AddEmailNotificationPageModule),
     canLoad: [AuthGuard] 
   },
   {
-    path: 'add-sms-notification',
+    path: 'add-sms-notification/:action/:id',
     loadChildren: () => import('./pages/notification/add-sms-notification/add-sms-notification.module').then( m => m.AddSmsNotificationPageModule),
     canLoad: [AuthGuard] 
   },
@@ -227,9 +228,9 @@ const routes: Routes = [
     canLoad: [AuthGuard] 
   },
   {
-    path: 'institute-view',
+    path: 'institute-view/:id',
     loadChildren: () => import('./pages/settings/institute-view/institute-view.module').then( m => m.InstituteViewPageModule),
-    canLoad: [AuthGuard] 
+    // canLoad: [AuthGuard] 
   },
   {
     path: 'add-hsn',

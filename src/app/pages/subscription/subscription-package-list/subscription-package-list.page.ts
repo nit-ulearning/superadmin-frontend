@@ -1,6 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import { ModalController, ToastController } from '@ionic/angular';
+import { ModalController} from '@ionic/angular';
 import { ModalPage } from '../../modal/modal.page';
+import { HttpClient } from '@angular/common/http';
+import { Component, OnInit } from '@angular/core';
+import { AlertController, Platform, ToastController } from '@ionic/angular';
+import { Subscription } from 'rxjs';
+import { CommonUtils } from 'src/app/services/common-utils/common-utils';
 
 @Component({
   selector: 'app-subscription-package-list',
@@ -10,20 +14,191 @@ import { ModalPage } from '../../modal/modal.page';
 export class SubscriptionPackageListPage implements OnInit {
   constructor(
     public toastController: ToastController,
+    public alertController: AlertController,
     private modalController : ModalController,
+    private plt: Platform,
+    private http : HttpClient,
+    private commonUtils: CommonUtils // common functionlity come here
   ) { }
 
   // Variables start
   statusChange = true;
   isListLoading = false;
-  skeleton = [
-    {},{},{},{},{},{},{},{},{},{},
-  ]
   // Variables end
+  listing_url;
+  pageNo;
+  tableData; 
+  sortColumnName;
+  deleteApi;
+  sortOrderName;
+  deleteLoading = false;
+  tableHeaderData = [
+    {
+      column_name: "instituteEntity.instName",
+      display_name: "Institute",
+      sortingButtonName: ""
+    },{
+      column_name: "pkCdate",
+      display_name: "Request Date",
+      sortingButtonName: ""
+    },{
+      column_name: "pkName",
+      display_name: "Package",
+      sortingButtonName: ""
+    },{
+      column_name: "pkNusers",
+      display_name: "No. of Users",
+      sortingButtonName: ""
+    },{
+      column_name: "pkValidityType",
+      display_name: "Request Type",
+      sortingButtonName: ""
+    },{
+      column_name: "pkStatus",
+      display_name: "Status",
+      sortingButtonName: ""
+    }
 
+  ];
+
+  private tableListSubscribe: Subscription;
+  private deleteDataSubscribe: Subscription;
   ngOnInit() {
+    this.commonFunction();
   }
+  ionViewWillEnter() {
+    this.commonFunction();
+  }
+  commonFunction(){
 
+    // table list data url name
+    this.listing_url = 'package/list';
+    this.onRefresh();
+
+    // delete api
+    this.deleteApi = 'emailTemplate/delete/';
+  }
+// Display records start
+  displayRecord = '10';
+  displayRecords = [
+      { id : '1', displayValue: '10'},
+      { id : '2', displayValue: '25'},
+      { id : '3', displayValue: '50'},
+      { id : '4', displayValue: '100'},
+      { id : '5', displayValue: '200'}
+  ];
+  displayRecordChange(_record) {
+      console.log('_record', _record);
+      
+      this.displayRecord = _record;
+
+      this.onListDate(this.listing_url, this.pageNo, _record, this.sortColumnName, this.sortOrderName, this.searchTerm);
+    }
+    // Display records end
+    // List data start
+    onListDate(_listUrl, _pageNo, _displayRecord, _sortColumnName, _sortOrderName, _searchTerm){
+      this.isListLoading = true;
+      let api = _listUrl+'/'+_pageNo+'/'+_displayRecord+'/'+_sortColumnName+'/'+_sortOrderName+'?keyword='+ _searchTerm;
+      this.tableListSubscribe = this.http.get(api).subscribe(
+        (res:any) => {
+          this.isListLoading = false;
+          console.log('res', res);
+          this.tableData = res;
+          console.log('this.tableData', this.tableData.data);
+        },
+        errRes => {
+          // this.selectLoadingDepend = false;
+          this.isListLoading = false;
+        }
+      );
+    }
+    // List data end
+
+     // Search start
+      searchTerm:string = '';
+      searchList(event){
+        this.searchTerm = event.target.value;
+
+        console.log('this.searchTerm', this.searchTerm);
+        
+        this.onListDate(this.listing_url, this.pageNo, this.displayRecord, this.sortColumnName, this.sortOrderName, this.searchTerm);
+      }
+    // Search end
+    // Pagination start
+      setPage(page: number) {
+        console.log('page', page);
+        
+        this.pageNo = page;
+        this.onListDate(this.listing_url, this.pageNo, this.displayRecord, this.sortColumnName, this.sortOrderName, this.searchTerm);
+        
+      }
+    // Pagination end
+
+    // Sorting start
+    isSortTableHeader(_tableHeaderData,  _headerItem ){
+      console.log('_tableHeaderData', _tableHeaderData);
+      console.log('_headerItem', _headerItem);
+
+      // all field reset first
+      _tableHeaderData.forEach((val) => {
+        val.sortingButtonName = ''
+      })
+
+      _headerItem.orederShow = !_headerItem.orederShow;
+      if(_headerItem.orederShow) {
+        _headerItem.sortingButtonName = "ASC";
+      }else
+      {
+        _headerItem.sortingButtonName = "DESC";
+      }
+
+      this.sortColumnName = _headerItem.column_name;
+      this.sortOrderName = _headerItem.sortingButtonName;
+
+      console.log('this.sortColumnName', this.sortColumnName);
+      console.log('this.sortOrderName', this.sortOrderName);
+      console.log('_tableHeaderData>>', _tableHeaderData);
+
+      this.onListDate(this.listing_url, this.pageNo, this.displayRecord, this.sortColumnName, this.sortOrderName, this.searchTerm);
+    }
+    // Sorting end
+
+    // Referesh start
+    onRefresh(){
+      this.pageNo = 0;
+      this.sortColumnName = 'pkId';
+      this.sortOrderName = 'DESC';
+      this.searchTerm = '';
+      // table data call
+      this.onListDate(this.listing_url, this.pageNo, this.displayRecord, this.sortColumnName, this.sortOrderName, this.searchTerm);
+    }
+    // Referesh end
+
+    // Delete start
+    deleteData(_id){
+      console.log('id>>', _id);
+      
+      this.deleteLoading = true;
+      this.deleteDataSubscribe = this.http.delete(this.deleteApi +_id).subscribe(
+        (res:any) => {
+          this.deleteLoading = false;
+          console.log("Edit data  res >", res.return_data);
+          if(res.status == 200){
+            this.commonUtils.presentToast('success', res.message);
+            this.onRefresh();
+          }else {
+            this.commonUtils.presentToast('error', res.message);
+          }
+        },
+        errRes => {
+          // this.selectLoadingDepend = false;
+          this.deleteLoading = false;
+        }
+      );
+    }
+    // Delete end
+
+  /*----------------Table list data end----------------*/
   async presentToast(_msg, _type) {
     const toast = await this.toastController.create({
       message: _msg,
@@ -97,9 +272,8 @@ export class SubscriptionPackageListPage implements OnInit {
     changePassword_modal.onDidDismiss()
     .then((getdata) => {
       console.log('getdata >>>>>>>>>>>', getdata);
-      this.presentToast('Package Suspend', 'success');
-      if(getdata.data == 'submitClose'){
-        /* this.onListData(this.listing_url, this.displayRecord, this.pageNo, this.api_parms, this.searchTerm, this.cherecterSearchTerm, this.sortColumnName, this.sortOrderName, this.advanceSearchParms, this.urlIdentifire);  */
+      if(getdata.data == 'submitClose' && getdata.role == '200'){
+        this.onRefresh();
       }
 
     });

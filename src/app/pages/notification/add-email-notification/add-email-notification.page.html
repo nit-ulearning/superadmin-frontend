@@ -7,9 +7,10 @@
       <div class="form-layout">
         <div class="card-outer">
           <div class="card card-box">
+            <form #addEmailnoticForm="ngForm" (ngSubmit)="onSubmitForm(addEmailnoticForm)" >
               <div class="card-header">
                   <div class="card-header-tittle">
-                    Email Template Add
+                    Email Template {{parms_action_name}}
                   </div>
                   <div class="card-header-action">
                   </div>
@@ -21,14 +22,14 @@
                       <!-- Template For -->
                       <ion-col size-xs="12" size-sm="4" size-md="4"  size-lg="4">
                         <div class="form-item">
-                          <ion-badge class="pillBtn" color="primary" (click)="AddTemplate('AddTemplate_modal', get_user_dtls, '');">
+                          <!-- <ion-badge class="pillBtn" color="primary" (click)="AddTemplate('AddTemplate_modal', get_user_dtls, '');">
                             <ion-icon name="add-outline"></ion-icon>
                             Add
-                          </ion-badge>
+                          </ion-badge> -->
                           <mat-form-field appearance="outline">
-                            <mat-label>Template For <sup class="requiredSup">*</sup></mat-label>
-                            <mat-select [(value)]="selectedTemplate">
-                              <mat-option [value]="option.value" *ngFor="let option of Template">{{ option.viewValue }}</mat-option>
+                            <mat-label>Template For </mat-label>
+                            <mat-select [(value)]="selectedTemplate" [(ngModel)]="model.etAction" name="etAction" required>
+                              <mat-option (click)="selectTemplates(template.etTags)" [value]="template.etAction" *ngFor="let template of Templates">{{ template.etAction }}</mat-option>
                             </mat-select>
                           </mat-form-field>
                         </div>
@@ -37,8 +38,8 @@
                       <ion-col size-xs="12" size-sm="4" size-md="4"  size-lg="4">
                         <div class="form-item">
                           <mat-form-field appearance="outline">
-                            <mat-label>Template Name <sup class="requiredSup">*</sup></mat-label>
-                            <input matInput placeholder="Template Name" type="text" [(ngModel)]="model.templateName">
+                            <mat-label>Template Name </mat-label>
+                            <input matInput placeholder="Template Name" name="etName" type="text" [(ngModel)]="model.etName" required>
                           </mat-form-field>
                         </div>
                       </ion-col>
@@ -46,46 +47,60 @@
                        <ion-col size-xs="12" size-sm="4" size-md="4"  size-lg="4">
                         <div class="form-item">
                           <mat-form-field appearance="outline">
-                            <mat-label>Subject <sup class="requiredSup">*</sup></mat-label>
-                            <input matInput placeholder="Subject" type="text" [(ngModel)]="model.subject">
+                            <mat-label>Subject </mat-label>
+                            <input matInput placeholder="Subject" name="etSubject" type="text" [(ngModel)]="model.etSubject" required>
                           </mat-form-field>
                         </div>
                       </ion-col>
                       <!-- Set Default -->
                       <ion-col size-xs="12" size-sm="4" size-md="4"  size-lg="4">
                         <div class="form-item">
-                          <ion-badge class="pillBtn" color="primary" (click)="AddDefault('AddDefault_modal', get_user_dtls, '');">
-                            <ion-icon name="add-outline"></ion-icon>
-                            Add
-                          </ion-badge>
                           <mat-form-field appearance="outline">
-                            <mat-label>Set Default <sup class="requiredSup">*</sup></mat-label>
-                            <mat-select [(value)]="selectedType">
-                              <mat-option [value]="option.value" *ngFor="let option of setDefault">{{ option.viewValue }}</mat-option>
+                            <mat-label>Set Default</mat-label>
+                            <mat-select [(value)]="selectedType" [(ngModel)]="model.isPrimary" name="isPrimary" required>
+                              <mat-option [value]="setDefault.id" *ngFor="let setDefault of setDefaults">{{ setDefault.name }}</mat-option>
                             </mat-select>
                           </mat-form-field>
+                        </div>
+                      </ion-col>
+                      <!-- Useable tag -->
+                      <ion-col size-xs="12" size-sm="12" size-md="12"  size-lg="12" *ngIf="selectdTag">
+                        <div class="card-outer">
+                          <div class="card card-box">
+                            <div class="card-header">
+                              <div class="card-header-tittle">
+                                Useable tags for template body:
+                              </div>
+                            </div>
+                            <div class="card-body">
+                              {{selectdTag}}
+                            </div>
+                          </div>
                         </div>
                       </ion-col>
                       <!-- Template Description -->
                       <ion-col size-xs="12" size-sm="12" size-md="12"  size-lg="12">
                         <div class="form-item">
-                          <ion-label>Template Body <sup class="requiredSup">*</sup></ion-label>
+                          <ion-label>Template Body </ion-label>
                           <div class="text-editor">
-                            <tinymce name="description" ></tinymce>
+                            <tinymce name="description" name="etBody" type="text" [(ngModel)]="model.etBody" required></tinymce>
                           </div>
                         </div>
                       </ion-col>
                     </ion-row>
-                    <p class="informationTxt">You have <span>100</span> characters left.</p>
                   </ion-grid>
                 </div>
               </div>
               <div class="card-footer">
                   <div>
-                      <button class="border-btn danger btn-md" style="margin-right: 10px;" mat-stroked-button>Cancel</button>
-                      <button class="fill-btn btn-md" (click)="presentToast()" mat-stroked-button [routerLink]="['/', 'email-notification-list']">Save</button>
+                      <button class="border-btn danger btn-md" type="reset" [routerLink]="['/', 'email-notification-list']" style="margin-right: 10px;" mat-stroked-button>Cancel</button>
+                      <button class="fill-btn btn-md" mat-stroked-button type="submit" [disabled]="!addEmailnoticForm.valid || formLoading">
+                        <ion-spinner *ngIf="formLoading" name="crescent"></ion-spinner>
+                        Save
+                      </button>
                   </div>
               </div>
+            </form>
           </div>
         </div>
       </div>

@@ -15,6 +15,7 @@ import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { InterceptorProvider } from './services/interceptors/interceptor';
 import { IonicStorageModule } from '@ionic/storage';
+import { NgHttpLoaderModule } from 'ng-http-loader';
 
 @NgModule({
   declarations: [AppComponent],
@@ -28,7 +29,8 @@ import { IonicStorageModule } from '@ionic/storage';
     IonicStorageModule.forRoot(),
     HttpClientModule,
     ModalPageModule,  // Modal page
-    MatDatepickerModule
+    MatDatepickerModule,
+    NgHttpLoaderModule.forRoot(),
   ],
   providers: [
     {provide: LocationStrategy, useClass: HashLocationStrategy},

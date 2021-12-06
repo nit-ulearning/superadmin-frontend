@@ -138,9 +138,9 @@ export class AuthPage implements OnInit {
           this.formSubmitSubscribe = authObs.subscribe(
             resData => {
               console.log('resData =============))))))))))))))>', resData);
-              if(resData.return_status > 0)
+              if(resData.status == 200)
               {
-                console.log('user Type =============))))))))))))))>', resData.return_data.user_type);
+                console.log('user Type =============))))))))))))))>', resData);
                 /* this.userTypes = this.commonUtils.userTypes;
                 console.log('user Type =============))))))))))))))>', this.userTypes); */
 
@@ -155,7 +155,7 @@ export class AuthPage implements OnInit {
                 } */
 
                 this.router.navigateByUrl('/dashboard');
-
+                this.commonUtils.presentToast('success', resData.message);
                 
                 /* setTimeout(() => {
                   // user menu call
@@ -171,7 +171,7 @@ export class AuthPage implements OnInit {
                 
               }else{
                 loadingEl.dismiss();
-                this.commonUtils.presentToast('error', resData.return_message);
+                this.commonUtils.presentToast('error', resData.message);
               }
               
               // console.log("data login after resData ++++++>", resData);

@@ -1,6 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController, ToastController } from '@ionic/angular';
 import { ModalPage } from '../../modal/modal.page';
+import { CommonUtils } from 'src/app/services/common-utils/common-utils';
+import { ActivatedRoute, Router } from '@angular/router';
+import { NgForm } from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
+import { Subscription } from 'rxjs';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-add-sms-notification',
@@ -9,6 +15,21 @@ import { ModalPage } from '../../modal/modal.page';
 })
 export class AddSmsNotificationPage implements OnInit {
   model: any = {};
+  parms_action_name;
+  parms_action_id;
+  editApi;
+  editForm_api;
+  form_api;
+  actionHeaderText;
+  editLoading = false;
+  allEditData;
+  formLoading = false;
+  templates;
+  selectdTag;
+  getTemplateForSMS_api;
+  private formSubmitSubscribe: Subscription;
+  private editDataSubscribe: Subscription;
+  private templateforSMS_get :Subscription;
   cities = [
     {
         id: 1,
@@ -27,33 +48,184 @@ export class AddSmsNotificationPage implements OnInit {
         avatar: '//www.gravatar.com/avatar/b0d8c6e5ea589e6fc3d3e08afb1873bb?d=retro&r=g&s=30 2x'
     },
   ];
-  Template = [
-    {value: 'Select Template', viewValue: 'Select Template'},
-    {value: 'SMS-IN', viewValue: 'SMS-IN'},
-    {value: 'Holiday', viewValue: 'Holiday'},
-    {value: 'SMS-OUT', viewValue: 'SMS-OUT'},
-    {value: 'ABSENT', viewValue: 'ABSENT'},
-
+  headerIds = [
+    {id: 1, name: 'DLT ID'},
   ];
-  header = [
-    {value: 'DLT ID', viewValue: 'DLT ID'},
-  ];
-  setDefault = [
-    {value: 'Not Default', viewValue: 'Not Default'},
-    {value: 'Default', viewValue: 'Default'},
+  setDefaults = [
+    {id: 0, name: 'Not Default'},
+    {id: 1, name: 'Default'},
   ];
   
   selectedCity = this.cities[0].name;
-  selectedHeader = this.header[0].value;
-  selectedType = this.setDefault[0].value;
-  selectedTemplate = this.Template[0].value;
+  selectedHeader = this.headerIds[0].name;
+  selectedType = this.setDefaults[0].name;
   constructor(
     public toastController: ToastController,
     private modalController : ModalController,
+    private http : HttpClient,
+    private commonUtils: CommonUtils, // common functionlity come here
+     private router: Router,
+    private activatedRoute : ActivatedRoute,
   ) { }
 
   ngOnInit() {
+    this.commonFunction();
   }
+    // getTemplatefor start
+  getTemplatefor(){
+    console.log("HHH");
+    this.templateforSMS_get = this.http.get(this.getTemplateForSMS_api).subscribe(
+        (res:any) => {
+          console.log("Get template for  >", res[0].etAction); 
+          console.log("Get template for length",res.length);
+          this.templates = res; 
+          console.log("Get template for length",this.templates);
+
+        },
+        errRes => {
+           console.log("Get template for  >", errRes);  
+        }
+      );
+    
+  }
+  // getTemplatefor end
+  // commonFunction start 
+ commonFunction(){
+    // get active url name
+    this.commonUtils.getPathNameFun(this.router.url.split('/')[1]);
+    let x = this.commonUtils.getPathNameFun(this.router.url.split('/')[1])
+    console.log(this.router.url);
+    this.parms_action_name = this.activatedRoute.snapshot.paramMap.get('action');
+    this.parms_action_id = this.activatedRoute.snapshot.paramMap.get('id');
+
+    console.log('parms_action_name', this.parms_action_name);
+    console.log('parms_action_id', this.parms_action_id);
+     this.getTemplateForSMS_api = 'smsTemplate/smsFor/list';
+    this.getTemplatefor();
+    // edit api
+    if(this.parms_action_name == 'edit'){
+      this.editApi = 'smsTemplate/list/'+this.parms_action_id;
+
+      // init call
+      this.init();
+
+      this.editForm_api = 'smsTemplate/update/'+this.parms_action_id;
+    }
+
+    // form_api Api
+    this.form_api = 'smsTemplate/add';
+  }
+    // ---------- init start ----------
+  init(){
+    if( this.parms_action_name == 'edit'){
+      
+
+      this.editLoading = true;
+
+      //edit data call
+      this.editDataSubscribe = this.http.get(this.editApi).subscribe(
+        (res:any) => {
+          console.log("stAction >", res.stAction,this.templates);   
+          for(let i=0;i<this.templates.length;i++)
+          {
+             if(res.stAction == this.templates[i].stName)
+             {
+                console.log("Match >", res.stAction,"Templates >", this.templates[i].stName);
+                this.selectdTag=this.templates[i].stTags;
+             } 
+          }
+          this.editLoading = false;
+          console.log("Edit data  res >", res.return_data);
+          this.model = {
+            stAction : res.stAction,
+            stName : res.stName,
+            stTempId : res.stTempId,
+            setDefault : res.setDefault,
+            isPrimary:res.isPrimary,
+            stSubject:res.stSubject,
+            stBody:res.stBody
+          }; 
+          
+          
+          
+
+          // edit data
+          this.allEditData = res;
+          console.log('this.allEditData', this.allEditData);
+          
+        },
+        errRes => {
+          // this.selectLoadingDepend = false;
+          this.editLoading = false;
+        }
+      );
+
+    }else{
+      this.actionHeaderText = 'Add';
+    }
+  }
+  // ---------- init end ----------
+// commonFunction end
+  // --------on submit star----------
+  onSubmitForm(form:NgForm)
+  {
+    this.formLoading = true;
+    let formValue = form.value;
+    console.log(form.value);
+    // / get form value
+    let fd = new FormData();
+    for (let val in form.value) {
+      if(form.value[val] == undefined){
+        form.value[val] = '';
+      }
+      fd.append(val, form.value[val]);
+    };
+
+    console.log('value >', fd);
+    if(!form.valid){
+      return;
+    }
+    if(this.parms_action_name == 'edit'){
+      this.formSubmitSubscribe = this.http.put(this.editForm_api, form.value).subscribe(
+        (response:any) => {
+          this.formLoading = false;
+          console.log("add form response >", response);
+  
+          if(response.status == 200){
+            this.commonUtils.presentToast('success', response.message);
+            this.router.navigateByUrl('/sms-notification-list');
+            form.reset();
+          }else {
+            this.commonUtils.presentToast('error', response.message);
+          }
+        },
+        errRes => {
+          this.formLoading = false;
+          console.log("errRes",errRes)
+        }
+      );
+    }
+    else if(this.parms_action_name == 'add'){
+      this.formSubmitSubscribe = this.http.post(this.form_api, form.value).subscribe(
+        (response:any) => {
+          this.formLoading = false;
+          console.log("add form response >", response);
+  
+          if(response.status == 200){
+            this.commonUtils.presentToast('success', response.message);
+            this.router.navigateByUrl('/sms-notification-list');
+            form.reset();
+          }else {
+            this.commonUtils.presentToast('error', response.message);
+          }
+        },
+        errRes => {
+          this.formLoading = false;
+        }
+      );
+    }
+  }
+  // on submit end
     // AddTemplate start
     async AddSmsTemplate(_identifier, _item, _items) {
       // console.log('_identifier >>', _identifier);
@@ -137,14 +309,30 @@ export class AddSmsNotificationPage implements OnInit {
   
       return await changePassword_modal.present();
     }
-    // addSmsDefault end    
-  async presentToast() {
-    const toast = await this.toastController.create({
-      message: 'Your data have been saved.',
-      duration: 2000,
-      cssClass:"my-tost-custom-classsuccess",
-    });
-    toast.present();
-  }
+    // addSmsDefault end 
+    
+    selectTemplates(_data){
+      console.log('_data>>', _data);
+      this.selectdTag = _data;
+    }
 
+    async presentToast() {
+      const toast = await this.toastController.create({
+        message: 'Your data have been saved.',
+        duration: 2000,
+        cssClass:"my-tost-custom-classsuccess",
+      });
+      toast.present();
+    }
+
+    // ----------- destroy subscription start ---------
+    ngOnDestroy() {
+      if(this.formSubmitSubscribe !== undefined){
+        this.formSubmitSubscribe.unsubscribe();
+      }
+      if(this.editDataSubscribe !== undefined ){
+        this.editDataSubscribe.unsubscribe();
+      }
+    }
+    // destroy subscription end
 }

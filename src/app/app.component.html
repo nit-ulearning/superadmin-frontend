@@ -43,7 +43,7 @@
                     List Institute 
                   </ion-label>
                 </ion-item>
-                <ion-item class="sub-item" [routerLink]="['/','add-security']" routerLinkActive="router-link-active" routerDirection="root" [routerLinkActiveOptions]="{ exact: true }">
+                <ion-item class="sub-item" [routerLink]="['/','add-security', 'add', 'id']" routerLinkActive="router-link-active" routerDirection="root" [routerLinkActiveOptions]="{ exact: true }">
                   <ion-label>
                     Add Institute 
                   </ion-label>
@@ -66,7 +66,7 @@
                     Package List 
                   </ion-label>
                 </ion-item>
-                <ion-item class="sub-item" [routerLink]="['/','add-subscription-package']" routerLinkActive="router-link-active" routerDirection="root" [routerLinkActiveOptions]="{ exact: true }">
+                <ion-item class="sub-item" [routerLink]="['/','add-subscription-package', 'add', 'id']" routerLinkActive="router-link-active" routerDirection="root" [routerLinkActiveOptions]="{ exact: true }">
                   <ion-label>
                     Add Package
                   </ion-label>
@@ -89,7 +89,7 @@
                     Institute License List 
                   </ion-label>
                 </ion-item>
-                <ion-item class="sub-item" [routerLink]="['/','add-license']" routerLinkActive="router-link-active" routerDirection="root" [routerLinkActiveOptions]="{ exact: true }">
+                <ion-item class="sub-item" [routerLink]="['/','add-license', 'add', 'id']" routerLinkActive="router-link-active" routerDirection="root" [routerLinkActiveOptions]="{ exact: true }">
                   <ion-label>
                     Add Institute License
                   </ion-label>
@@ -156,7 +156,7 @@
             </mat-expansion-panel-header>
             <ion-list>
               <ion-menu-toggle auto-hide="false">
-                <ion-item class="sub-item" [routerLink]="['/','add-email-notification']" routerLinkActive="router-link-active" routerDirection="root" [routerLinkActiveOptions]="{ exact: true }">
+                <ion-item class="sub-item" [routerLink]="['/','add-email-notification', 'add', 'id']" routerLinkActive="router-link-active" routerDirection="root" [routerLinkActiveOptions]="{ exact: true }">
                   <ion-label>
                     Add email template
                   </ion-label>
@@ -195,7 +195,7 @@
             </mat-expansion-panel-header>
             <ion-list>
               <ion-menu-toggle auto-hide="false">
-                <ion-item class="sub-item" [routerLink]="['/','add-sms-notification']" routerLinkActive="router-link-active" routerDirection="root" [routerLinkActiveOptions]="{ exact: true }">
+                <ion-item class="sub-item" [routerLink]="['/','add-sms-notification', 'add', 'id']" routerLinkActive="router-link-active" routerDirection="root" [routerLinkActiveOptions]="{ exact: true }">
                   <ion-label>
                     Add SMS template
                   </ion-label>
@@ -313,6 +313,8 @@
         </mat-accordion>
       </ion-content>
     </ion-menu>
-    <ion-router-outlet id="main-content"></ion-router-outlet>
+    <ion-router-outlet id="main-content">
+      <ng-http-loader></ng-http-loader>
+    </ion-router-outlet>
   </ion-split-pane>
 </ion-app>

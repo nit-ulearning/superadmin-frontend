@@ -161,7 +161,8 @@ export class CommonUtils {
             message: msg,
             animated:true,
             translucent: true,
-            duration: 2000,
+            position: "top",
+            duration: 4000,
             cssClass:"my-tost-custom-class" +_type,
         });
         toast.present();

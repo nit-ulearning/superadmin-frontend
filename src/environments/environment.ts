@@ -5,8 +5,8 @@
 export const environment = {
   production: false,
   apiMaster:'1',
-  apiUrl:'http://192.168.0.177:8088/dev',
-  fileUrl:'http://192.168.0.177:8088/dev'
+  apiUrl:'http://65.1.66.115:8085/dev',
+  fileUrl:'http://65.1.66.115:8085/dev'
 };
 
 /*

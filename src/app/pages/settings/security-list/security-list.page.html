@@ -12,7 +12,7 @@
                       Institutes List
                   </div>
                   <div class="card-header-action">
-                    <button class="border-btn success" [routerLink]="['/', 'add-security']" mat-stroked-button>
+                    <button class="border-btn success" [routerLink]="['/', 'add-security', 'add', 'id']" mat-stroked-button>
                       <mat-icon>add_circle_outline</mat-icon>
                       Add Institute
                     </button>
@@ -24,17 +24,16 @@
                     <ion-item class="record">
                       <span>Records: </span>
                       <mat-form-field>
-                        <mat-select value="10">
-                          <mat-option value="10">10</mat-option>
-                          <mat-option value="25">25</mat-option>
-                          <mat-option value="50">50</mat-option>
-                          <mat-option value="100">100</mat-option>
+                        <mat-select [(ngModel)]="displayRecord" name="record" (selectionChange)="displayRecordChange($event.value)">
+                          <mat-option *ngFor="let record of displayRecords" [value]="record.displayValue">
+                            {{record.displayValue}}
+                          </mat-option>
                         </mat-select>
                       </mat-form-field>
                     </ion-item>
                   </div>
                   <div class="search-wrapper">
-                    <ion-searchbar showCancelButton="focus" debounce="500" placeholder="Search item ...."></ion-searchbar>
+                    <ion-searchbar showCancelButton="focus" debounce="500" placeholder="Search item ...." [(ngModel)]="searchTerm" (ionChange)="searchList($event)"></ion-searchbar>
                   </div>
                 </div>
                 <div class="table-responsive">
@@ -51,40 +50,12 @@
                                       <ion-checkbox color="primary"></ion-checkbox>
                                   </div>
                                 </th>
-                                <th class="ion-text-center">
+                                <th *ngFor="let th of tableHeaderData" (click)="isSortTableHeader(tableHeaderData, th)" class="ion-text-center">
                                   <div>
-                                      Institute Name
-                                      <mat-icon>import_export</mat-icon>
-                                  </div>
-                                </th>
-                                <th class="ion-text-center">
-                                  <div>
-                                    User Name
-                                    <mat-icon>import_export</mat-icon>
-                                  </div>
-                                </th>
-                                <th class="ion-text-center">
-                                  <div>
-                                    Registration Date
-                                    <mat-icon>import_export</mat-icon>
-                                  </div>
-                                </th>
-                                <th class="ion-text-center">
-                                  <div>
-                                    Email Address
-                                    <mat-icon>import_export</mat-icon>
-                                  </div>
-                                </th>
-                                <th class="ion-text-center">
-                                  <div>
-                                    Mobile Number
-                                    <mat-icon>import_export</mat-icon>
-                                  </div>
-                                </th>
-                                <th class="ion-text-center">
-                                  <div>
-                                    Institute Website
-                                    <mat-icon>import_export</mat-icon>
+                                    {{th.display_name}}
+                                    <mat-icon *ngIf="th.sortingButtonName == ''">import_export</mat-icon>
+                                    <mat-icon *ngIf="th.sortingButtonName == 'ASC'">expand_less</mat-icon>
+                                    <mat-icon *ngIf="th.sortingButtonName == 'DESC'">expand_more</mat-icon>
                                   </div>
                                 </th>
                                 <th class="ion-text-center">
@@ -100,42 +71,48 @@
                               Data is loading...
                             </td>
                           </tr>
-                          <tr  [hidden]="isListLoading" *ngFor="let item of skeleton; let i = index">
-                            <td>1</td>
+                          <tr [hidden]="isListLoading" *ngIf="tableData?.data.length == 0" class="loading-table-data">
+                            <td colspan="100">
+                              No data found
+                            </td>
+                          </tr>
+                          <tr [hidden]="isListLoading" *ngFor="let item of tableData?.data; let i = index">
+                            <td>{{i + 1}}</td>
                             <td>
                               <ion-checkbox color="primary"></ion-checkbox>
                             </td>
                             <td>
                               <ion-item class="name-box">
                                 <ion-avatar slot="start">
-                                  <img src="assets/images/avatar1.jpg">
+                                  <img *ngIf="item?.instLogo" src="{{item?.instLogo}}" alt="{{item?.instLogo}}">
+                                  <img *ngIf="!item?.instLogo" src="assets/images/noimage.jpg" alt="{{item?.instLogo}}">
                                 </ion-avatar>
                                 <ion-label>
-                                  <h2 class="userName">Lalit Tutorial</h2>
+                                  <h2 class="userName">{{item?.instName}}</h2>
                                 </ion-label>
                               </ion-item>
                             </td>
                             <td>
-                              lalit_tutorial
+                              {{item?.instituteAdmin[0].amdUsername}}
                             </td>
                             <td>
-                              November 8 | 2021
+                              {{item?.isntRegDate}}
                             </td>
                             <td>
-                              lalit@ulearn.in
+                              {{item?.instEmail}}
                             </td>
                             <td>
-                              +91 91258 96558
+                              {{item?.instMnum}}
                             </td>
                             <td>
-                              www.lalittutorial.com
+                              {{item?.instWebsite}}
                             </td>
                             <td>
                               <div class="action ion-text-center">
-                                <ion-button matTooltip="Edit" matTooltipPosition="above" size="small" color="secondary" (click)="clickActionBtn('', 'edit')" [routerLink]="['/', 'add-security']">
+                                <ion-button matTooltip="Edit" matTooltipPosition="above" size="small" color="secondary" [routerLink]="['/', 'add-security', 'edit', item.instId ]">
                                     <mat-icon>edit</mat-icon>
                                 </ion-button>
-                                <ion-button matTooltip="View" matTooltipPosition="above" size="small" color="tertiary" [routerLink]="['/', 'institute-view']">
+                                <ion-button matTooltip="View" matTooltipPosition="above" size="small" color="tertiary" [routerLink]="['/',  'institute-view', item.instId]">
                                   <mat-icon>view_in_ar</mat-icon>
                                 </ion-button>
                                 <ion-button *ngIf="statusChange" matTooltip="Enable" matTooltipPosition="above" size="small" color="success" (click)="clickActionBtn(statusChange, 'status')">
@@ -156,10 +133,10 @@
               </div>
               <div class="card-footer">
                   <div class="action">
-                    <ion-button matTooltip="Refresh" matTooltipPosition="above" size="small" color="secondary" (click)="clickActionBtn('', 'refresh')">
+                    <ion-button matTooltip="Refresh" matTooltipPosition="above" size="small" color="secondary" (click)="onRefresh()">
                         <mat-icon>refresh</mat-icon>
                     </ion-button>
-                    <ion-button matTooltip="Enable" matTooltipPosition="above" size="small" color="success" (click)="clickActionBtn(statusChange, 'status')">
+                    <!-- <ion-button matTooltip="Enable" matTooltipPosition="above" size="small" color="success" (click)="clickActionBtn(statusChange, 'status')">
                         <mat-icon>visibility</mat-icon>
                     </ion-button>
                     <ion-button matTooltip="Disable" matTooltipPosition="above" size="small" color="medium" (click)="clickActionBtn(statusChange, 'status')">
@@ -167,17 +144,17 @@
                     </ion-button>
                     <ion-button matTooltip="Delete" matTooltipPosition="above" size="small" color="danger" (click)="presentAlert()">
                         <mat-icon>delete</mat-icon>
-                    </ion-button>
+                    </ion-button> -->
                   </div>
                   <div>
                     <ul class="pagination">
-                        <li class="circle-border" matTooltip="First" matTooltipPosition="above">
+                        <li (click)="setPage(0)" [ngClass]="{disabled:tableData?.currentPage === 0}" class="circle-border" matTooltip="First" matTooltipPosition="above">
                             <a>
                               <!-- First -->
                               <ion-icon name="play-skip-back"></ion-icon>
                             </a>
                         </li>
-                        <li class="circle-border" matTooltip="Previous" matTooltipPosition="above">
+                        <li (click)="setPage(tableData.currentPage - 1)" [ngClass]="{disabled:tableData?.currentPage === 0}" class="circle-border" matTooltip="Previous" matTooltipPosition="above">
                             <a>
                               <!-- Previous -->
                               <ion-icon name="caret-back"></ion-icon>
@@ -185,16 +162,16 @@
                         </li>
                         <li> <span class="ran-separator pull-right margin-top-3"></span> </li>
                         <li>
-                            Page <a>1</a> of 10
+                          Page <a>{{ tableData?.currentPage + 1 }}</a> of {{ tableData?.totalPage + 1 }} 
                         </li>
                         <li> <span class="ran-separator pull-right margin-top-3"></span> </li>
-                        <li class="circle-border" matTooltip="Next" matTooltipPosition="above">
+                        <li (click)="setPage(tableData.currentPage + 1)" [ngClass]="{disabled:tableData?.currentPage === tableData?.totalPage}" class="circle-border" matTooltip="Next" matTooltipPosition="above">
                             <a>
                               <!-- Next -->
                               <ion-icon name="caret-forward"></ion-icon>
                             </a>
                         </li>
-                        <li class="circle-border" matTooltip="Last" matTooltipPosition="above">
+                        <li (click)="setPage(tableData.totalPage)" [ngClass]="{disabled:tableData?.currentPage === tableData?.totalPage}" class="circle-border" matTooltip="Last" matTooltipPosition="above">
                             <a>
                               <!-- Last -->
                               <ion-icon name="play-skip-forward"></ion-icon>

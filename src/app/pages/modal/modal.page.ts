@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ModalController, NavParams } from '@ionic/angular';
+import * as moment from 'moment';
 import { Observable, Subscription } from 'rxjs';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { CommonUtils } from 'src/app/services/common-utils/common-utils';
@@ -62,6 +63,7 @@ export class ModalPage implements OnInit {
 
     if(this.get_identifier == 'suspend_package_modal') {
       this.heder_title = 'Package Suspend';
+      this.form_api = 'package/suspended/'+this.get_item;
     } else if(this.get_identifier == 'restore_package_modal'){
       this.heder_title = 'Package Restore';
     } else if(this.get_identifier == 'end_package_modal'){
@@ -74,6 +76,7 @@ export class ModalPage implements OnInit {
       this.heder_title = 'Licence  Renewal';
     } else if(this.get_identifier == 'suspend_licence_modal'){
       this.heder_title = 'Licence  Suspension';
+      this.form_api = 'license/suspend/'+this.get_item;
     } else if(this.get_identifier == 'extend_licence_modal'){
       this.heder_title = 'Licence  Extension';
     } else if(this.get_identifier == 'changepassword_modal'){
@@ -110,6 +113,7 @@ export class ModalPage implements OnInit {
   // view data fetch end
 
   // =================== Form submit start =======================
+  // for License Suspension start
   formLoading = false;
   apiForEmail;
   apiForPhone;
@@ -134,8 +138,7 @@ export class ModalPage implements OnInit {
     if(!form.valid){
       return;
     }
-
-    this.formSubmitSubscribe = this.http.post(this.form_api, form.value).subscribe(
+      this.formSubmitSubscribe = this.http.post(this.form_api, form.value).subscribe(
       (response:any) => {
         this.formLoading = false;
 
@@ -145,7 +148,7 @@ export class ModalPage implements OnInit {
           this.commonUtils.presentToast('success', response.message);
           // this.get_array.push(response);
           form.reset();
-          this.modalController.dismiss('submitClose',response.message );
+          this.modalController.dismiss('submitClose',response.status );
           
         }else{
           this.commonUtils.presentToast('warning', response.message);
@@ -155,13 +158,35 @@ export class ModalPage implements OnInit {
         this.formLoading = false;
       }
     );
+    
+    
 
   }
+  // package Suspension start
 
+  // package Suspension end
+  // for License Suspension start
   // close modal
   closeModal() {
     // this.modalController.dismiss(this.arrayList);
     this.modalController.dismiss();
   }
+
+  // Date format change start
+  changeDateFormat(_identifier, _date){
+    console.log('_date', _date);
+    console.log('_identifier', _identifier);
+
+    if(_identifier == 'licSusDate') {
+      this.model.llEdate = moment(_date).format('YYYY/MM/DD');
+    }else if(_identifier == 'plSusDate') {
+      this.model.plAdate = moment(_date).format('YYYY/MM/DD');
+    }
+    console.log('model.llEdate', this.model.llEdate);
+  
+
+  }
+  // Date format change end
+
 
 }

@@ -84,8 +84,8 @@ export class AuthService {
     // ---setGlobalParams function defination----
     private setGlobalParams(resData){
       console.log('..................set 11 >', resData);
-      if(resData.return_status > 0){
-        this.commonUtils.presentToast('success', resData.return_message);
+      if(resData.status > 200){
+        this.commonUtils.presentToast('success', resData.message);
         // window.location.reload();
       }
       this._globalparamsData.next(

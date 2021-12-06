@@ -17,7 +17,7 @@
         <div class="form-layout">
           <div class="form-wrapper">
             <ion-grid>
-              <form #changePasswordForm="ngForm" (ngSubmit)="onSubmitForm(changePasswordForm)" (keyup.enter)="onSubmitForm(changePasswordForm)" [mustMatch]="['password', 'confirm_password']" novalidate>
+              <form #changePasswordForm="ngForm" (ngSubmit)="onSubmitForm(changePasswordForm)" [mustMatch]="['password', 'confirm_password']" novalidate>
                 <ion-row>
                   <input type="hidden" name="userName" [(ngModel)]="get_item" required>
                   <!-- Enter old password -->
@@ -78,34 +78,39 @@
         <div class="form-layout">
           <div class="form-wrapper">
             <ion-grid>
-              <ion-row>
-                <!-- Date -->
-                <ion-col size-xs="12" size-sm="12" size-md="12"  size-lg="12">
-                  <div class="form-item">
-                    <mat-form-field class="example-full-width" appearance="outline">
-                      <mat-label>Date</mat-label>
-                      <input matInput [matDatepicker]="dob">
-                      <mat-datepicker-toggle matSuffix [for]="dob"></mat-datepicker-toggle>
-                      <mat-datepicker touchUi #dob></mat-datepicker>
-                    </mat-form-field>
+              <form #suspendPackageForm="ngForm" (ngSubmit)="onSubmitForm(suspendPackageForm)" novalidate>
+                <ion-row>
+                  <!-- Date -->
+                  <ion-col size-xs="12" size-sm="12" size-md="12"  size-lg="12">
+                    <div class="form-item">
+                      <mat-form-field appearance="outline">
+                        <mat-label>Date</mat-label>
+                        <input (change)="changeDateFormat('plSusDate', model.plSusDate)" matInput placeholder="Date of Birth" type="date" name="plSusDate" [(ngModel)]="model.plSusDate" required>
+                      </mat-form-field>
+                    </div>
+                  </ion-col>
+                  <!-- Hidden -->
+                  <input type="hidden" name="plAdate" [(ngModel)]="model.plAdate" required>
+                  <!-- Remarks -->
+                  <ion-col size-xs="12" size-sm="12" size-md="12"  size-lg="12">
+                    <div class="form-item">
+                      <mat-form-field appearance="outline">
+                        <mat-label>Remarks</mat-label>
+                        <textarea rows="5" matInput name="plComment" [(ngModel)]="model.plComment"></textarea>
+                      </mat-form-field>
+                    </div>
+                  </ion-col>
+                </ion-row>
+                <ion-footer class="modal-footer">
+                  <div class="footer-inner">
+                    <button class="border-btn danger btn-md" style="margin-right: 10px;" (click)="closeModal()" mat-stroked-button>Cancel</button>
+                    <button class="fill-btn btn-md" mat-stroked-button type="submit" [disabled]="!suspendPackageForm.valid || formLoading">
+                      <ion-spinner *ngIf="formLoading" name="crescent"></ion-spinner>
+                      Save
+                    </button>
                   </div>
-                </ion-col>
-                <!-- Remarks -->
-                <ion-col size-xs="12" size-sm="12" size-md="12"  size-lg="12">
-                  <div class="form-item">
-                    <mat-form-field appearance="outline">
-                      <mat-label>Remarks</mat-label>
-                      <textarea rows="5" matInput></textarea>
-                    </mat-form-field>
-                  </div>
-                </ion-col>
-              </ion-row>
-              <ion-footer class="modal-footer">
-                <div class="footer-inner">
-                  <button class="border-btn danger btn-md" style="margin-right: 10px;" (click)="closeModal()" mat-stroked-button>Cancel</button>
-                  <button class="fill-btn btn-md" mat-stroked-button type="submit" (click)="closeModal()">Save</button>
-                </div>
-              </ion-footer>
+                </ion-footer>
+              </form>
             </ion-grid>
           </div>
         </div>
@@ -340,34 +345,39 @@
         <div class="form-layout">
           <div class="form-wrapper">
             <ion-grid>
-              <ion-row>
-                <!-- Date -->
-                <ion-col size-xs="12" size-sm="12" size-md="12"  size-lg="12">
-                  <div class="form-item">
-                    <mat-form-field class="example-full-width" appearance="outline">
-                      <mat-label>Date</mat-label>
-                      <input matInput [matDatepicker]="dob">
-                      <mat-datepicker-toggle matSuffix [for]="dob"></mat-datepicker-toggle>
-                      <mat-datepicker touchUi #dob></mat-datepicker>
-                    </mat-form-field>
+              <form #suspendLicenseForm="ngForm" (ngSubmit)="onSubmitForm(suspendLicenseForm)" novalidate>
+                <ion-row>
+                  <!-- Date -->
+                  <ion-col size-xs="12" size-sm="12" size-md="12"  size-lg="12">
+                    <div class="form-item">
+                      <mat-form-field appearance="outline">
+                        <mat-label>Date</mat-label>
+                        <input (change)="changeDateFormat('licSusDate', model.licSusDate)" matInput placeholder="Date of Birth" type="date" name="licSusDate" [(ngModel)]="model.licSusDate" required>
+                      </mat-form-field>
+                    </div>
+                  </ion-col>
+                  <!-- Hidden -->
+                  <input type="hidden" name="llEdate" [(ngModel)]="model.llEdate" required>
+                  <!-- Remarks -->
+                  <ion-col size-xs="12" size-sm="12" size-md="12"  size-lg="12">
+                    <div class="form-item">
+                      <mat-form-field appearance="outline">
+                        <mat-label>Remarks</mat-label>
+                        <textarea rows="5" matInput name="llComment" [(ngModel)]="model.llComment"></textarea>
+                      </mat-form-field>
+                    </div>
+                  </ion-col>
+                </ion-row>
+                <ion-footer class="modal-footer">
+                  <div class="footer-inner">
+                    <button class="border-btn danger btn-md" style="margin-right: 10px;" (click)="closeModal()" mat-stroked-button>Cancel</button>
+                    <button class="fill-btn btn-md" mat-stroked-button type="submit" [disabled]="!suspendLicenseForm.valid || formLoading">
+                      <ion-spinner *ngIf="formLoading" name="crescent"></ion-spinner>
+                      Save
+                    </button>
                   </div>
-                </ion-col>
-                <!-- Remarks -->
-                <ion-col size-xs="12" size-sm="12" size-md="12"  size-lg="12">
-                  <div class="form-item">
-                    <mat-form-field appearance="outline">
-                      <mat-label>Remarks</mat-label>
-                      <textarea rows="5" matInput></textarea>
-                    </mat-form-field>
-                  </div>
-                </ion-col>
-              </ion-row>
-              <ion-footer class="modal-footer">
-                <div class="footer-inner">
-                  <button class="border-btn danger btn-md" style="margin-right: 10px;" (click)="closeModal()" mat-stroked-button>Cancel</button>
-                  <button class="fill-btn btn-md" mat-stroked-button type="submit" (click)="closeModal()">Save</button>
-                </div>
-              </ion-footer>
+                </ion-footer>
+              </form>
             </ion-grid>
           </div>
         </div>

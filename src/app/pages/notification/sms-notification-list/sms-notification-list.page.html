@@ -12,7 +12,7 @@
                     SMS Template List
                   </div>
                   <div class="card-header-action">
-                    <button class="border-btn success" [routerLink]="['/', 'add-sms-notification']" mat-stroked-button>
+                    <button class="border-btn success" [routerLink]="['/', 'add-sms-notification', 'add', 'id']" mat-stroked-button>
                       <mat-icon>add_circle_outline</mat-icon>
                       Add Template
                     </button>
@@ -24,17 +24,16 @@
                     <ion-item class="record">
                       <span>Records: </span>
                       <mat-form-field>
-                        <mat-select value="10">
-                          <mat-option value="10">10</mat-option>
-                          <mat-option value="25">25</mat-option>
-                          <mat-option value="50">50</mat-option>
-                          <mat-option value="100">100</mat-option>
+                        <mat-select [(ngModel)]="displayRecord" name="record" (selectionChange)="displayRecordChange($event.value)">
+                          <mat-option *ngFor="let record of displayRecords" [value]="record.displayValue">
+                            {{record.displayValue}}
+                          </mat-option>
                         </mat-select>
                       </mat-form-field>
                     </ion-item>
                   </div>
                   <div class="search-wrapper">
-                    <ion-searchbar showCancelButton="focus" debounce="500" placeholder="Search item ...."></ion-searchbar>
+                    <ion-searchbar showCancelButton="focus" debounce="500" placeholder="Search item ...." [(ngModel)]="searchTerm" (ionChange)="searchList($event)"></ion-searchbar>
                   </div>
                 </div>
                 <div class="table-responsive">
@@ -51,22 +50,12 @@
                                       <ion-checkbox color="primary"></ion-checkbox>
                                   </div>
                                 </th>
-                                <th class="ion-text-center">
+                                <th *ngFor="let th of tableHeaderData" (click)="isSortTableHeader(tableHeaderData, th)" class="ion-text-center">
                                   <div>
-                                    Template For
-                                    <mat-icon>import_export</mat-icon>
-                                  </div>
-                                </th>
-                                <th class="ion-text-center">
-                                  <div>
-                                    Template Name
-                                    <mat-icon>import_export</mat-icon>
-                                  </div>
-                                </th>
-                                <th class="ion-text-center">
-                                  <div>
-                                    Status
-                                    <mat-icon>import_export</mat-icon>
+                                    {{th.display_name}}
+                                    <mat-icon *ngIf="th.sortingButtonName == ''">import_export</mat-icon>
+                                    <mat-icon *ngIf="th.sortingButtonName == 'ASC'">expand_less</mat-icon>
+                                    <mat-icon *ngIf="th.sortingButtonName == 'DESC'">expand_more</mat-icon>
                                   </div>
                                 </th>
                                 <th class="ion-text-center">
@@ -82,27 +71,38 @@
                               Data is loading...
                             </td>
                           </tr>
-                          <tr  [hidden]="isListLoading" *ngFor="let item of skeleton; let i = index">
-                            <td>1</td>
+                          <tr [hidden]="isListLoading" *ngIf="tableData?.data.length == 0" class="loading-table-data">
+                            <td colspan="100">
+                              No data found
+                            </td>
+                          </tr>
+                          <tr [hidden]="isListLoading" *ngFor="let item of tableData?.data; let i = index">
+                            <td>{{i + 1}}</td>
                             <td>
                               <ion-checkbox color="primary"></ion-checkbox>
                             </td>
                             <td>
-                              SMS-OUT
+                              {{item?.stAction}}
                             </td>
                             <td>
-                              Registration template
+                              {{item?.stName}}
                             </td>
                             <td>
-                              Default
+                              {{item?.stType}}
                             </td>
                             <td>
                               <div class="action ion-text-center">
-                                <ion-button matTooltip="Edit" matTooltipPosition="above" size="small" color="secondary" (click)="clickActionBtn('', 'edit')" [routerLink]="['/', 'add-email-notification']">
-                                    <mat-icon>edit</mat-icon>
+                                <ion-button [ngClass]="{'readOnly': item?.stType == 'DEFAULT'}" matTooltip="Edit" matTooltipPosition="above" size="small" color="secondary" [routerLink]="['/', 'add-sms-notification', 'edit', item.stId ]">
+                                  <mat-icon>edit</mat-icon>
                                 </ion-button>
-                                <ion-button matTooltip="Delete" matTooltipPosition="above" size="small" color="danger" (click)="presentAlert()">
+                                <ion-button [ngClass]="{'readOnly': item?.stType == 'DEFAULT'}" matTooltip="Delete" matTooltipPosition="above" size="small" color="danger" (click)="presentAlert('delete', item.stId)">
                                     <mat-icon>delete</mat-icon>
+                                </ion-button>
+                               <ion-button  *ngIf="item?.isPrimary == 1" matTooltip="Unset form Primary" matTooltipPosition="above" size="small" color="success" (click)="presentAlert('unsetprimary', item.stId)">
+                                  <mat-icon>visibility</mat-icon>
+                                </ion-button>
+                                <ion-button *ngIf="item?.isPrimary == 0" matTooltip="Set Primary" matTooltipPosition="above" size="small" color="medium" (click)="presentAlert('setprimary', item.stId)">
+                                    <mat-icon>visibility_off</mat-icon>
                                 </ion-button>
                               </div>
                             </td>
@@ -113,22 +113,22 @@
               </div>
               <div class="card-footer">
                   <div class="action">
-                    <ion-button matTooltip="Refresh" matTooltipPosition="above" size="small" color="secondary" (click)="clickActionBtn('', 'refresh')">
+                    <ion-button matTooltip="Refresh" matTooltipPosition="above" size="small" color="secondary" (click)="onRefresh()">
                         <mat-icon>refresh</mat-icon>
                     </ion-button>
-                    <ion-button matTooltip="Delete" matTooltipPosition="above" size="small" color="danger" (click)="presentAlert()">
+                    <!-- <ion-button matTooltip="Delete" matTooltipPosition="above" size="small" color="danger" (click)="presentAlert()">
                         <mat-icon>delete</mat-icon>
-                    </ion-button>
+                    </ion-button> -->
                   </div>
                   <div>
                     <ul class="pagination">
-                        <li class="circle-border" matTooltip="First" matTooltipPosition="above">
+                        <li (click)="setPage(0)" [ngClass]="{disabled:tableData?.currentPage === 0}" class="circle-border" matTooltip="First" matTooltipPosition="above">
                             <a>
                               <!-- First -->
                               <ion-icon name="play-skip-back"></ion-icon>
                             </a>
                         </li>
-                        <li class="circle-border" matTooltip="Previous" matTooltipPosition="above">
+                        <li (click)="setPage(tableData.currentPage - 1)" [ngClass]="{disabled:tableData?.currentPage === 0}" class="circle-border" matTooltip="Previous" matTooltipPosition="above">
                             <a>
                               <!-- Previous -->
                               <ion-icon name="caret-back"></ion-icon>
@@ -136,16 +136,16 @@
                         </li>
                         <li> <span class="ran-separator pull-right margin-top-3"></span> </li>
                         <li>
-                            Page <a>1</a> of 10
+                             Page <a>{{ tableData?.currentPage + 1 }}</a> of {{ tableData?.totalPage + 1 }} 
                         </li>
                         <li> <span class="ran-separator pull-right margin-top-3"></span> </li>
-                        <li class="circle-border" matTooltip="Next" matTooltipPosition="above">
+                        <li (click)="setPage(tableData.currentPage + 1)" [ngClass]="{disabled:tableData?.currentPage === tableData?.totalPage}" class="circle-border" matTooltip="Next" matTooltipPosition="above">
                             <a>
                               <!-- Next -->
                               <ion-icon name="caret-forward"></ion-icon>
                             </a>
                         </li>
-                        <li class="circle-border" matTooltip="Last" matTooltipPosition="above">
+                        <li (click)="setPage(tableData.totalPage)" [ngClass]="{disabled:tableData?.currentPage === tableData?.totalPage}" class="circle-border" matTooltip="Last" matTooltipPosition="above">
                             <a>
                               <!-- Last -->
                               <ion-icon name="play-skip-forward"></ion-icon>
