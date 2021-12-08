@@ -21,17 +21,27 @@
                     <ion-row>
                        <!-- Template For -->
                        <ion-col size-xs="12" size-sm="4" size-md="4"  size-lg="4">
-                        <div class="form-item">
+                        <div class="form-item ngsel">
                          <!--  <ion-badge class="pillBtn" color="primary" (click)="AddSmsTemplate('AddSmsTemplate_modal', get_user_dtls, '');">
                             <ion-icon name="add-outline"></ion-icon>
                             Add
                           </ion-badge> -->
-                          <mat-form-field appearance="outline">
+                         <!--  <mat-form-field appearance="outline">
                             <mat-label>Template For </mat-label>
                             <mat-select [(value)]="selectedTemplate" [(ngModel)]="model.stAction" name="stAction" required>
                               <mat-option (click)="selectTemplates(template.stTags)" [value]="template.stName" *ngFor="let template of templates">{{ template.stName }}</mat-option>
                             </mat-select>
-                          </mat-form-field>
+                          </mat-form-field> -->
+                           
+                          <ng-select [items]="Templates" 
+                                   bindLabel="etAction" 
+                                   name="etAction"
+                                   placeholder="Select Template For"
+                                   bindValue="etAction" 
+                                   [(ngModel)]="model.etAction"
+                                   (change)="selectTemplates(model.etAction)">
+                          </ng-select>
+                          <label>Template For</label>
                         </div>
                       </ion-col>
                       <!-- Template name -->
@@ -60,17 +70,21 @@
                       </ion-col> -->
                       <!-- Set Default -->
                       <ion-col size-xs="12" size-sm="4" size-md="4"  size-lg="4">
-                        <div class="form-item">
+                        <div class="form-item ngsel">
                          <!--  <ion-badge class="pillBtn" color="primary"  (click)="addSmsDefault('add_Sms_default_modal', get_user_dtls, '');">
                             <ion-icon name="add-outline"></ion-icon>
                             Add
                           </ion-badge> -->
-                          <mat-form-field appearance="outline">
-                            <mat-label>Set Default </mat-label>
-                            <mat-select [(value)]="selectedType" [(ngModel)]="model.isPrimary" name="isPrimary" required>
-                              <mat-option [value]="setDefault.id" *ngFor="let setDefault of setDefaults">{{ setDefault.name }}</mat-option>
-                            </mat-select>
-                          </mat-form-field>
+                          
+                          <ng-select [items]="setDefaults" 
+                                   bindLabel="name" 
+                                   name="isPrimary"
+                                   placeholder="Select Set Default"
+                                   bindValue="id" 
+                                   [(ngModel)]="model.isPrimary"
+                                   (change)="ngsel(model.isPrimary)">
+                          </ng-select>
+                          <label>Set Default</label>
                         </div>
                       </ion-col>
                       <!-- Template name -->
@@ -98,16 +112,45 @@
                         </div>
                       </ion-col>
                       <!-- Template Description -->
-                      <ion-col size-xs="12" size-sm="12" size-md="12"  size-lg="12">
+                      <!-- <ion-col size-xs="12" size-sm="12" size-md="12"  size-lg="12">
                         <div class="form-item">
                           <ion-label>Template Body </ion-label>
                           <div class="text-editor">
                             <tinymce  name="stBody" [(ngModel)]="model.stBody" required></tinymce>
                           </div>
                         </div>
+                      </ion-col> -->
+                    </ion-row>
+                    <ion-row>
+                      <!-- Message Text -->
+                      <ion-col size-xs="12" size-sm="12" size-md="6"  size-lg="6">
+                        <div class="form-item ngsel">
+                           <ng-select [items]="selectFieldVariable" 
+                                    bindLabel="name" 
+                                    name="msgVariable"
+                                    placeholder="Select field"
+                                    bindValue="id" 
+                                    [(ngModel)]="model.msgVariable"
+                                    (change)="selectFieldForMsg(model.msgVariable)">
+                           </ng-select>
+                           <label>Select field</label>
+                         </div>
+                        <div class="form-item">
+                          <mat-form-field appearance="outline">
+                            <mat-label>Message Text</mat-label>
+                            <textarea #msgText (click)="getCursorPosition(msgText, model.stBody)" (keyup)="getCursorPosition(msgText, model.stBody)" matInput name="stBody" [(ngModel)]="model.stBody" required></textarea>
+                          </mat-form-field>
+                        </div>
+                        <p *ngIf="model.stBody" class="informationTxt"><span>{{model?.stBody?.length}}</span> Characters Used.  |  Count <span>{{model?.stBody?.length / 120  | number: '1.0-0'}}</span></p> 
+                      </ion-col>
+                      <!-- Message view -->
+                      <ion-col *ngIf="model.stBody" size-xs="12" size-sm="12" size-md="6"  size-lg="6">
+                        <div class="msgViewBox">
+                          <p class="msgHeading">Message view</p>
+                          <p class="msgBody">{{model?.stBody}}</p>
+                        </div>
                       </ion-col>
                     </ion-row>
-                    <!-- <p class="informationTxt">You have <span>100</span> characters left.</p> -->
                   </ion-grid>
                 </div>
               </div>

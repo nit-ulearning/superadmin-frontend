@@ -92,10 +92,10 @@
                             </td>
                             <td>
                               <div class="action ion-text-center">
-                                <ion-button [ngClass]="{'readOnly': item?.etType == 'DEFAULT'}" matTooltip="Edit" matTooltipPosition="above" size="small" color="secondary" [routerLink]="['/', 'add-email-notification', 'edit', item.etId ]">
+                                <ion-button matTooltip="Edit" matTooltipPosition="above" size="small" color="secondary" [routerLink]="['/', 'add-email-notification', 'edit', item.etId ]">
                                   <mat-icon>edit</mat-icon>
                                 </ion-button>
-                                <ion-button [ngClass]="{'readOnly': item?.etType == 'DEFAULT'}" matTooltip="Delete" matTooltipPosition="above" size="small" color="danger" (click)="presentAlert('delete', item.etId)">
+                                <ion-button matTooltip="Delete" matTooltipPosition="above" size="small" color="danger" (click)="presentAlert('delete', item.etId)">
                                     <mat-icon>delete</mat-icon>
                                 </ion-button>
                                 <ion-button  *ngIf="item?.isPrimary == 1" matTooltip="Unset form Primary" matTooltipPosition="above" size="small" color="success" (click)="presentAlert('unsetprimary', item.etId)">

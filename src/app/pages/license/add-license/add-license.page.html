@@ -45,63 +45,7 @@
                         </div>
                       </ion-col>
                       <input type="hidden" name="lcCreatDate" [(ngModel)]="model.lcCreatDate">
-                      <!-- Institute -->
-                      <ion-col size-xs="12" size-sm="6" size-md="4"  size-lg="4">
-                        <div class="form-item">
-                          <mat-form-field appearance="outline">
-                            <mat-label>Institutes</mat-label>
-                            <mat-select required [(ngModel)]="model.instId" name="instId">
-                              <mat-option *ngFor="let Institute of institutes" [value]="Institute.instId">
-                                {{Institute.instName}}
-                              </mat-option>
-                            </mat-select>
-                          </mat-form-field>
-                        </div>
-                      </ion-col>
-
-                      <!-- License Type -->
-                      <ion-col size-xs="12" size-sm="6" size-md="4"  size-lg="4">
-                        <div class="form-item">
-                          <mat-form-field appearance="outline">
-                            <mat-label>License Type</mat-label>
-                            <mat-select required [(ngModel)]="model.lcType" name="lcType">
-                              <mat-option *ngFor="let license of licenseType" [value]="license.name">
-                                {{license.name}}
-                              </mat-option>
-                            </mat-select>
-                          </mat-form-field>
-                        </div>
-                      </ion-col>
-
-                      <!-- Server Type -->
-                      <ion-col size-xs="12" size-sm="6" size-md="4"  size-lg="4">
-                        <div class="form-item">
-                          <mat-form-field appearance="outline">
-                            <mat-label>Server Type</mat-label>
-                            <mat-select required [(ngModel)]="model.lcStype" name="lcStype">
-                              <mat-option *ngFor="let server of serverType" [value]="server.name">
-                                {{server.name}}
-                              </mat-option>
-                            </mat-select>
-                          </mat-form-field>
-                        </div>
-                      </ion-col>
-
-                      <!-- Validity -->
-                      <ion-col size-xs="12" size-sm="6" size-md="4"  size-lg="4">
-                        <div class="form-item">
-                          <mat-form-field appearance="outline">
-                            <mat-label>Validity</mat-label>
-                            <mat-select required [(ngModel)]="model.lcValidityType" name="lcValidityType" (selectionChange)="endDateCalculate('validity',model.lcValidityType);">
-                              <mat-option *ngFor="let item of validity" [value]="item.name">
-                                {{item.name}}
-                              </mat-option>
-                            </mat-select>
-                          </mat-form-field>
-                        </div>
-                      </ion-col>
-
-                      <!-- Duration -->
+                       <!-- Duration -->
                       <ion-col size-xs="12" size-sm="6" size-md="4"  size-lg="4">
                         <div class="form-item">
                           <mat-form-field appearance="outline">
@@ -110,8 +54,82 @@
                           </mat-form-field>
                         </div>
                       </ion-col>
+                      <!-- Institute -->
+                      <ion-col size-xs="12" size-sm="6" size-md="4"  size-lg="4">
+                        <div class="form-item ngsel">
+                          
+                          <ng-select [items]="institutes" 
+                                   bindLabel="instName" 
+                                   placeholder="Select Institute"
+                                   name="instId"
+                                   bindValue="instId" 
+                                   [(ngModel)]="model.instId"
+                                   (change)="ngsel(model.instId)"
+                                   required>
+                          </ng-select>
+                          <label>Select Institute</label>
+                        </div>
+                      </ion-col>
 
-                      <!-- End date -->
+                      <!-- License Type -->
+                      <ion-col size-xs="12" size-sm="6" size-md="4"  size-lg="4">
+                        <div class="form-item  ngsel">
+                          
+                          <ng-select [items]="licenseType" 
+                                   bindLabel="name" 
+                                   name="lcType"
+                                   placeholder="Select License Type"
+                                   bindValue="name" 
+                                   [(ngModel)]="model.lcType"
+                                   (change)="ngsel(model.lcType)"
+                                   required>
+                          </ng-select>
+                          <label>License Type</label>
+                        </div>
+                      </ion-col>
+
+                      <!-- Server Type -->
+                      <ion-col size-xs="12" size-sm="4" size-md="4"  size-lg="4">
+                        <div class="form-item ngsel">
+                          
+                          <ng-select [items]="serverType" 
+                                   bindLabel="name" 
+                                   name="lcStype"
+                                   placeholder="Select Server Type"
+                                   bindValue="name" 
+                                   [(ngModel)]="model.lcStype"
+                                   (change)="ngsel(model.lcStype)"
+                                   required>
+                          </ng-select>
+                          <label>Server Type</label>
+                        </div>
+                      </ion-col>
+
+                      <!-- Validity -->
+                      <ion-col size-xs="12" size-sm="6" size-md="4"  size-lg="4">
+                        <div class="form-item ngsel">
+                          <!-- <mat-form-field appearance="outline">
+                            <mat-label>Validity</mat-label>
+                            <mat-select required [(ngModel)]="model.lcValidityType" name="lcValidityType" (selectionChange)="endDateCalculate('validity',model.lcValidityType);">
+                              <mat-option *ngFor="let item of validity" [value]="item.name">
+                                {{item.name}}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field> -->
+                          
+                          <ng-select [items]="validity" 
+                                   bindLabel="name" 
+                                   name="lcValidityType"
+                                   placeholder="Select Validity"
+                                   bindValue="name" 
+                                   [(ngModel)]="model.lcValidityType"
+                                   (change)="endDateCalculate('validity',model.lcValidityType);"
+                                   required>
+                          </ng-select>
+                          <label>Validity</label>
+                        </div>
+                      </ion-col>
+                     <!-- End date -->
                       <ion-col size-xs="12" size-sm="6" size-md="4"  size-lg="4">
                         <div class="form-item readOnly">
                           <mat-form-field appearance="outline">

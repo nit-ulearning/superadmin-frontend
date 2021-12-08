@@ -69,6 +69,24 @@ body {
     cursor: not-allowed;
     opacity: 0.6;
 }
+.msgViewBox {
+    border: 1px dashed #4444;
+    .msgHeading{
+        text-align: center;
+        font-weight: 500;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        padding: 10px;
+        margin: 0px;
+        border-bottom: 1px dashed #4444;
+    }
+    .msgBody {
+        margin: 0;
+        padding: 10px;
+        min-height: 150px;
+        font-family: monospace;
+    }
+}
 .customnumber{
     mat-label
     {
@@ -1487,16 +1505,35 @@ ion-header.main-header {
             ng-select {
                 .ng-select-container {
                     padding: 10px 0px 10px 8px;
-                    height: 42px;
-                    margin-top: 8px;
+                    height: 50px;
+                    margin-top: 5px;
                     border-radius: 6px;
                     border: 1px solid #b9b9b9;
                 }
                 .ng-select-container:focus {
                     border-color: #3195cb;
+                    border: 2.2px solid #5CD470;
                     box-shadow: 0 0.313rem 0.719rem rgb(122 123 151 / 10%), 0 0.156rem 0.125rem rgb(122 123 151 / 6%);
+
                 }
             }
+            .ngsel
+            {
+               ng-select {
+                    .ng-select-container {
+                        padding: 10px 0px 10px 8px;
+                        height: 50px !important;
+                        margin-top: 5px !important;
+                        border-radius: 6px;
+                        border: 1px solid #b9b9b9;
+                    }
+                    .ng-select-container:focus {
+                        border-color: #3195cb;
+                        box-shadow: 0 0.313rem 0.719rem rgb(122 123 151 / 10%), 0 0.156rem 0.125rem rgb(122 123 151 / 6%);
+                    }
+                } 
+            }
+            
             .custom-file {
                 position: relative;
                 display: inline-block;
@@ -2358,3 +2395,78 @@ ion-modal.mymodalClass.medium {
     }
 }
 // chandan end
+.form-item.ngsel
+{
+    position: relative;
+    label
+    {
+        position: absolute;
+        height: fit-content;
+        width: fit-content;
+        left: 3%;
+        top: 50%;
+        background: #fff;
+        transition:.3s ease-in-out;
+        transform: translateY(-50%);
+        z-index: 1;
+        color: #666;
+    }
+    .ng-select 
+    {
+        margin-bottom: 20px;
+        .ng-select-container 
+        {
+            z-index: 0;
+        }
+    }
+    .ng-select:valid + label
+    {
+         top: 0%;
+         font-size: 11px;
+         padding: 0 3px;
+         color: #666;
+         overflow: hidden;
+    }
+    .ng-placeholder
+    {
+        // display: none;
+    }
+    .ng-select.ng-select-focused .ng-placeholder
+    {
+        // display: block;
+    }
+    .ng-select.ng-select-focused .ng-select-container
+    {
+        border: 2.3px solid #5CD470;   
+    }
+    .ng-select-focused + label
+    {
+         top: 0%;
+         font-size: 11px;
+         padding: 0px 3px;
+         color: #5CD470;
+    }
+    .ng-valid + label
+    {
+         top: 0%;
+         font-size: 11px;
+         padding: 0 3px;
+         color: #666;
+    }
+    .ng-invalid .ng-placeholder
+    {
+
+    }
+    .ng-select-focused  .ng-placeholder
+    {
+        display: none;
+    }
+    .ng-select  .ng-placeholder
+    {
+        display: none;
+    }
+    .ng-select-container .ng-input input:valid
+    {
+        // background: red;
+    }
+}

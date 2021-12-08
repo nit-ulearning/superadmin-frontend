@@ -98,6 +98,10 @@ export class AddSubscriptionPackagePage implements OnInit {
         }
       );
   }
+  ngsel(value)
+  {
+     console.log("select", value);  
+  }
   // ---------- init start ----------
   init(){
     if( this.parms_action_name == 'edit'){

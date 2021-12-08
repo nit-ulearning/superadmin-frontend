@@ -179,7 +179,7 @@ export class SecurityListPage implements OnInit {
     // List data start
     onListDate(_listUrl, _pageNo, _displayRecord, _sortColumnName, _sortOrderName, _searchTerm){
       this.isListLoading = true;
-      let api = _listUrl+'/'+_pageNo+'/'+_displayRecord+'/'+_sortColumnName+'/'+_sortOrderName+'?keyword='+ _searchTerm;
+      let api = _listUrl+'/'+_pageNo+'/'+_displayRecord+'/'+_sortColumnName+'/'+_sortOrderName+'/0?keyword='+ _searchTerm;
       this.tableListSubscribe = this.http.get(api).subscribe(
         (res:any) => {
           this.isListLoading = false;

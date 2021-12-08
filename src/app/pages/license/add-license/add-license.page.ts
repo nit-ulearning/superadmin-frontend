@@ -93,7 +93,7 @@ export class AddLicensePage implements OnInit {
   selectedinstitute = this.institutes[0].name;
   selectedPaymentType = this.paymentType[0].name;
   selectedLicenseFor = this.licenseFor[0].name;
-
+  instId;
   parms_action_name;
   parms_action_id;
   form_api;
@@ -144,7 +144,10 @@ export class AddLicensePage implements OnInit {
     // form_api Api
     this.form_api = 'license/add';
   }
-
+  ngsel(value)
+  {
+      // this.instId = value;
+  }
   getInstituteList()
   {
     console.log("HHH");
@@ -183,9 +186,9 @@ export class AddLicensePage implements OnInit {
             lcEndDate : res.lcEndDate,
             lcComment : res.lcComment,
           }; 
-          
+          // this.ngsel(this.model.instId);
           this.model.creatDate = moment(res.lcCreatDate).format('YYYY-MM-DD');
-          console.log('this.model.creatDate', this.model.creatDate);
+          console.log('this.model.creatDate', this.model);
           
 
           // edit data

@@ -205,71 +205,91 @@
                       </ion-col>
                       <!-- Country -->
                       <ion-col size-xs="12" size-sm="6" size-md="4"  size-lg="4">
-                        <div class="form-item">
-                          <mat-form-field appearance="outline">
-                            <mat-label>Country </mat-label>
-                            <mat-select name="adrCountry" [(ngModel)]="model.adrCountry" required>
-                              <mat-option *ngFor="let item of country" [value]="item.id">
-                                {{item.name}}
-                              </mat-option>
-                            </mat-select>
-                          </mat-form-field>
+                        <div class="form-item ngsel">
+                          <ng-select [items]="country" 
+                                   bindLabel="name" 
+                                   name="adrCountry"
+                                   placeholder="Select Country"
+                                   bindValue="id" 
+                                   [(ngModel)]="model.adrCountry"
+                                   (change)="ngsel(model.adrCountry)"
+                                   required>
+                          </ng-select>
+                          <label>Country </label>
                         </div>
                       </ion-col>
                       <!-- State -->
                       <ion-col size-xs="12" size-sm="6" size-md="4"  size-lg="4">
-                        <div class="form-item">
-                          <mat-form-field appearance="outline">
-                            <mat-label>State </mat-label>
-                            <mat-select name="adrState" [(ngModel)]="model.adrState" required>
-                              <mat-option *ngFor="let item of state" [value]="item.id">
-                                {{item.name}}
-                              </mat-option>
-                            </mat-select>
-                          </mat-form-field>
+                        <div class="form-item ngsel">
+                          <ng-select [items]="state" 
+                                   bindLabel="name" 
+                                   name="adrState"
+                                   placeholder="Select State"
+                                   bindValue="id" 
+                                   [(ngModel)]="model.adrState"
+                                   (change)="ngsel(model.adrState)"
+                                   required>
+                          </ng-select>
+                          <label>State</label>
                         </div>
                       </ion-col>
                       <!-- District -->
                       <ion-col size-xs="12" size-sm="6" size-md="4"  size-lg="4">
-                        <div class="form-item">
-                          <mat-form-field appearance="outline">
-                            <mat-label>District</mat-label>
-                            <mat-select name="adrDistrict" [(ngModel)]="model.adrDistrict">
-                              <mat-option *ngFor="let item of district" [value]="item.id">
-                                {{item.name}}
-                              </mat-option>
-                            </mat-select>
-                          </mat-form-field>
+                        <div class="form-item ngsel">
+                          <ng-select [items]="district" 
+                                   bindLabel="name" 
+                                   name="adrDistrict"
+                                   placeholder="Select District"
+                                   bindValue="id" 
+                                   [(ngModel)]="model.adrDistrict"
+                                   (change)="ngsel(model.adrDistrict)"
+                                   required>
+                          </ng-select>
+                          <label>District </label>
                         </div>
                       </ion-col>
                       <!-- Taluka -->
                       <ion-col size-xs="12" size-sm="6" size-md="4"  size-lg="4">
-                        <div class="form-item">
-                          <mat-form-field appearance="outline">
+                        <div class="form-item ngsel">
+                          <!-- <mat-form-field appearance="outline">
                             <mat-label>Taluka</mat-label>
                             <mat-select name="adrTaluka" [(ngModel)]="model.adrTaluka">
                               <mat-option *ngFor="let item of taluka" [value]="item.id">
                                 {{item.name}}
                               </mat-option>
                             </mat-select>
-                          </mat-form-field>
+                          </mat-form-field> -->
+                         
+                          <ng-select [items]="district" 
+                                   bindLabel="name" 
+                                   name="adrTaluka"
+                                   placeholder="Select Taluka"
+                                   bindValue="id" 
+                                   [(ngModel)]="model.adrTaluka"
+                                   (change)="ngsel(model.adrTaluka)"
+                                   required>
+                          </ng-select> 
+                          <label>Taluka </label>
                         </div>
                       </ion-col>
                       <!-- City -->
                       <ion-col size-xs="12" size-sm="6" size-md="4"  size-lg="4">
-                        <div class="form-item">
-                          <mat-form-field appearance="outline">
-                            <mat-label>City</mat-label>
-                            <mat-select name="adrCity" [(ngModel)]="model.adrCity">
-                              <mat-option *ngFor="let item of city" [value]="item.id">
-                                {{item.name}}
-                              </mat-option>
-                            </mat-select>
-                          </mat-form-field>
+                        <div class="form-item ngsel">
+                          
+                          <ng-select [items]="city" 
+                                   bindLabel="name" 
+                                   name="adrCity"
+                                   placeholder="Select Taluka"
+                                   bindValue="id" 
+                                   [(ngModel)]="model.adrCity"
+                                   (change)="ngsel(model.adrCity)"
+                                   required>
+                          </ng-select>
+                          <label>City </label>
                         </div>
                       </ion-col>
                       <!-- Pin Code -->
-                      <ion-col size-xs="12" size-sm="6" size-md="4"  size-lg="4">
+                      <ion-col size-xs="12" size-sm="6" size-md="4"  size-lg="4" >
                         <div class="form-item">
                           <mat-form-field appearance="outline">
                             <mat-label>Pin Code </mat-label>

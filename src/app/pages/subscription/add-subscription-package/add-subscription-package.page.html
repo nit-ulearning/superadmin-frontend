@@ -38,19 +38,6 @@
                           </mat-form-field>
                         </div>
                       </ion-col>
-                      <!-- Institute -->
-                      <ion-col size-xs="12" size-sm="6" size-md="4"  size-lg="4" [ngClass]="{ 'readOnly' : instEdit }">
-                        <div class="form-item">
-                          <mat-form-field appearance="outline">
-                            <mat-label>Institutes</mat-label>
-                            <mat-select required [(ngModel)]="model.instId" name="instId" [ngClass]="{ 'readOnly' : instEdit }">
-                              <mat-option *ngFor="let Institute of institutes" [value]="Institute.instId" [ngClass]="{ 'readOnly' : instEdit }">
-                                {{Institute.instName}}
-                              </mat-option>
-                            </mat-select>
-                          </mat-form-field>
-                        </div>
-                      </ion-col>
                       <!-- No. of users -->
                       <ion-col size-xs="12" size-sm="6" size-md="4"  size-lg="4">
                         <div class="form-item">
@@ -60,18 +47,38 @@
                           </mat-form-field>
                         </div>
                       </ion-col>
+                      <!-- Institute -->
+                      <ion-col size-xs="12" size-sm="6" size-md="4"  size-lg="4" [ngClass]="{ 'readOnly' : instEdit }">
+                        <div class="form-item">
+                          <mat-label>Institutes</mat-label>
+                          <ng-select [items]="institutes" 
+                                   bindLabel="instName" 
+                                   name="instId"
+                                   placeholder="Select Institutes"
+                                   bindValue="instId" 
+                                   [(ngModel)]="model.instId"
+                                   (change)="ngsel(model.instId)"
+                                   [ngClass]="{ 'readOnly' : instEdit }"
+                                   required>
+                          </ng-select>
+                          <!-- </mat-form-field> -->
+                        </div>
+                      </ion-col>
+                      
 
                       <!-- Validity -->
                       <ion-col size-xs="12" size-sm="6" size-md="4"  size-lg="4">
                         <div class="form-item">
-                          <mat-form-field appearance="outline">
                             <mat-label>Validity</mat-label>
-                            <mat-select [(ngModel)]="model.pkValidityType" required name="pkValidityType">
-                              <mat-option *ngFor="let item of validity" [value]="item.name">
-                                {{item.name}}
-                              </mat-option>
-                            </mat-select>
-                          </mat-form-field>
+                            <ng-select [items]="validity" 
+                                   bindLabel="name" 
+                                   name="pkValidityType"
+                                   placeholder="Select Validity"
+                                   bindValue="name" 
+                                   [(ngModel)]="model.pkValidityType"
+                                   (change)="ngsel(model.pkValidityType)"
+                                   required >
+                          </ng-select>
                         </div>
                       </ion-col>
 
@@ -96,7 +103,7 @@
 
                           <mat-form-field appearance="outline">
                             <mat-label>Start Date</mat-label>
-                            <input (change)="changeDateFormat('startDate', model.chkdurationyear)" (keydown)="disableDate()" matInput placeholder="Start Date" type="date" name="chkdurationyear" [(ngModel)]="model.chkdurationyear" required>
+                            <input (change)="changeDateFormat('startDate', model.chkdurationyear)" onkeydown="return false" matInput placeholder="Start Date" type="date" name="chkdurationyear" [(ngModel)]="model.chkdurationyear" required>
                           </mat-form-field>
                         </div>
                       </ion-col>
@@ -107,7 +114,7 @@
                         <div class="form-item">
                           <mat-form-field appearance="outline">
                             <mat-label>Remarks</mat-label>
-                            <textarea matInput name="pkComment" [(ngModel)]="model.pkComment"></textarea>
+                            <textarea matInput name="pkComment" [(ngModel)]="model.pkComment" required></textarea>
                           </mat-form-field>
                         </div>
                       </ion-col>

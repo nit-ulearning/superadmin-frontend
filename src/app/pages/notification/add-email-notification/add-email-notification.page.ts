@@ -46,7 +46,7 @@ export class AddEmailNotificationPage implements OnInit {
   setDefaults=[
     {id: 0, name: 'Not Default'},
     {id: 1, name: 'Default'}
-  ]
+  ];
   // selectedCity = this.cities[0].name;
   // selectedType = this.setDefaults[1].name;
   // selectedTemplate = this.Templates[1].name;
@@ -80,6 +80,10 @@ export class AddEmailNotificationPage implements OnInit {
     
   }
   // getTemplatefor end
+  ngsel(value)
+  {
+    console.log("select",value);
+  }
   // commonFunction start 
   commonFunction(){
     // get active url name
@@ -135,7 +139,8 @@ export class AddEmailNotificationPage implements OnInit {
             etName : res.etName,
             etSubject : res.etSubject,
             isPrimary : res.isPrimary,
-            etBody:res.etBody
+            etBody:res.etBody,
+            etType: res.etType
           }; 
 
           
@@ -263,6 +268,7 @@ export class AddEmailNotificationPage implements OnInit {
     // this.Templates
     console.log("this.Templates ",this.Templates ); 
   }
+
   // ----------- destroy subscription start ---------
   ngOnDestroy() {
     if(this.formSubmitSubscribe !== undefined){

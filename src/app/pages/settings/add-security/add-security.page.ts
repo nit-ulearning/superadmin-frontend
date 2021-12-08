@@ -433,7 +433,10 @@ export class AddSecurityPage implements OnInit {
     return false;
   }
   // Disable date field end
-  
+  ngsel(value)
+  {
+     console.log('Select >>>', value);
+  }  
 
   // ----------- destroy subscription start ---------
   ngOnDestroy() {

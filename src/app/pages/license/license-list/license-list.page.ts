@@ -38,11 +38,11 @@ export class LicenseListPage implements OnInit {
       display_name: "License Name",
       sortingButtonName: ""
     },{
-      column_name: "Creation Date",
+      column_name: "lcCreatDate",
       display_name: "Creation Date",
       sortingButtonName: ""
     },{
-      column_name: "Validity Number",
+      column_name: "lcValidityNum",
       display_name: "Validity Number",
       sortingButtonName: ""
     },{
@@ -50,23 +50,19 @@ export class LicenseListPage implements OnInit {
       display_name: "Validity   Type",
       sortingButtonName: ""
     },{
-      column_name: "instituteEntity?.instName",
+      column_name: "instituteEntity.instName",
       display_name: "Institute",
       sortingButtonName: ""
     },{
-      column_name: "Numbers",
-      display_name: "Numbers",
-      sortingButtonName: ""
-    },{
-      column_name: "Expiry Date",
+      column_name: "lcEndDate",
       display_name: "Expiry Date",
       sortingButtonName: ""
     },{
-      column_name: "Server Type",
+      column_name: "lcStype",
       display_name: "Server Type",
       sortingButtonName: ""
     },{
-      column_name: "Status",
+      column_name: "lcStatus",
       display_name: "Status",
       sortingButtonName: ""
     }
@@ -113,7 +109,7 @@ export class LicenseListPage implements OnInit {
     // List data start
     onListDate(_listUrl, _pageNo, _displayRecord, _sortColumnName, _sortOrderName, _searchTerm){
       this.isListLoading = true;
-      let api = _listUrl+'/'+_pageNo+'/'+_displayRecord+'/'+_sortColumnName+'/'+_sortOrderName+'?keyword='+ _searchTerm;
+      let api = _listUrl+'/'+_pageNo+'/'+_displayRecord+'/'+_sortColumnName+'/'+_sortOrderName+'/0?keyword='+ _searchTerm;
       this.tableListSubscribe = this.http.get(api).subscribe(
         (res:any) => {
           this.isListLoading = false;

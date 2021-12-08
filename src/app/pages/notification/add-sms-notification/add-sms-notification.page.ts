@@ -55,6 +55,12 @@ export class AddSmsNotificationPage implements OnInit {
     {id: 0, name: 'Not Default'},
     {id: 1, name: 'Default'},
   ];
+  selectFieldVariable = [
+    {id: '##Number##', name: 'Number'},
+    {id: '##Name##', name: 'Name'},
+    {id: '##Class##', name: 'Class'},
+    {id: '##Roll##', name: 'Roll'},
+  ];
   
   selectedCity = this.cities[0].name;
   selectedHeader = this.headerIds[0].name;
@@ -71,7 +77,7 @@ export class AddSmsNotificationPage implements OnInit {
   ngOnInit() {
     this.commonFunction();
   }
-    // getTemplatefor start
+  // getTemplatefor start
   getTemplatefor(){
     console.log("HHH");
     this.templateforSMS_get = this.http.get(this.getTemplateForSMS_api).subscribe(
@@ -90,7 +96,7 @@ export class AddSmsNotificationPage implements OnInit {
   }
   // getTemplatefor end
   // commonFunction start 
- commonFunction(){
+  commonFunction(){
     // get active url name
     this.commonUtils.getPathNameFun(this.router.url.split('/')[1]);
     let x = this.commonUtils.getPathNameFun(this.router.url.split('/')[1])
@@ -101,7 +107,7 @@ export class AddSmsNotificationPage implements OnInit {
     console.log('parms_action_name', this.parms_action_name);
     console.log('parms_action_id', this.parms_action_id);
      this.getTemplateForSMS_api = 'smsTemplate/smsFor/list';
-    this.getTemplatefor();
+    // this.getTemplatefor();
     // edit api
     if(this.parms_action_name == 'edit'){
       this.editApi = 'smsTemplate/list/'+this.parms_action_id;
@@ -115,7 +121,8 @@ export class AddSmsNotificationPage implements OnInit {
     // form_api Api
     this.form_api = 'smsTemplate/add';
   }
-    // ---------- init start ----------
+  // commonFunction end
+  // ---------- init start ----------
   init(){
     if( this.parms_action_name == 'edit'){
       
@@ -165,8 +172,8 @@ export class AddSmsNotificationPage implements OnInit {
     }
   }
   // ---------- init end ----------
-// commonFunction end
-  // --------on submit star----------
+
+  // --------on submit start----------
   onSubmitForm(form:NgForm)
   {
     this.formLoading = true;
@@ -226,113 +233,149 @@ export class AddSmsNotificationPage implements OnInit {
     }
   }
   // on submit end
-    // AddTemplate start
-    async AddSmsTemplate(_identifier, _item, _items) {
-      // console.log('_identifier >>', _identifier);
-      let changePassword_modal;
-      changePassword_modal = await this.modalController.create({
-        component: ModalPage,
-        cssClass: 'mymodalClass small',
-        componentProps: { 
-          identifier: _identifier,
-          modalForm_item: _item,
-          modalForm_array: _items
-        }
-      });
-      
-      // modal data back to Component
-      changePassword_modal.onDidDismiss()
-      .then((getdata) => {
-        console.log('getdata >>>>>>>>>>>', getdata);
-        // this.presentToast('Package End', 'success');
-        if(getdata.data == 'submitClose'){
-          /* this.onListData(this.listing_url, this.displayRecord, this.pageNo, this.api_parms, this.searchTerm, this.cherecterSearchTerm, this.sortColumnName, this.sortOrderName, this.advanceSearchParms, this.urlIdentifire);  */
-        }
-  
-      });
-  
-      return await changePassword_modal.present();
-    }
-    // AddTemplate end
-    // choseHeader start
-    async choseHeader(_identifier, _item, _items) {
-      console.log('_identifier >>', _identifier);
-      let changePassword_modal;
-      changePassword_modal = await this.modalController.create({
-        component: ModalPage,
-        cssClass: 'mymodalClass small',
-        componentProps: { 
-          identifier: _identifier,
-          modalForm_item: _item,
-          modalForm_array: _items
-        }
-      });
-      
-      // modal data back to Component
-      changePassword_modal.onDidDismiss()
-      .then((getdata) => {
-        console.log('getdata >>>>>>>>>>>', getdata);
-        // this.presentToast('Package End', 'success');
-        if(getdata.data == 'submitClose'){
-          /* this.onListData(this.listing_url, this.displayRecord, this.pageNo, this.api_parms, this.searchTerm, this.cherecterSearchTerm, this.sortColumnName, this.sortOrderName, this.advanceSearchParms, this.urlIdentifire);  */
-        }
-  
-      });
-  
-      return await changePassword_modal.present();
-    }
-    // choseHeader end
-    // addSmsDefault start
-    async addSmsDefault(_identifier, _item, _items) {
-      console.log('_identifier >>', _identifier);
-      let changePassword_modal;
-      changePassword_modal = await this.modalController.create({
-        component: ModalPage,
-        cssClass: 'mymodalClass small',
-        componentProps: { 
-          identifier: _identifier,
-          modalForm_item: _item,
-          modalForm_array: _items
-        }
-      });
-      
-      // modal data back to Component
-      changePassword_modal.onDidDismiss()
-      .then((getdata) => {
-        console.log('getdata >>>>>>>>>>>', getdata);
-        // this.presentToast('Package End', 'success');
-        if(getdata.data == 'submitClose'){
-          /* this.onListData(this.listing_url, this.displayRecord, this.pageNo, this.api_parms, this.searchTerm, this.cherecterSearchTerm, this.sortColumnName, this.sortOrderName, this.advanceSearchParms, this.urlIdentifire);  */
-        }
-  
-      });
-  
-      return await changePassword_modal.present();
-    }
-    // addSmsDefault end 
+
+  // AddTemplate start
+  async AddSmsTemplate(_identifier, _item, _items) {
+    // console.log('_identifier >>', _identifier);
+    let changePassword_modal;
+    changePassword_modal = await this.modalController.create({
+      component: ModalPage,
+      cssClass: 'mymodalClass small',
+      componentProps: { 
+        identifier: _identifier,
+        modalForm_item: _item,
+        modalForm_array: _items
+      }
+    });
     
-    selectTemplates(_data){
-      console.log('_data>>', _data);
-      this.selectdTag = _data;
-    }
-
-    async presentToast() {
-      const toast = await this.toastController.create({
-        message: 'Your data have been saved.',
-        duration: 2000,
-        cssClass:"my-tost-custom-classsuccess",
-      });
-      toast.present();
-    }
-
-    // ----------- destroy subscription start ---------
-    ngOnDestroy() {
-      if(this.formSubmitSubscribe !== undefined){
-        this.formSubmitSubscribe.unsubscribe();
+    // modal data back to Component
+    changePassword_modal.onDidDismiss()
+    .then((getdata) => {
+      console.log('getdata >>>>>>>>>>>', getdata);
+      // this.presentToast('Package End', 'success');
+      if(getdata.data == 'submitClose'){
+        /* this.onListData(this.listing_url, this.displayRecord, this.pageNo, this.api_parms, this.searchTerm, this.cherecterSearchTerm, this.sortColumnName, this.sortOrderName, this.advanceSearchParms, this.urlIdentifire);  */
       }
-      if(this.editDataSubscribe !== undefined ){
-        this.editDataSubscribe.unsubscribe();
+
+    });
+
+    return await changePassword_modal.present();
+  }
+  // AddTemplate end
+  // choseHeader start
+  async choseHeader(_identifier, _item, _items) {
+    console.log('_identifier >>', _identifier);
+    let changePassword_modal;
+    changePassword_modal = await this.modalController.create({
+      component: ModalPage,
+      cssClass: 'mymodalClass small',
+      componentProps: { 
+        identifier: _identifier,
+        modalForm_item: _item,
+        modalForm_array: _items
       }
+    });
+    
+    // modal data back to Component
+    changePassword_modal.onDidDismiss()
+    .then((getdata) => {
+      console.log('getdata >>>>>>>>>>>', getdata);
+      // this.presentToast('Package End', 'success');
+      if(getdata.data == 'submitClose'){
+        /* this.onListData(this.listing_url, this.displayRecord, this.pageNo, this.api_parms, this.searchTerm, this.cherecterSearchTerm, this.sortColumnName, this.sortOrderName, this.advanceSearchParms, this.urlIdentifire);  */
+      }
+
+    });
+
+    return await changePassword_modal.present();
+  }
+  // choseHeader end
+  // addSmsDefault start
+  async addSmsDefault(_identifier, _item, _items) {
+    console.log('_identifier >>', _identifier);
+    let changePassword_modal;
+    changePassword_modal = await this.modalController.create({
+      component: ModalPage,
+      cssClass: 'mymodalClass small',
+      componentProps: { 
+        identifier: _identifier,
+        modalForm_item: _item,
+        modalForm_array: _items
+      }
+    });
+    
+    // modal data back to Component
+    changePassword_modal.onDidDismiss()
+    .then((getdata) => {
+      console.log('getdata >>>>>>>>>>>', getdata);
+      // this.presentToast('Package End', 'success');
+      if(getdata.data == 'submitClose'){
+        /* this.onListData(this.listing_url, this.displayRecord, this.pageNo, this.api_parms, this.searchTerm, this.cherecterSearchTerm, this.sortColumnName, this.sortOrderName, this.advanceSearchParms, this.urlIdentifire);  */
+      }
+
+    });
+
+    return await changePassword_modal.present();
+  }
+  // addSmsDefault end 
+  
+  selectTemplates(_data){
+    console.log('_data>>', _data);
+    this.selectdTag = _data;
+  }
+
+  async presentToast() {
+    const toast = await this.toastController.create({
+      message: 'Your data have been saved.',
+      duration: 2000,
+      cssClass:"my-tost-custom-classsuccess",
+    });
+    toast.present();
+  }
+
+  // Get selectFieldForMsg start
+  selectFieldForMsg(_value){
+    console.log('_value', _value);
+
+    if(!this.model.stBody){
+      this.model.stBody = _value;
+    }else{
+      this.model.stBody = this.postionBeforeValue + _value + this.postionAfterValue;
     }
-    // destroy subscription end
+    
+    console.log('this.model.stBody', this.model.stBody);
+    
+  }
+  // Get selectFieldForMsg end
+
+  // getCursorPosition start
+  postionBeforeValue;
+  postionAfterValue;
+  getCursorPosition(oField, _value) {
+    console.log('_value', _value);
+    
+    
+    if (oField.selectionStart || oField.selectionStart == '0') {
+
+      console.log('oField.selectionStart', oField.selectionStart);
+
+      this.postionBeforeValue = _value.slice(0,oField.selectionStart);
+      this.postionAfterValue = _value.slice(oField.selectionStart);
+        
+      console.log('postionBeforeValue', this.postionBeforeValue);
+      console.log('postionAfterValue', this.postionAfterValue);
+    }
+  }
+  // getCursorPosition end
+
+  // ----------- destroy subscription start ---------
+  ngOnDestroy() {
+    if(this.formSubmitSubscribe !== undefined){
+      this.formSubmitSubscribe.unsubscribe();
+    }
+    if(this.editDataSubscribe !== undefined ){
+      this.editDataSubscribe.unsubscribe();
+    }
+  }
+  // destroy subscription end
 }
