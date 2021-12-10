@@ -25,11 +25,11 @@ export class AddSmsNotificationPage implements OnInit {
   allEditData;
   formLoading = false;
   templates;
-  selectdTag;
   getTemplateForSMS_api;
   private formSubmitSubscribe: Subscription;
   private editDataSubscribe: Subscription;
   private templateforSMS_get :Subscription;
+  private templateTagsGet :Subscription;
   cities = [
     {
         id: 1,
@@ -55,12 +55,7 @@ export class AddSmsNotificationPage implements OnInit {
     {id: 0, name: 'Not Default'},
     {id: 1, name: 'Default'},
   ];
-  selectFieldVariable = [
-    {id: '##Number##', name: 'Number'},
-    {id: '##Name##', name: 'Name'},
-    {id: '##Class##', name: 'Class'},
-    {id: '##Roll##', name: 'Roll'},
-  ];
+  selectFieldVariable;
   
   selectedCity = this.cities[0].name;
   selectedHeader = this.headerIds[0].name;
@@ -95,6 +90,7 @@ export class AddSmsNotificationPage implements OnInit {
     
   }
   // getTemplatefor end
+
   // commonFunction start 
   commonFunction(){
     // get active url name
@@ -122,6 +118,7 @@ export class AddSmsNotificationPage implements OnInit {
     this.form_api = 'smsTemplate/add';
   }
   // commonFunction end
+
   // ---------- init start ----------
   init(){
     if( this.parms_action_name == 'edit'){
@@ -133,14 +130,7 @@ export class AddSmsNotificationPage implements OnInit {
       this.editDataSubscribe = this.http.get(this.editApi).subscribe(
         (res:any) => {
           console.log("stAction >", res.stAction,this.templates);   
-          for(let i=0;i<this.templates.length;i++)
-          {
-             if(res.stAction == this.templates[i].stName)
-             {
-                console.log("Match >", res.stAction,"Templates >", this.templates[i].stName);
-                this.selectdTag=this.templates[i].stTags;
-             } 
-          }
+          
           this.editLoading = false;
           console.log("Edit data  res >", res.return_data);
           this.model = {
@@ -149,11 +139,11 @@ export class AddSmsNotificationPage implements OnInit {
             stTempId : res.stTempId,
             setDefault : res.setDefault,
             isPrimary:res.isPrimary,
-            stSubject:res.stSubject,
-            stBody:res.stBody
+            stBody:res.stBody,
+            stType:res.stType,
           }; 
           
-          
+          this.getTags(res.stAction);
           
 
           // edit data
@@ -318,11 +308,6 @@ export class AddSmsNotificationPage implements OnInit {
     return await changePassword_modal.present();
   }
   // addSmsDefault end 
-  
-  selectTemplates(_data){
-    console.log('_data>>', _data);
-    this.selectdTag = _data;
-  }
 
   async presentToast() {
     const toast = await this.toastController.create({
@@ -368,6 +353,24 @@ export class AddSmsNotificationPage implements OnInit {
   }
   // getCursorPosition end
 
+  // get tags start
+  getTags(_action){
+    console.log('_action', _action);
+    this.selectFieldVariable = '';
+    this.templateTagsGet = this.http.get('smsTemplate/getTags/'+_action).subscribe(
+      (res:any) => {
+        console.log('res', res);
+        this.selectFieldVariable = res;
+
+      },
+      errRes => {
+         console.log("Get tags >", errRes);  
+         this.selectFieldVariable = '';
+      }
+    );
+  }
+  // get tags end
+
   // ----------- destroy subscription start ---------
   ngOnDestroy() {
     if(this.formSubmitSubscribe !== undefined){
@@ -375,6 +378,12 @@ export class AddSmsNotificationPage implements OnInit {
     }
     if(this.editDataSubscribe !== undefined ){
       this.editDataSubscribe.unsubscribe();
+    }
+    if(this.templateforSMS_get !== undefined ){
+      this.templateforSMS_get.unsubscribe();
+    }
+    if(this.templateTagsGet !== undefined ){
+      this.templateTagsGet.unsubscribe();
     }
   }
   // destroy subscription end

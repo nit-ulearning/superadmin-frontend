@@ -107,10 +107,10 @@
                             </td>
                             <td>
                               <div class="action ion-text-center">
-                                <ion-button [ngClass]="{'readOnly': item?.stType == 'DEFAULT'}" matTooltip="Edit" matTooltipPosition="above" size="small" color="secondary" [routerLink]="['/', 'add-sms-notification', 'edit', item.stId ]">
+                                <ion-button matTooltip="Edit" matTooltipPosition="above" size="small" color="secondary" [routerLink]="['/', 'add-sms-notification', 'edit', item.stId ]">
                                   <mat-icon>edit</mat-icon>
                                 </ion-button>
-                                <ion-button [ngClass]="{'readOnly': item?.stType == 'DEFAULT'}" matTooltip="Delete" matTooltipPosition="above" size="small" color="danger" (click)="presentAlert('delete', item.stId)">
+                                <ion-button matTooltip="Delete" matTooltipPosition="above" size="small" color="danger" (click)="presentAlert('delete', item.stId)">
                                     <mat-icon>delete</mat-icon>
                                 </ion-button>
                                <ion-button  *ngIf="item?.isPrimary == 1" matTooltip="Unset form Primary" matTooltipPosition="above" size="small" color="success" (click)="presentAlert('unsetprimary', item.stId)">

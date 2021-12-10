@@ -33,14 +33,14 @@
                             </mat-select>
                           </mat-form-field> -->
                            
-                          <ng-select [items]="templates" 
+                          <ng-select [ngClass]="{'readOnly': model?.stType == 'DEFAULT'}" [items]="templates" 
                                    bindLabel="stAction" 
                                    name="stAction"
                                    placeholder="Select Template For"
                                    bindValue="stAction"
                                    required 
                                    [(ngModel)]="model.stAction"
-                                   (change)="selectTemplates(model.stAction)">
+                                   (change)="getTags(model.stAction)">
                           </ng-select>
                           <label>Template For</label>
                         </div>
@@ -48,7 +48,7 @@
                       <!-- Template name -->
                       <ion-col size-xs="12" size-sm="4" size-md="4"  size-lg="4">
                         <div class="form-item">
-                          <mat-form-field appearance="outline">
+                          <mat-form-field appearance="outline" [ngClass]="{'readOnly': model?.stType == 'DEFAULT'}">
                             <mat-label>Template Name </mat-label>
                             <input matInput placeholder="Template Name" type="text" name="stName" [(ngModel)]="model.stName" required>
                           </mat-form-field>
@@ -92,9 +92,9 @@
                       <!-- Template name -->
                       <ion-col size-xs="12" size-sm="4" size-md="4"  size-lg="4">
                         <div class="form-item">
-                          <mat-form-field appearance="outline">
+                          <mat-form-field appearance="outline" [ngClass]="{'readOnly': model?.stType == 'DEFAULT'}">
                             <mat-label>Template Id </mat-label>
-                            <input matInput placeholder="Header" type="text" name="stSubject" [(ngModel)]="model.stSubject">
+                            <input matInput placeholder="Header" type="text" name="stTempId" [(ngModel)]="model.stTempId">
                           </mat-form-field>
                         </div>
                       </ion-col>
@@ -127,18 +127,18 @@
                       <!-- Message Text -->
                       <ion-col size-xs="12" size-sm="12" size-md="6"  size-lg="6">
                         <div class="form-item ngsel">
-                           <ng-select [items]="selectFieldVariable" 
+                           <ng-select [ngClass]="{'readOnly': model?.stType == 'DEFAULT'}" [items]="selectFieldVariable" 
                                     bindLabel="name" 
                                     name="msgVariable"
                                     placeholder="Select field"
-                                    bindValue="id" 
+                                    bindValue="value" 
                                     [(ngModel)]="model.msgVariable"
                                     (change)="selectFieldForMsg(model.msgVariable)">
                            </ng-select>
                            <label>Select field</label>
                          </div>
                         <div class="form-item">
-                          <mat-form-field appearance="outline">
+                          <mat-form-field appearance="outline" [ngClass]="{'readOnly': model?.stType == 'DEFAULT'}">
                             <mat-label>Message Text</mat-label>
                             <textarea #msgText (click)="getCursorPosition(msgText, model.stBody)" (keyup)="getCursorPosition(msgText, model.stBody)" matInput name="stBody" [(ngModel)]="model.stBody" required></textarea>
                           </mat-form-field>
