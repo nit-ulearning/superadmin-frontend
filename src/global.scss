@@ -1970,6 +1970,33 @@ ion-modal.mymodalClass.medium {
                 }
             }
         }
+        .table-segment{
+            ion-segment {
+                background: #4444;
+                border-radius: 6px;
+                ion-segment-button {
+                    background: var(--ion-color-white);
+                    border-radius: 6px;
+                    margin: 4px;
+                    min-height: 28px;
+                    width: 90px;
+                    ion-label {
+                        margin: 0px;
+                        font-size: 12px;
+                    }
+                }
+                ion-segment-button.segment-button-checked {
+                    background: var(--ion-color-theme2deep);
+                    ion-label {
+                        color: var(--ion-color-white);
+                    }
+                }
+                .segment-button-indicator {
+                    display: none;
+                    opacity: 0;
+                }
+            }
+        }
     }
 }
 

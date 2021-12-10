@@ -34,6 +34,7 @@ export class EmailNotificationListPage implements OnInit {
   deleteLoading = false;
   setprimaryapi;
   unsetprimaryapi;
+  tableValueType;
   tableHeaderData = [
     {
       column_name: "etAction",
@@ -189,25 +190,25 @@ export class EmailNotificationListPage implements OnInit {
     // Display records start
     displayRecord = '10';
     displayRecords = [
-        { id : '1', displayValue: '10'},
-        { id : '2', displayValue: '25'},
-        { id : '3', displayValue: '50'},
-        { id : '4', displayValue: '100'},
-        { id : '5', displayValue: '200'}
+      { id : '1', displayValue: '10'},
+      { id : '2', displayValue: '25'},
+      { id : '3', displayValue: '50'},
+      { id : '4', displayValue: '100'},
+      { id : '5', displayValue: '0'}
     ];
     displayRecordChange(_record) {
       console.log('_record', _record);
       
       this.displayRecord = _record;
-
-      this.onListDate(this.listing_url, this.pageNo, _record, this.sortColumnName, this.sortOrderName, this.searchTerm);
+      this.pageNo = 0;
+      this.onListDate(this.listing_url, this.pageNo, _record, this.sortColumnName, this.sortOrderName, this.tableValueType, this.searchTerm);
     }
     // Display records end
 
     // List data start
-    onListDate(_listUrl, _pageNo, _displayRecord, _sortColumnName, _sortOrderName, _searchTerm){
+    onListDate(_listUrl, _pageNo, _displayRecord, _sortColumnName, _sortOrderName, _tableValueType, _searchTerm){
       this.isListLoading = true;
-      let api = _listUrl+'/'+_pageNo+'/'+_displayRecord+'/'+_sortColumnName+'/'+_sortOrderName+'/0?keyword='+ _searchTerm;
+      let api = _listUrl+'/'+_pageNo+'/'+_displayRecord+'/'+_sortColumnName+'/'+_sortOrderName+'/'+_tableValueType+'?keyword='+ _searchTerm;
       this.tableListSubscribe = this.http.get(api).subscribe(
         (res:any) => {
           this.isListLoading = false;
@@ -227,7 +228,7 @@ export class EmailNotificationListPage implements OnInit {
         console.log('page', page);
         
         this.pageNo = page;
-        this.onListDate(this.listing_url, this.pageNo, this.displayRecord, this.sortColumnName, this.sortOrderName, this.searchTerm);
+        this.onListDate(this.listing_url, this.pageNo, this.displayRecord, this.sortColumnName, this.sortOrderName, this.tableValueType, this.searchTerm);
         
       }
     // Pagination end
@@ -257,7 +258,7 @@ export class EmailNotificationListPage implements OnInit {
       console.log('this.sortOrderName', this.sortOrderName);
       console.log('_tableHeaderData>>', _tableHeaderData);
 
-      this.onListDate(this.listing_url, this.pageNo, this.displayRecord, this.sortColumnName, this.sortOrderName, this.searchTerm);
+      this.onListDate(this.listing_url, this.pageNo, this.displayRecord, this.sortColumnName, this.sortOrderName, this.tableValueType, this.searchTerm);
     }
     // Sorting end
 
@@ -268,7 +269,7 @@ export class EmailNotificationListPage implements OnInit {
 
         console.log('this.searchTerm', this.searchTerm);
         
-        this.onListDate(this.listing_url, this.pageNo, this.displayRecord, this.sortColumnName, this.sortOrderName, this.searchTerm);
+        this.onListDate(this.listing_url, this.pageNo, this.displayRecord, this.sortColumnName, this.sortOrderName, this.tableValueType, this.searchTerm);
       }
     // Search end
 
@@ -278,8 +279,9 @@ export class EmailNotificationListPage implements OnInit {
       this.sortColumnName = 'etId';
       this.sortOrderName = 'DESC';
       this.searchTerm = '';
+      this.tableValueType = '0';
       // table data call
-      this.onListDate(this.listing_url, this.pageNo, this.displayRecord, this.sortColumnName, this.sortOrderName, this.searchTerm);
+      this.onListDate(this.listing_url, this.pageNo, this.displayRecord, this.sortColumnName, this.sortOrderName, this.tableValueType, this.searchTerm);
     }
     // Referesh end
 
@@ -355,6 +357,14 @@ export class EmailNotificationListPage implements OnInit {
       );
     }
     // setprimaryDataSubscribe end
+
+    // Deleted or not start
+    deletedOrNot(ev: any) {
+      console.log('Segment changed', ev);
+      this.tableValueType = ev.detail.value;
+      this.onListDate(this.listing_url, this.pageNo, this.displayRecord, this.sortColumnName, this.sortOrderName, this.tableValueType, this.searchTerm);
+    }
+    // Deleted or not end
 
   /*----------------Table list data end----------------*/
 

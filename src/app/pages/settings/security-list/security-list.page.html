@@ -26,11 +26,26 @@
                       <mat-form-field>
                         <mat-select [(ngModel)]="displayRecord" name="record" (selectionChange)="displayRecordChange($event.value)">
                           <mat-option *ngFor="let record of displayRecords" [value]="record.displayValue">
-                            {{record.displayValue}}
+                            <span *ngIf="record.displayValue > 0">{{record.displayValue}}</span>
+                            <span *ngIf="record.displayValue == 0">All</span>
                           </mat-option>
                         </mat-select>
                       </mat-form-field>
                     </ion-item>
+                  </div>
+                  <div class="table-segment">
+                    <ion-segment [(ngModel)]="tableValueType" (ionChange)="deletedOrNot($event)" color="secondary">
+                      <ion-segment-button value="0">
+                        <ion-label>
+                          Current
+                        </ion-label>
+                      </ion-segment-button>
+                      <ion-segment-button value="1">
+                        <ion-label>
+                          Deleted
+                        </ion-label>
+                      </ion-segment-button>
+                    </ion-segment>
                   </div>
                   <div class="search-wrapper">
                     <ion-searchbar showCancelButton="focus" debounce="500" placeholder="Search item ...." [(ngModel)]="searchTerm" (ionChange)="searchList($event)"></ion-searchbar>
@@ -115,6 +130,9 @@
                                 <ion-button matTooltip="View" matTooltipPosition="above" size="small" color="tertiary" [routerLink]="['/',  'institute-view', item.instId]">
                                   <mat-icon>view_in_ar</mat-icon>
                                 </ion-button>
+                                <ion-button (click)="presentAlert('credentialSent', item)" matTooltip="Sent Credential" matTooltipPosition="above" size="small" color="warning">
+                                  <mat-icon>send</mat-icon>
+                                </ion-button>
                                 <ion-button *ngIf="statusChange" matTooltip="Enable" matTooltipPosition="above" size="small" color="success" (click)="clickActionBtn(statusChange, 'status')">
                                     <mat-icon >visibility</mat-icon>
                                 </ion-button>
@@ -136,6 +154,9 @@
                     <ion-button matTooltip="Refresh" matTooltipPosition="above" size="small" color="secondary" (click)="onRefresh()">
                         <mat-icon>refresh</mat-icon>
                     </ion-button>
+                    <!-- <ion-button matTooltip="Recycle Bin" matTooltipPosition="above" size="small" color="danger">
+                      <mat-icon>delete_forever</mat-icon>
+                    </ion-button> -->
                     <!-- <ion-button matTooltip="Enable" matTooltipPosition="above" size="small" color="success" (click)="clickActionBtn(statusChange, 'status')">
                         <mat-icon>visibility</mat-icon>
                     </ion-button>

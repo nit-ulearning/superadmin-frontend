@@ -33,13 +33,14 @@
                             </mat-select>
                           </mat-form-field> -->
                            
-                          <ng-select [items]="Templates" 
-                                   bindLabel="etAction" 
-                                   name="etAction"
+                          <ng-select [items]="templates" 
+                                   bindLabel="stAction" 
+                                   name="stAction"
                                    placeholder="Select Template For"
-                                   bindValue="etAction" 
-                                   [(ngModel)]="model.etAction"
-                                   (change)="selectTemplates(model.etAction)">
+                                   bindValue="stAction"
+                                   required 
+                                   [(ngModel)]="model.stAction"
+                                   (change)="selectTemplates(model.stAction)">
                           </ng-select>
                           <label>Template For</label>
                         </div>
@@ -81,6 +82,7 @@
                                    name="isPrimary"
                                    placeholder="Select Set Default"
                                    bindValue="id" 
+                                   required
                                    [(ngModel)]="model.isPrimary"
                                    (change)="ngsel(model.isPrimary)">
                           </ng-select>
@@ -92,12 +94,12 @@
                         <div class="form-item">
                           <mat-form-field appearance="outline">
                             <mat-label>Template Id </mat-label>
-                            <input matInput placeholder="Header" type="text" name="stSubject" [(ngModel)]="model.stSubject" required>
+                            <input matInput placeholder="Header" type="text" name="stSubject" [(ngModel)]="model.stSubject">
                           </mat-form-field>
                         </div>
                       </ion-col>
                       <!-- Useable tag -->
-                      <ion-col size-xs="12" size-sm="12" size-md="12"  size-lg="12" *ngIf="selectdTag">
+                      <!-- <ion-col size-xs="12" size-sm="12" size-md="12"  size-lg="12" *ngIf="selectdTag">
                         <div class="card-outer">
                           <div class="card card-box">
                             <div class="card-header">
@@ -110,7 +112,7 @@
                             </div>
                           </div>
                         </div>
-                      </ion-col>
+                      </ion-col> -->
                       <!-- Template Description -->
                       <!-- <ion-col size-xs="12" size-sm="12" size-md="12"  size-lg="12">
                         <div class="form-item">

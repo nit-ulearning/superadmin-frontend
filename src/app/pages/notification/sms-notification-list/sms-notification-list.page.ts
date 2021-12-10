@@ -34,6 +34,7 @@ export class SmsNotificationListPage implements OnInit {
   deleteLoading = false;
   setprimaryapi;
   unsetprimaryapi;
+  tableValueType;
   tableHeaderData = [
     {
       column_name: "stAction",
@@ -63,28 +64,38 @@ export class SmsNotificationListPage implements OnInit {
   ionViewWillEnter() {
     this.commonFunction();
   }
+
+  commonFunction(){
+    this.listing_url = 'smsTemplate/list';
+     this.onRefresh();
+       // delete api
+    this.deleteApi = 'smsTemplate/delete/';
+    this.setprimaryapi = 'smsTemplate/delete/';
+    this.unsetprimaryapi = 'smsTemplate/delete/';
+  }
   
-   // Display records start
+  /*----------------Table list data start----------------*/
+    // Display records start
     displayRecord = '10';
     displayRecords = [
-        { id : '1', displayValue: '10'},
-        { id : '2', displayValue: '25'},
-        { id : '3', displayValue: '50'},
-        { id : '4', displayValue: '100'},
-        { id : '5', displayValue: '200'}
+      { id : '1', displayValue: '10'},
+      { id : '2', displayValue: '25'},
+      { id : '3', displayValue: '50'},
+      { id : '4', displayValue: '100'},
+      { id : '5', displayValue: '0'}
     ];
     displayRecordChange(_record) {
       console.log('_record', _record);
       
       this.displayRecord = _record;
-
-      this.onListDate(this.listing_url, this.pageNo, _record, this.sortColumnName, this.sortOrderName, this.searchTerm);
+      this.pageNo = 0;
+      this.onListDate(this.listing_url, this.pageNo, _record, this.sortColumnName, this.sortOrderName, this.tableValueType, this.searchTerm);
     }
     // Display records end
-     // List data start
-    onListDate(_listUrl, _pageNo, _displayRecord, _sortColumnName, _sortOrderName, _searchTerm){
+    // List data start
+    onListDate(_listUrl, _pageNo, _displayRecord, _sortColumnName, _sortOrderName, _tableValueType, _searchTerm){
       this.isListLoading = true;
-      let api = _listUrl+'/'+_pageNo+'/'+_displayRecord+'/'+_sortColumnName+'/'+_sortOrderName+'?keyword='+ _searchTerm;
+      let api = _listUrl+'/'+_pageNo+'/'+_displayRecord+'/'+_sortColumnName+'/'+_sortOrderName+'/'+_tableValueType+'?keyword='+ _searchTerm;
       this.tableListSubscribe = this.http.get(api).subscribe(
         (res:any) => {
           this.isListLoading = false;
@@ -99,14 +110,14 @@ export class SmsNotificationListPage implements OnInit {
     }
     // List data end
     // Pagination start
-      setPage(page: number) {
-        console.log('page', page);
-        console.log("page");
-        
-        this.pageNo = page;
-        this.onListDate(this.listing_url, this.pageNo, this.displayRecord, this.sortColumnName, this.sortOrderName, this.searchTerm);
-        
-      }
+    setPage(page: number) {
+      console.log('page', page);
+      console.log("page");
+      
+      this.pageNo = page;
+      this.onListDate(this.listing_url, this.pageNo, this.displayRecord, this.sortColumnName, this.sortOrderName, this.tableValueType, this.searchTerm);
+      
+    }
     // Pagination end
 
     // Sorting start
@@ -134,19 +145,19 @@ export class SmsNotificationListPage implements OnInit {
       console.log('this.sortOrderName', this.sortOrderName);
       console.log('_tableHeaderData>>', _tableHeaderData);
 
-      this.onListDate(this.listing_url, this.pageNo, this.displayRecord, this.sortColumnName, this.sortOrderName, this.searchTerm);
+      this.onListDate(this.listing_url, this.pageNo, this.displayRecord, this.sortColumnName, this.sortOrderName, this.tableValueType, this.searchTerm);
     }
     // Sorting end
 
-     // Search start
-      searchTerm:string = '';
-      searchList(event){
-        this.searchTerm = event.target.value;
+    // Search start
+    searchTerm:string = '';
+    searchList(event){
+      this.searchTerm = event.target.value;
 
-        console.log('this.searchTerm', this.searchTerm);
-        
-        this.onListDate(this.listing_url, this.pageNo, this.displayRecord, this.sortColumnName, this.sortOrderName, this.searchTerm);
-      }
+      console.log('this.searchTerm', this.searchTerm);
+      
+      this.onListDate(this.listing_url, this.pageNo, this.displayRecord, this.sortColumnName, this.sortOrderName, this.tableValueType, this.searchTerm);
+    }
     // Search end
 
     // Referesh start
@@ -155,8 +166,9 @@ export class SmsNotificationListPage implements OnInit {
       this.sortColumnName = 'stId';
       this.sortOrderName = 'DESC';
       this.searchTerm = '';
+      this.tableValueType = '0';
       // table data call
-      this.onListDate(this.listing_url, this.pageNo, this.displayRecord, this.sortColumnName, this.sortOrderName, this.searchTerm);
+      this.onListDate(this.listing_url, this.pageNo, this.displayRecord, this.sortColumnName, this.sortOrderName, this.tableValueType, this.searchTerm);
     }
     // Referesh end
 
@@ -231,31 +243,17 @@ export class SmsNotificationListPage implements OnInit {
       );
     }
     // setprimaryDataSubscribe end
-    // getTemplateList start
-  // getSMSTemplateList()
-  // {
-  //   console.log("HHH");
-  //   this.getSMSTemplateListing = this.http.get(this.getTemplateList_api).subscribe(
-  //       (res:any) => {
-  //         console.log("Get template for  >", res);
-  //         this.skeleton = res; 
-  //         console.log("Get template for length",this.skeleton);
 
-  //       },
-  //       errRes => {
-  //          console.log("Get template for  >", errRes);  
-  //       }
-  //     );    
-  // }
-   commonFunction(){
-    this.listing_url = 'smsTemplate/list';
-     this.onRefresh();
-       // delete api
-    this.deleteApi = 'smsTemplate/delete/';
-    this.setprimaryapi = 'smsTemplate/delete/';
-    this.unsetprimaryapi = 'smsTemplate/delete/';
-  }
-  // getTemplateList end
+    // Deleted or not start
+    deletedOrNot(ev: any) {
+      console.log('Segment changed', ev);
+      this.tableValueType = ev.detail.value;
+      this.onListDate(this.listing_url, this.pageNo, this.displayRecord, this.sortColumnName, this.sortOrderName, this.tableValueType, this.searchTerm);
+    }
+    // Deleted or not end
+
+  /*----------------Table list data end----------------*/
+  
   // Delete aleart start
   async presentAlert(_identifier, _id) {
 

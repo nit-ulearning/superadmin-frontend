@@ -25,10 +25,27 @@
                       <span>Records: </span>
                       <mat-form-field>
                         <mat-select [(ngModel)]="displayRecord" name="record" (selectionChange)="displayRecordChange($event.value)">
-                          <mat-option *ngFor="let record of displayRecords" [value]="record.displayValue">{{record.displayValue}}</mat-option>
+                          <mat-option *ngFor="let record of displayRecords" [value]="record.displayValue">
+                            <span *ngIf="record.displayValue > 0">{{record.displayValue}}</span>
+                            <span *ngIf="record.displayValue == 0">All</span>
+                          </mat-option>
                         </mat-select>
                       </mat-form-field>
                     </ion-item>
+                  </div>
+                  <div class="table-segment">
+                    <ion-segment [(ngModel)]="tableValueType" (ionChange)="deletedOrNot($event)" color="secondary">
+                      <ion-segment-button value="0">
+                        <ion-label>
+                          Current
+                        </ion-label>
+                      </ion-segment-button>
+                      <ion-segment-button value="1">
+                        <ion-label>
+                          Deleted
+                        </ion-label>
+                      </ion-segment-button>
+                    </ion-segment>
                   </div>
                   <div class="search-wrapper">
                     <ion-searchbar showCancelButton="focus" debounce="500" placeholder="Search item ...." [(ngModel)]="searchTerm" (ionChange)="searchList($event)"></ion-searchbar>

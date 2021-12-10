@@ -107,7 +107,7 @@ export class AddSmsNotificationPage implements OnInit {
     console.log('parms_action_name', this.parms_action_name);
     console.log('parms_action_id', this.parms_action_id);
      this.getTemplateForSMS_api = 'smsTemplate/smsFor/list';
-    // this.getTemplatefor();
+    this.getTemplatefor();
     // edit api
     if(this.parms_action_name == 'edit'){
       this.editApi = 'smsTemplate/list/'+this.parms_action_id;

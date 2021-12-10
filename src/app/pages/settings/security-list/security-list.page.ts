@@ -30,6 +30,7 @@ export class SecurityListPage implements OnInit {
   sortColumnName = '';
   sortOrderName = '';
   tableData;
+  tableValueType;
 
   tableHeaderData = [
     {
@@ -60,6 +61,7 @@ export class SecurityListPage implements OnInit {
   ];
 
   private tableListSubscribe: Subscription;
+  private sentCredentialSubscribe: Subscription;
   // Variables end
 
   ngOnInit() {
@@ -71,7 +73,6 @@ export class SecurityListPage implements OnInit {
   }
 
   commonFunction(){
-
     // table list data url name
     this.listing_url = 'institute/list';
     this.onRefresh();
@@ -128,12 +129,20 @@ export class SecurityListPage implements OnInit {
     this.isListLoading = false;
   }
 
-  // Delete aleart start
-  async presentAlert() {
+  // Aleart start
+  async presentAlert(_identifier, _item) {
+    console.log('_identifier', _identifier);
+    console.log('_item', _item);
+    let messages,headers;
+
+    if(_identifier == 'credentialSent'){
+      headers = "Sent Credential"
+      messages = "Are you sure want to sent credential to this Institute?";
+    }
     const alert = await this.alertController.create({
       cssClass: 'aleart-popupBox',
-      header: 'Delete',
-      message: 'Are you sure want to delete this item?',
+      header: headers,
+      message: messages,
       buttons: [
         {
           text: 'Cancel',
@@ -147,7 +156,9 @@ export class SecurityListPage implements OnInit {
           cssClass: 'popup-ok-btn',
           handler: () => {
             console.log('Confirm Okay');
-            this.clickActionBtn('', 'delete');
+            if(_identifier == 'credentialSent'){
+              this.sentCredential(_item);
+            }
           }
         }
       ]
@@ -155,7 +166,7 @@ export class SecurityListPage implements OnInit {
 
     await alert.present();
   }
-  // Delete aleart end
+  // Aleart end
 
   /*----------------Table list data start----------------*/
     // Display records start
@@ -165,21 +176,21 @@ export class SecurityListPage implements OnInit {
         { id : '2', displayValue: '25'},
         { id : '3', displayValue: '50'},
         { id : '4', displayValue: '100'},
-        { id : '5', displayValue: '200'}
+        { id : '5', displayValue: '0'}
     ];
     displayRecordChange(_record) {
       console.log('_record', _record);
       
       this.displayRecord = _record;
-
-      this.onListDate(this.listing_url, this.pageNo, _record, this.sortColumnName, this.sortOrderName, this.searchTerm);
+      this.pageNo = 0;
+      this.onListDate(this.listing_url, this.pageNo, _record, this.sortColumnName, this.sortOrderName, this.tableValueType, this.searchTerm);
     }
     // Display records end
 
     // List data start
-    onListDate(_listUrl, _pageNo, _displayRecord, _sortColumnName, _sortOrderName, _searchTerm){
+    onListDate(_listUrl, _pageNo, _displayRecord, _sortColumnName, _sortOrderName, _tableValueType, _searchTerm){
       this.isListLoading = true;
-      let api = _listUrl+'/'+_pageNo+'/'+_displayRecord+'/'+_sortColumnName+'/'+_sortOrderName+'/0?keyword='+ _searchTerm;
+      let api = _listUrl+'/'+_pageNo+'/'+_displayRecord+'/'+_sortColumnName+'/'+_sortOrderName+'/'+_tableValueType+'?keyword='+ _searchTerm;
       this.tableListSubscribe = this.http.get(api).subscribe(
         (res:any) => {
           this.isListLoading = false;
@@ -199,7 +210,7 @@ export class SecurityListPage implements OnInit {
         console.log('page', page);
         
         this.pageNo = page;
-        this.onListDate(this.listing_url, this.pageNo, this.displayRecord, this.sortColumnName, this.sortOrderName, this.searchTerm);
+        this.onListDate(this.listing_url, this.pageNo, this.displayRecord, this.sortColumnName, this.sortOrderName, this.tableValueType, this.searchTerm);
         
       }
     // Pagination end
@@ -229,7 +240,7 @@ export class SecurityListPage implements OnInit {
       console.log('this.sortOrderName', this.sortOrderName);
       console.log('_tableHeaderData>>', _tableHeaderData);
 
-      this.onListDate(this.listing_url, this.pageNo, this.displayRecord, this.sortColumnName, this.sortOrderName, this.searchTerm);
+      this.onListDate(this.listing_url, this.pageNo, this.displayRecord, this.sortColumnName, this.sortOrderName, this.tableValueType, this.searchTerm);
     }
     // Sorting end
 
@@ -240,7 +251,7 @@ export class SecurityListPage implements OnInit {
 
         console.log('this.searchTerm', this.searchTerm);
         
-        this.onListDate(this.listing_url, this.pageNo, this.displayRecord, this.sortColumnName, this.sortOrderName, this.searchTerm);
+        this.onListDate(this.listing_url, this.pageNo, this.displayRecord, this.sortColumnName, this.sortOrderName, this.tableValueType, this.searchTerm);
       }
     // Search end
 
@@ -250,10 +261,40 @@ export class SecurityListPage implements OnInit {
       this.sortColumnName = 'instId';
       this.sortOrderName = 'DESC';
       this.searchTerm = '';
+      this.tableValueType = '0';
       // table data call
-      this.onListDate(this.listing_url, this.pageNo, this.displayRecord, this.sortColumnName, this.sortOrderName, this.searchTerm);
+      this.onListDate(this.listing_url, this.pageNo, this.displayRecord, this.sortColumnName, this.sortOrderName, this.tableValueType, this.searchTerm);
     }
     // Referesh end
+
+    // Deleted or not start
+    deletedOrNot(ev: any) {
+      console.log('Segment changed', ev);
+      this.tableValueType = ev.detail.value;
+      this.onListDate(this.listing_url, this.pageNo, this.displayRecord, this.sortColumnName, this.sortOrderName, this.tableValueType, this.searchTerm);
+    }
+    // Deleted or not end
+
+    // sentCredential to email start
+    sentCredential(_item){
+      console.log('_item', _item);
+      let sentValues = {'instEmail': _item.instEmail, 'instId': _item.instId};
+      this.sentCredentialSubscribe = this.http.post('institute/credentialssent', sentValues).subscribe(
+        (response:any) => {
+          console.log("add form response >", response);
+  
+          if(response.status == 200){
+            this.commonUtils.presentToast('success', response.message);
+          }else {
+            this.commonUtils.presentToast('error', response.message);
+          }
+        },
+        errRes => {
+          
+        }
+      );
+    }
+    // sentCredential to email end
 
   /*----------------Table list data end----------------*/
 
@@ -264,7 +305,9 @@ export class SecurityListPage implements OnInit {
     if(this.tableListSubscribe !== undefined){
       this.tableListSubscribe.unsubscribe();
     }
-
+    if(this.sentCredentialSubscribe !== undefined){
+      this.sentCredentialSubscribe.unsubscribe();
+    }
   }
 
 }
