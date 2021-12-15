@@ -63,7 +63,7 @@ export class AddSubscriptionPackagePage implements OnInit {
     this.commonUtils.getPathNameFun(this.router.url.split('/')[1]);
     this.parms_action_name = this.activatedRoute.snapshot.paramMap.get('action');
     this.parms_action_id = this.activatedRoute.snapshot.paramMap.get('id');
-    this.getInstituteList_api ="institute/getlist";
+    this.getInstituteList_api ="institute/getlicenselist";
     this.getInstituteList();
     console.log('parms_action_name', this.parms_action_name);
     console.log('parms_action_id', this.parms_action_id);

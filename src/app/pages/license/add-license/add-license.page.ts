@@ -126,8 +126,7 @@ export class AddLicensePage implements OnInit {
     this.commonUtils.getPathNameFun(this.router.url.split('/')[1]);
     this.parms_action_name = this.activatedRoute.snapshot.paramMap.get('action');
     this.parms_action_id = this.activatedRoute.snapshot.paramMap.get('id');
-    this.getInstituteList_api ="institute/getlist";
-    this.getInstituteList();
+    
     console.log('parms_action_name', this.parms_action_name);
     console.log('parms_action_id', this.parms_action_id);
 
@@ -139,6 +138,11 @@ export class AddLicensePage implements OnInit {
       this.init();
 
       this.editForm_api = 'license/update/'+this.parms_action_id;
+      this.getInstituteList_api ="institute/geteditlicenselist";
+      this.getInstituteList();
+    }else if(this.parms_action_name == 'add'){
+      this.getInstituteList_api ="institute/getlist";
+      this.getInstituteList();
     }
 
     // form_api Api

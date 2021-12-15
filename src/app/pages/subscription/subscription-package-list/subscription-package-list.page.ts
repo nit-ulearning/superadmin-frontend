@@ -79,16 +79,18 @@ export class SubscriptionPackageListPage implements OnInit {
     // delete api
     this.deleteApi = 'emailTemplate/delete/';
   }
-// Display records start
-  displayRecord = '10';
-  displayRecords = [
-    { id : '1', displayValue: '10'},
-    { id : '2', displayValue: '25'},
-    { id : '3', displayValue: '50'},
-    { id : '4', displayValue: '100'},
-    { id : '5', displayValue: '0'}
-  ];  
-  displayRecordChange(_record) {
+
+  /*----------------Table list data start----------------*/
+    // Display records start
+    displayRecord = '10';
+    displayRecords = [
+      { id : '1', displayValue: '10'},
+      { id : '2', displayValue: '25'},
+      { id : '3', displayValue: '50'},
+      { id : '4', displayValue: '100'},
+      { id : '5', displayValue: '0'}
+    ];  
+    displayRecordChange(_record) {
       console.log('_record', _record);
       
       this.displayRecord = _record;
@@ -115,7 +117,7 @@ export class SubscriptionPackageListPage implements OnInit {
     }
     // List data end
 
-     // Search start
+    // Search start
       searchTerm:string = '';
       searchList(event){
         this.searchTerm = event.target.value;
@@ -292,35 +294,35 @@ export class SubscriptionPackageListPage implements OnInit {
   }
   // suspend package modal end 
 
-    // ..... Restore package modal start ......
-    async RestorePackageOpenModal(_identifier, _item, _items) {
-      // console.log('_identifier >>', _identifier);
-      let changePassword_modal;
-      changePassword_modal = await this.modalController.create({
-        component: ModalPage,
-        cssClass: 'mymodalClass small',
-        componentProps: { 
-          identifier: _identifier,
-          modalForm_item: _item,
-          modalForm_array: _items
-        }
-      });
-      
-      // modal data back to Component
-      changePassword_modal.onDidDismiss()
-      .then((getdata) => {
-        console.log('getdata >>>>>>>>>>>', getdata);
-        this.presentToast('Package Restored', 'success');
-        if(getdata.data == 'submitClose'){
-          /* this.onListData(this.listing_url, this.displayRecord, this.pageNo, this.api_parms, this.searchTerm, this.cherecterSearchTerm, this.sortColumnName, this.sortOrderName, this.advanceSearchParms, this.urlIdentifire);  */
-        }
-  
-      });
-  
-      return await changePassword_modal.present();
-    }
-    // Restore package modal end 
   // ..... Restore package modal start ......
+  async RestorePackageOpenModal(_identifier, _item, _items) {
+    // console.log('_identifier >>', _identifier);
+    let changePassword_modal;
+    changePassword_modal = await this.modalController.create({
+      component: ModalPage,
+      cssClass: 'mymodalClass small',
+      componentProps: { 
+        identifier: _identifier,
+        modalForm_item: _item,
+        modalForm_array: _items
+      }
+    });
+    
+    // modal data back to Component
+    changePassword_modal.onDidDismiss()
+    .then((getdata) => {
+      console.log('getdata >>>>>>>>>>>', getdata);
+      this.presentToast('Package Restored', 'success');
+      if(getdata.data == 'submitClose'){
+        /* this.onListData(this.listing_url, this.displayRecord, this.pageNo, this.api_parms, this.searchTerm, this.cherecterSearchTerm, this.sortColumnName, this.sortOrderName, this.advanceSearchParms, this.urlIdentifire);  */
+      }
+
+    });
+
+    return await changePassword_modal.present();
+  }
+  // Restore package modal end 
+  // ..... EndPackageOpenModal start ......
   async EndPackageOpenModal(_identifier, _item, _items) {
     // console.log('_identifier >>', _identifier);
     let changePassword_modal;
@@ -347,6 +349,6 @@ export class SubscriptionPackageListPage implements OnInit {
 
     return await changePassword_modal.present();
   }
-  // Restore package modal end   
+  // EndPackageOpenModal end   
 
 }

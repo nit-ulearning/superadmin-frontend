@@ -133,10 +133,10 @@
                                 <ion-button *ngIf="tableValueType == 0" (click)="presentAlert('credentialSent', item)" matTooltip="Sent Credential" matTooltipPosition="above" size="small" color="warning">
                                   <mat-icon>send</mat-icon>
                                 </ion-button>
-                                <ion-button *ngIf="item?.instStatus == '1'" matTooltip="Make Disable" matTooltipPosition="above" size="small" color="success" (click)="presentAlert('statusChange', item.instId)">
+                                <ion-button *ngIf="item?.instStatus == '1' && tableValueType == 0" matTooltip="Make Disable" matTooltipPosition="above" size="small" color="success" (click)="presentAlert('statusChange', item.instId)">
                                     <mat-icon >visibility</mat-icon>
                                 </ion-button>
-                                <ion-button *ngIf="item?.instStatus == '0'" matTooltip="Make Enable" matTooltipPosition="above" size="small" color="medium" (click)="presentAlert('statusChange', item.instId)">
+                                <ion-button *ngIf="item?.instStatus == '0' && tableValueType == 0" matTooltip="Make Enable" matTooltipPosition="above" size="small" color="medium" (click)="presentAlert('statusChange', item.instId)">
                                   <mat-icon>visibility_off</mat-icon>
                                 </ion-button>
                                 <ion-button *ngIf="tableValueType == 0" matTooltip="Delete" matTooltipPosition="above" size="small" color="danger" (click)="presentAlert('delete', item.instId)">
