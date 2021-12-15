@@ -31,6 +31,9 @@
 :host {
     font-family: serif !important;
 }
+.tox-notifications-container {
+    display: none;
+}
 ion-header,ion-footer,ion-item.item,input.mat-input-element,.search-box
 {
     --background: #fff;

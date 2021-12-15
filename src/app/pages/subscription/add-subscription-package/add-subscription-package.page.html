@@ -124,7 +124,7 @@
               </div>
               <div class="card-footer">
                 <div>
-                    <button class="border-btn danger btn-md" style="margin-right: 10px;" mat-stroked-button>Cancel</button>
+                    <button class="border-btn danger btn-md" type="reset" [routerLink]="['/', 'subscription-package-list']" style="margin-right: 10px;" mat-stroked-button>Cancel</button>
                     <button class="fill-btn btn-md" mat-stroked-button type="submit" [disabled]="!addPackageForm.valid || formLoading">
                       <ion-spinner *ngIf="formLoading" name="crescent"></ion-spinner> 
                       Save

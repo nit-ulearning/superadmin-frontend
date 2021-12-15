@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ModalController, ToastController } from '@ionic/angular';
 import { ModalPage } from '../../modal/modal.page';
 import { CommonUtils } from 'src/app/services/common-utils/common-utils';
@@ -7,14 +7,17 @@ import { NgForm } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { Subscription } from 'rxjs';
 import * as moment from 'moment';
+import { TinymceComponent } from 'ngx-tinymce';
 @Component({
   selector: 'app-add-email-notification',
   templateUrl: './add-email-notification.page.html',
   styleUrls: ['./add-email-notification.page.scss'],
 })
 export class AddEmailNotificationPage implements OnInit {
+  @ViewChild(TinymceComponent) private tinyMce: TinymceComponent;
   model: any = {};
-   parms_action_name;
+  tinyMceConfig: any;
+  parms_action_name;
   parms_action_id;
   editApi;
   editForm_api;
@@ -25,10 +28,11 @@ export class AddEmailNotificationPage implements OnInit {
   formLoading = false;
   alladdTemplateData:any;
   getTemplateFor_api;
-  selectdTag;
+  selectFieldVariable;
   private formSubmitSubscribe: Subscription;
   private editDataSubscribe: Subscription;
   private templatefor_get:Subscription;
+  private templateTagsGet :Subscription;
   cities = [
     {
       id: 1,  name: 'Vilnius',  avatar: '//www.gravatar.com/avatar/b0d8c6e5ea589e6fc3d3e08afb1873bb?d=retro&r=g&s=30 2x'
@@ -95,6 +99,8 @@ export class AddEmailNotificationPage implements OnInit {
     console.log('parms_action_name', this.parms_action_name);
     console.log('parms_action_id', this.parms_action_id);
 
+    this.configureTinyMce();
+
     this.getTemplateFor_api = 'emailTemplate/getAll/template_for';
     this.getTemplatefor();
 
@@ -128,10 +134,8 @@ export class AddEmailNotificationPage implements OnInit {
              {
                 console.log("Match >", res.etAction);   
                 console.log("Templates >", this.Templates[i].etTags);
-                this.selectdTag=this.Templates[i].etTags;
              } 
           }
-          this.editLoading = false;
           
           console.log("Edit data  res >", res.return_data);
           this.model = {
@@ -144,12 +148,13 @@ export class AddEmailNotificationPage implements OnInit {
           }; 
 
           
-          
+          this.getTags(res.etAction);
 
           // edit data
           this.allEditData = res;
           console.log('this.allEditData', this.allEditData);
-          
+          this.configureTinyMce();
+          this.editLoading = false;
         },
         errRes => {
           // this.selectLoadingDepend = false;
@@ -163,8 +168,7 @@ export class AddEmailNotificationPage implements OnInit {
   }
   // ---------- init end ----------
   // --------on submit start----------
-  onSubmitForm(form:NgForm)
-  {
+  onSubmitForm(form:NgForm){
     this.formLoading = true;
     let formValue = form.value;
     console.log(form.value);
@@ -262,12 +266,76 @@ export class AddEmailNotificationPage implements OnInit {
   }
   // AddTemplate end
 
-  selectTemplates(_data){
-    console.log('_data>>', _data);
-    this.selectdTag = _data;
-    // this.Templates
-    console.log("this.Templates ",this.Templates ); 
+  // get tags start
+  getTags(_action){
+    console.log('_action', _action);
+    this.selectFieldVariable = '';
+    this.templateTagsGet = this.http.get('emailTemplate/getTags/'+_action).subscribe(
+      (res:any) => {
+        console.log('res', res);
+        this.selectFieldVariable = res;
+
+      },
+      errRes => {
+         console.log("Get tags >", errRes);  
+         this.selectFieldVariable = '';
+      }
+    );
   }
+  // get tags end
+
+  // Get selectFieldForMsg start
+  selectedVariable;
+  selectFieldForTags(_value){
+    console.log('_value', _value);
+    this.selectedVariable = _value;
+    this.configureTinyMce();
+  }
+  // Get selectFieldForMsg end
+
+  // Text editor start
+  configureTinyMce() {
+    this.tinyMceConfig = {
+      branding: false,
+      apiKey: "v420gfv525dl4bzohv4y0qw5tcouix3rq685gumxmji5h17t",
+      /**
+       * This is needed to prevent console errors
+       * if you're hosting your own TinyMCE
+       */
+      // content_css: 'assets/tinymce/skins/ui/oxide/content.min.css',
+      height: 400,
+      image_advtab: true,
+      imagetools_toolbar: `
+        rotateleft rotateright |
+        flipv fliph | 
+        editimage imageoptions`,
+      importcss_append: !0,
+      inline: false,
+      menubar: true,
+      paste_data_images: !0,
+      /**
+       * This is needed to prevent console errors 
+       * if you're hosting your own TinyMCE
+       */
+      // skin_url: 'assets/tinymce/skins/ui/oxide',
+      toolbar: `
+        insertText |
+        copy undo redo formatselect |
+        bold italic strikethrough forecolor backcolor |
+        link | alignleft aligncenter alignright alignjustify |
+        numlist bullist outdent indent |
+        removeformat`,
+      setup: (editor) => {
+        editor.ui.registry.addButton('insertText', {
+          text: 'Press Me To Insert Text!',
+          onAction: () => {
+            editor.insertContent(this.selectedVariable);
+          }
+        });
+      }
+    };
+  }
+  // text editor end
 
   // ----------- destroy subscription start ---------
   ngOnDestroy() {
@@ -276,6 +344,12 @@ export class AddEmailNotificationPage implements OnInit {
     }
     if(this.editDataSubscribe !== undefined ){
       this.editDataSubscribe.unsubscribe();
+    }
+    if(this.templateTagsGet !== undefined){
+      this.templateTagsGet.unsubscribe();
+    }
+    if(this.templatefor_get !== undefined ){
+      this.templatefor_get.unsubscribe();
     }
   }
   // destroy subscription end

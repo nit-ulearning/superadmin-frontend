@@ -32,8 +32,8 @@ export class SmsNotificationListPage implements OnInit {
   sortOrderName = '';
   deleteApi;
   deleteLoading = false;
-  setprimaryapi;
-  unsetprimaryapi;
+  restoreApi;
+  restoreLoading = false;
   tableValueType;
   tableHeaderData = [
     {
@@ -53,8 +53,7 @@ export class SmsNotificationListPage implements OnInit {
   private getSMSTemplateListing :Subscription;
   private tableListSubscribe: Subscription;
   private deleteDataSubscribe: Subscription;
-  private unsetprimaryDataSubscribe:Subscription;
-  private setprimaryDataSubscribe:Subscription;
+  private restoreDataSubscribe: Subscription;
   // Variables end
 
   ngOnInit() {
@@ -69,9 +68,9 @@ export class SmsNotificationListPage implements OnInit {
     this.listing_url = 'smsTemplate/list';
      this.onRefresh();
        // delete api
-    this.deleteApi = 'smsTemplate/delete/';
-    this.setprimaryapi = 'smsTemplate/delete/';
-    this.unsetprimaryapi = 'smsTemplate/delete/';
+    this.deleteApi = 'smsTemplate/delete';
+    // restore api
+    this.restoreApi = 'smsTemplate/restore'
   }
   
   /*----------------Table list data start----------------*/
@@ -175,9 +174,9 @@ export class SmsNotificationListPage implements OnInit {
     // Delete start
     deleteData(_id){
       console.log('id>>', _id);
-      
+      let sentValues = {'stId': _id};
       this.deleteLoading = true;
-      this.deleteDataSubscribe = this.http.delete(this.deleteApi+_id).subscribe(
+      this.deleteDataSubscribe = this.http.put(this.deleteApi, sentValues).subscribe(
         (res:any) => {
           this.deleteLoading = false;
           console.log("Edit data  res >", res.return_data);
@@ -195,15 +194,15 @@ export class SmsNotificationListPage implements OnInit {
       );
     }
     // Delete end
-    // unsetprimaryDataSubscribe start
-    unsetprimary(_id)
-    {
+
+    // Restore delete data start
+    restoreDeleteData(_id){
       console.log('id>>', _id);
-      
-      this.deleteLoading = true;
-      this.unsetprimaryDataSubscribe = this.http.delete(this.unsetprimaryapi+_id).subscribe(
+      let sentValues = {'stId': _id};
+      this.restoreLoading = true;
+      this.restoreDataSubscribe = this.http.put(this.restoreApi, sentValues).subscribe(
         (res:any) => {
-          this.deleteLoading = false;
+          this.restoreLoading = false;
           console.log("Edit data  res >", res.return_data);
           if(res.status == 200){
             this.commonUtils.presentToast('success', res.message);
@@ -214,35 +213,11 @@ export class SmsNotificationListPage implements OnInit {
         },
         errRes => {
           // this.selectLoadingDepend = false;
-          this.deleteLoading = false;
+          this.restoreLoading = false;
         }
       );
     }
-    // unsetprimaryDataSubscribe end
-    // setprimaryDataSubscribe start
-    setprimary(_id)
-    {
-      console.log('id>>', _id);
-      
-      this.deleteLoading = true;
-      this.setprimaryDataSubscribe = this.http.delete(this.setprimaryapi+_id).subscribe(
-        (res:any) => {
-          this.deleteLoading = false;
-          console.log("Edit data  res >", res.return_data);
-          if(res.status == 200){
-            this.commonUtils.presentToast('success', res.message);
-            this.onRefresh();
-          }else {
-            this.commonUtils.presentToast('error', res.message);
-          }
-        },
-        errRes => {
-          // this.selectLoadingDepend = false;
-          this.deleteLoading = false;
-        }
-      );
-    }
-    // setprimaryDataSubscribe end
+    // Restore delete data end
 
     // Deleted or not start
     deletedOrNot(ev: any) {
@@ -262,17 +237,10 @@ export class SmsNotificationListPage implements OnInit {
      if(_identifier == 'delete')
     {
       headers = "Delete"
-      messages = "Are you sure want to delete this item?";
-    }
-    else if(_identifier == 'unsetprimary')
-    {
-      headers = "Unset Primary"
-      messages = "Are you want to change unset primary from this?";
-    }
-    else if(_identifier == 'setprimary')
-    {
-      headers = "Set Primary"
-      messages = "Are you want to change primary from this?";
+      messages = "Are you sure want to delete this template?";
+    }else if(_identifier == 'restore'){
+      headers = "Restore"
+      messages = "Are you sure want to restore this template?";
     }
     const alert = await this.alertController.create({
       cssClass: 'aleart-popupBox',
@@ -293,14 +261,10 @@ export class SmsNotificationListPage implements OnInit {
             console.log('Confirm Okay');
             // this.clickActionBtn('', 'delete');
              // this.deleteData(_id);
-             if(_identifier == 'delete'){
+            if(_identifier == 'delete'){
               this.deleteData(_id);
-            }
-            else if(_identifier == 'unsetprimary'){
-              this.unsetprimary(_id);
-            }
-            else if(_identifier == 'setprimary'){
-              this.setprimary(_id);
+            }else if(_identifier == 'restore'){
+              this.restoreDeleteData(_id);
             }
           }
         }

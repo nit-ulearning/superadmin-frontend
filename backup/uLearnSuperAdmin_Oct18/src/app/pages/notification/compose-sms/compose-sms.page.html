@@ -1,0 +1,128 @@
+<!-- common header show -->
+<common-header></common-header>
+
+<ion-content>
+  <div class="page-body">
+    <div class="page-wrapper">
+      <div class="form-layout">
+        <div class="card-outer">
+          <div class="card card-box">
+              <div class="card-header">
+                  <div class="card-header-tittle">
+                    Compose SMS
+                  </div>
+                  <div class="card-header-action">
+                  </div>
+              </div>
+              <div class="card-body">
+                <div class="form-wrapper">
+                  <ion-grid>
+                    <ion-row>
+                      <!-- Choose mail type -->
+                      <ion-col size-xs="12" size-sm="6" size-md="3"  size-lg="3">
+                        <div class="form-item">
+                          <ion-label>SMS type</ion-label>
+                          <ng-select #select [items]="mailType" [searchable]="true" [(ngModel)]="selectedmailType" (change)="onChange(selectedmailType, 'mailType')" bindLabel="name" bindValue="name">
+                            <ng-template ng-header-tmp>
+                                <input style="width: 100%; line-height: 24px" type="text" />
+                            </ng-template>
+                          </ng-select>
+                        </div>
+                      </ion-col>
+
+                      <!-- Mobile Number -->
+                      <ion-col *ngIf="mailtype == 'Single'" size-xs="12" size-sm="6" size-md="3"  size-lg="3">
+                        <div class="form-item">
+                          <ion-label>Mobile Number</ion-label>
+                          <ion-input name="name" type="text"></ion-input>
+                        </div>
+                      </ion-col>
+
+                      <!-- Institute -->
+                      <ion-col *ngIf="mailtype == 'Multiple'" size-xs="12" size-sm="6" size-md="3"  size-lg="3">
+                        <div class="form-item">
+                          <ion-label>Institute</ion-label>
+                          <ng-select #select [items]="institute" [searchable]="true" [(ngModel)]="selectedinstitute" bindLabel="name" bindValue="name">
+                            <ng-template ng-header-tmp>
+                                <input style="width: 100%; line-height: 24px" type="text" />
+                            </ng-template>
+                          </ng-select>
+                        </div>
+                      </ion-col>
+
+                      <!-- Course -->
+                      <ion-col *ngIf="mailtype == 'Multiple'" size-xs="12" size-sm="6" size-md="3"  size-lg="3">
+                        <div class="form-item">
+                          <ion-label>Courses</ion-label>
+                          <ng-select #select [items]="courseItems" [multiple]="true" [searchable]="true" bindLabel="name" bindValue="name">
+                            <ng-template ng-header-tmp>
+                                <input style="width: 100%; line-height: 24px" type="text" />
+                            </ng-template>
+                          </ng-select>
+                        </div>
+                      </ion-col>
+
+                      <!-- Sessions -->
+                      <ion-col *ngIf="mailtype == 'Multiple'" size-xs="12" size-sm="6" size-md="3"  size-lg="3">
+                        <div class="form-item">
+                          <ion-label>Sessions</ion-label>
+                          <ng-select #select [items]="sessionItems" [multiple]="true" [searchable]="true" bindLabel="name" bindValue="name">
+                            <ng-template ng-header-tmp>
+                                <input style="width: 100%; line-height: 24px" type="text" />
+                            </ng-template>
+                          </ng-select>
+                        </div>
+                      </ion-col>
+
+                      <!-- Batchs -->
+                      <ion-col *ngIf="mailtype == 'Multiple'" size-xs="12" size-sm="6" size-md="3"  size-lg="3">
+                        <div class="form-item">
+                          <ion-label>Batchs</ion-label>
+                          <ng-select #select [items]="batchItems" [multiple]="true" [searchable]="true" bindLabel="name" bindValue="name">
+                            <ng-template ng-header-tmp>
+                                <input style="width: 100%; line-height: 24px" type="text" />
+                            </ng-template>
+                          </ng-select>
+                        </div>
+                      </ion-col>
+
+                      <!-- Choose mail template -->
+                      <ion-col size-xs="12" size-sm="6" size-md="3"  size-lg="3">
+                        <div class="form-item">
+                          <ion-label>Choose Template</ion-label>
+                          <ng-select #select [items]="template" (change)="onChange(selectedTemplate, 'mailTemplate')" [searchable]="false" [(ngModel)]="selectedTemplate" bindLabel="name" bindValue="name">
+                            <ng-template ng-header-tmp>
+                                <input style="width: 100%; line-height: 24px" type="text" />
+                            </ng-template>
+                          </ng-select>
+                        </div>
+                      </ion-col>
+
+                      <!-- SMS Body -->
+                      <ion-col size-xs="12" size-sm="12" size-md="12"  size-lg="12">
+                        <div class="form-item">
+                          <ion-label>SMS Body</ion-label>
+                          <div class="text-editor">
+                            <tinymce name="description" [(ngModel)]="mailBody" ></tinymce>
+                          </div>
+                        </div>
+                      </ion-col>
+                    </ion-row>
+                  </ion-grid>
+                </div>
+              </div>
+              <div class="card-footer">
+                  <div>
+                      <button class="border-btn danger btn-md" style="margin-right: 10px;" mat-stroked-button>Cancel</button>
+                      <button class="fill-btn btn-md" (click)="presentToast()" mat-stroked-button [routerLink]="['/', 'sent-sms']">Save</button>
+                  </div>
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ion-content>
+
+<!-- common footer show -->
+<common-footer></common-footer>

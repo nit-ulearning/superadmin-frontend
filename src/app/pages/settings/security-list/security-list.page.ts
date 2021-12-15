@@ -31,7 +31,12 @@ export class SecurityListPage implements OnInit {
   sortOrderName = '';
   tableData;
   tableValueType;
-
+  deleteApi;
+  restoreApi;
+  statusApi;
+  deleteLoading = false;
+  restoreLoading = false;
+  statusLoading = false;
   tableHeaderData = [
     {
       column_name: "instName",
@@ -61,7 +66,10 @@ export class SecurityListPage implements OnInit {
   ];
 
   private tableListSubscribe: Subscription;
+  private deleteDataSubscribe: Subscription;
   private sentCredentialSubscribe: Subscription;
+  private restoreDataSubscribe: Subscription;
+  private statusDataSubscribe: Subscription;
   // Variables end
 
   ngOnInit() {
@@ -76,6 +84,13 @@ export class SecurityListPage implements OnInit {
     // table list data url name
     this.listing_url = 'institute/list';
     this.onRefresh();
+
+    // delete api
+    this.deleteApi = 'institute/delete';
+    // restore api
+    this.restoreApi = 'institute/restore'
+    // status api
+    this.statusApi = 'institute/status';
   }
 
   async presentToast(_msg, _type) {
@@ -138,6 +153,15 @@ export class SecurityListPage implements OnInit {
     if(_identifier == 'credentialSent'){
       headers = "Sent Credential"
       messages = "Are you sure want to sent credential to this Institute?";
+    }else if(_identifier == 'delete'){
+      headers = "Delete"
+      messages = "Are you sure want to delete this institute?";
+    }else if(_identifier == 'restore'){
+      headers = "Restore"
+      messages = "Are you sure want to restore this institute?";
+    }else if(_identifier == 'statusChange'){
+      headers = "Change Status"
+      messages = "Are you sure want to change status of this institute?";
     }
     const alert = await this.alertController.create({
       cssClass: 'aleart-popupBox',
@@ -158,6 +182,12 @@ export class SecurityListPage implements OnInit {
             console.log('Confirm Okay');
             if(_identifier == 'credentialSent'){
               this.sentCredential(_item);
+            }else if(_identifier == 'delete'){
+              this.deleteData(_item);
+            }else if(_identifier == 'restore'){
+              this.restoreDeleteData(_item);
+            }else if(_identifier == 'statusChange'){
+              this.changeStatusData(_item);
             }
           }
         }
@@ -206,13 +236,13 @@ export class SecurityListPage implements OnInit {
     // List data end
 
     // Pagination start
-      setPage(page: number) {
-        console.log('page', page);
-        
-        this.pageNo = page;
-        this.onListDate(this.listing_url, this.pageNo, this.displayRecord, this.sortColumnName, this.sortOrderName, this.tableValueType, this.searchTerm);
-        
-      }
+    setPage(page: number) {
+      console.log('page', page);
+      
+      this.pageNo = page;
+      this.onListDate(this.listing_url, this.pageNo, this.displayRecord, this.sortColumnName, this.sortOrderName, this.tableValueType, this.searchTerm);
+      
+    }
     // Pagination end
 
     // Sorting start
@@ -275,6 +305,78 @@ export class SecurityListPage implements OnInit {
     }
     // Deleted or not end
 
+    // Delete start
+    deleteData(_id){
+      console.log('id>>', _id);
+      let sentValues = {'instId': _id};
+      this.deleteLoading = true;
+      this.deleteDataSubscribe = this.http.put(this.deleteApi, sentValues).subscribe(
+        (res:any) => {
+          this.deleteLoading = false;
+          console.log("Edit data  res >", res.return_data);
+          if(res.status == 200){
+            this.commonUtils.presentToast('success', res.message);
+            this.onRefresh();
+          }else {
+            this.commonUtils.presentToast('error', res.message);
+          }
+        },
+        errRes => {
+          // this.selectLoadingDepend = false;
+          this.deleteLoading = false;
+        }
+      );
+    }
+    // Delete end
+
+    // Restore delete data start
+    restoreDeleteData(_id){
+      console.log('id>>', _id);
+      let sentValues = {'instId': _id};
+      this.restoreLoading = true;
+      this.restoreDataSubscribe = this.http.put(this.restoreApi, sentValues).subscribe(
+        (res:any) => {
+          this.restoreLoading = false;
+          console.log("Edit data  res >", res.return_data);
+          if(res.status == 200){
+            this.commonUtils.presentToast('success', res.message);
+            this.onRefresh();
+          }else {
+            this.commonUtils.presentToast('error', res.message);
+          }
+        },
+        errRes => {
+          // this.selectLoadingDepend = false;
+          this.restoreLoading = false;
+        }
+      );
+    }
+    // Restore delete data end
+
+    // Change status start
+    changeStatusData(_id){
+      console.log('id>>', _id);
+      let sentValues = {'instId': _id};
+      this.statusLoading = true;
+      this.statusDataSubscribe = this.http.put(this.statusApi, sentValues).subscribe(
+        (res:any) => {
+          this.statusLoading = false;
+          console.log("Edit data  res >", res.return_data);
+          if(res.status == 200){
+            this.commonUtils.presentToast('success', res.message);
+            this.onRefresh();
+          }else {
+            this.commonUtils.presentToast('error', res.message);
+          }
+        },
+        errRes => {
+          // this.selectLoadingDepend = false;
+          this.statusLoading = false;
+        }
+      );
+    }
+    // Change status end
+
     // sentCredential to email start
     sentCredential(_item){
       console.log('_item', _item);
@@ -307,6 +409,15 @@ export class SecurityListPage implements OnInit {
     }
     if(this.sentCredentialSubscribe !== undefined){
       this.sentCredentialSubscribe.unsubscribe();
+    }
+    if(this.deleteDataSubscribe !== undefined){
+      this.deleteDataSubscribe.unsubscribe();
+    }
+    if(this.restoreDataSubscribe !== undefined){
+      this.restoreDataSubscribe.unsubscribe();
+    }
+    if(this.statusDataSubscribe !== undefined){
+      this.statusDataSubscribe.unsubscribe();
     }
   }
 

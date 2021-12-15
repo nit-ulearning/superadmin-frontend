@@ -25,6 +25,7 @@
     "@ionic/angular": "^5.5.2",
     "@ionic/storage": "^2.2.0",
     "@ng-select/ng-select": "^7.4.0",
+    "@tinymce/tinymce-angular": "^4.2.4",
     "apexcharts": "^3.27.2",
     "mat-select-filter": "^2.3.9",
     "moment": "^2.29.1",

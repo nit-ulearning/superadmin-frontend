@@ -179,9 +179,9 @@ export class SubscriptionPackageListPage implements OnInit {
     // Delete start
     deleteData(_id){
       console.log('id>>', _id);
-      
+      let sentValues = {'instId': _id};
       this.deleteLoading = true;
-      this.deleteDataSubscribe = this.http.delete(this.deleteApi +_id).subscribe(
+      this.deleteDataSubscribe = this.http.put(this.deleteApi, sentValues).subscribe(
         (res:any) => {
           this.deleteLoading = false;
           console.log("Edit data  res >", res.return_data);

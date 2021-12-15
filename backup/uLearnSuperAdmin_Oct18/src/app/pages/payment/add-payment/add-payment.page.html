@@ -1,0 +1,132 @@
+<!-- common header show -->
+<common-header></common-header>
+
+<ion-content>
+  <div class="page-body">
+    <div class="page-wrapper">
+      <div class="form-layout">
+        <div class="card-outer">
+          <div class="card card-box">
+              <div class="card-header">
+                  <div class="card-header-tittle">
+                    Payment Add
+                  </div>
+                  <div class="card-header-action">
+                  </div>
+              </div>
+              <div class="card-body">
+                <div class="form-wrapper">
+                  <ion-grid>
+                    <ion-row>
+
+                      <!-- Institute -->
+                      <ion-col size-xs="12" size-sm="6" size-md="4"  size-lg="4">
+                        <div class="form-item">
+                          <ion-label>Institute</ion-label>
+                          <ng-select #select [items]="institute" [searchable]="false" [(ngModel)]="selectedinstitute" bindLabel="name" bindValue="name">
+                            <ng-template ng-header-tmp>
+                                <input style="width: 100%; line-height: 24px" type="text" />
+                            </ng-template>
+                          </ng-select>
+                        </div>
+                      </ion-col>
+
+                      <!-- Package -->
+                      <ion-col size-xs="12" size-sm="6" size-md="4"  size-lg="4">
+                        <div class="form-item">
+                          <ion-label>Packages</ion-label>
+                          <ng-select #select [items]="package" [searchable]="false" [(ngModel)]="selectedPackage" bindLabel="name" bindValue="name">
+                            <ng-template ng-header-tmp>
+                                <input style="width: 100%; line-height: 24px" type="text" />
+                            </ng-template>
+                          </ng-select>
+                        </div>
+                      </ion-col>
+
+                      <!-- Payment Method-->
+                      <ion-col size-xs="12" size-sm="6" size-md="4"  size-lg="4">
+                        <div class="form-item">
+                          <ion-label>Payment Method</ion-label>
+                          <ng-select #select [items]="cities" [searchable]="false" [(ngModel)]="selectedCity" bindLabel="name" bindValue="name">
+                            <ng-template ng-header-tmp>
+                                <input style="width: 100%; line-height: 24px" type="text" />
+                            </ng-template>
+                          </ng-select>
+                        </div>
+                      </ion-col>
+                      
+                      <!-- Amount -->
+                      <ion-col size-xs="12" size-sm="6" size-md="4"  size-lg="4">
+                        <div class="form-item">
+                          <ion-label>Amount</ion-label>
+                          <ion-input name="name" type="number"></ion-input>
+                        </div>
+                      </ion-col>
+
+                      <!-- Payment Details -->
+                      <ion-col size-xs="12" size-sm="6" size-md="4"  size-lg="4">
+                        <div class="form-item">
+                          <ion-label>Payment Details</ion-label>
+                          <ion-input name="name" type="text"></ion-input>
+                        </div>
+                      </ion-col>
+
+                      <!-- Payment Status -->
+                      <ion-col size-xs="12" size-sm="6" size-md="4"  size-lg="4">
+                        <div class="form-item">
+                          <ion-label>Payment Status</ion-label>
+                          <ng-select #select [items]="paymentStatus" [searchable]="false" [(ngModel)]="selectedpaymentStatus" bindLabel="name" bindValue="name">
+                            <ng-template ng-header-tmp>
+                                <input style="width: 100%; line-height: 24px" type="text" />
+                            </ng-template>
+                          </ng-select>
+                        </div>
+                      </ion-col>
+
+                      <!-- Payment date -->
+                      <ion-col size-xs="12" size-sm="6" size-md="4"  size-lg="4">
+                        <div class="form-item">
+                          <ion-label>Payment date</ion-label>
+                          <div class="input-field mat-datePicker">
+                            <input matInput [matDatepicker]="startDatePicker">
+                            <mat-datepicker-toggle matSuffix [for]="startDatePicker">
+                              <mat-icon matDatepickerToggleIcon>date_range</mat-icon>
+                            </mat-datepicker-toggle>
+                            <mat-datepicker #startDatePicker></mat-datepicker>
+                          </div>
+                        </div>
+                      </ion-col>
+
+                      <!-- Next due date -->
+                      <ion-col size-xs="12" size-sm="6" size-md="4"  size-lg="4">
+                        <div class="form-item">
+                          <ion-label>Next due date</ion-label>
+                          <div class="input-field mat-datePicker">
+                            <input matInput [matDatepicker]="endDatePicker">
+                            <mat-datepicker-toggle matSuffix [for]="endDatePicker">
+                              <mat-icon matDatepickerToggleIcon>date_range</mat-icon>
+                            </mat-datepicker-toggle>
+                            <mat-datepicker #endDatePicker></mat-datepicker>
+                          </div>
+                        </div>
+                      </ion-col>
+
+                    </ion-row>
+                  </ion-grid>
+                </div>
+              </div>
+              <div class="card-footer">
+                  <div>
+                      <button class="border-btn danger btn-md" style="margin-right: 10px;" mat-stroked-button>Cancel</button>
+                      <button class="fill-btn btn-md" (click)="presentToast()" mat-stroked-button [routerLink]="['/', 'payment-list']">Save</button>
+                  </div>
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ion-content>
+
+<!-- common footer show -->
+<common-footer></common-footer>

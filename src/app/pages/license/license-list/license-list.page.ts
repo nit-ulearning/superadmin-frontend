@@ -126,13 +126,13 @@ export class LicenseListPage implements OnInit {
     // List data end
 
     // Pagination start
-      setPage(page: number) {
-        console.log('page', page);
-        
-        this.pageNo = page;
-        this.onListDate(this.listing_url, this.pageNo, this.displayRecord, this.sortColumnName, this.sortOrderName, this.tableValueType, this.searchTerm);
-        
-      }
+    setPage(page: number) {
+      console.log('page', page);
+      
+      this.pageNo = page;
+      this.onListDate(this.listing_url, this.pageNo, this.displayRecord, this.sortColumnName, this.sortOrderName, this.tableValueType, this.searchTerm);
+      
+    }
     // Pagination end
 
     // Sorting start
@@ -165,14 +165,14 @@ export class LicenseListPage implements OnInit {
     // Sorting end
 
     // Search start
-      searchTerm:string = '';
-      searchList(event){
-        this.searchTerm = event.target.value;
+    searchTerm:string = '';
+    searchList(event){
+      this.searchTerm = event.target.value;
 
-        console.log('this.searchTerm', this.searchTerm);
-        
-        this.onListDate(this.listing_url, this.pageNo, this.displayRecord, this.sortColumnName, this.sortOrderName, this.tableValueType, this.searchTerm);
-      }
+      console.log('this.searchTerm', this.searchTerm);
+      
+      this.onListDate(this.listing_url, this.pageNo, this.displayRecord, this.sortColumnName, this.sortOrderName, this.tableValueType, this.searchTerm);
+    }
     // Search end
 
     // Referesh start
@@ -190,9 +190,9 @@ export class LicenseListPage implements OnInit {
     // Delete start
     deleteData(_id){
       console.log('id>>', _id);
-      
+      let sentValues = {'instId': _id};
       this.deleteLoading = true;
-      this.deleteDataSubscribe = this.http.delete(this.deleteApi+_id).subscribe(
+      this.deleteDataSubscribe = this.http.put(this.deleteApi, sentValues).subscribe(
         (res:any) => {
           this.deleteLoading = false;
           console.log("Edit data  res >", res.return_data);
@@ -221,14 +221,14 @@ export class LicenseListPage implements OnInit {
 
   /*----------------Table list data end----------------*/
 
-async presentToast(_msg, _type) {
-const toast = await this.toastController.create({
-message: _msg,
-duration: 2000,
-cssClass:"my-tost-custom-class" +_type,
-});
-toast.present();
-}
+  async presentToast(_msg, _type) {
+    const toast = await this.toastController.create({
+    message: _msg,
+    duration: 2000,
+    cssClass:"my-tost-custom-class" +_type,
+    });
+    toast.present();
+  }
 // ..... Restore licence modal start ......
 async RestoreLicenceOpenModal(_identifier, _item, _items) {
 // console.log('_identifier >>', _identifier);

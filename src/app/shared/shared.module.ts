@@ -23,6 +23,7 @@ import { IonicModule } from '@ionic/angular';
 import { NgxGaugeModule } from 'ngx-gauge';
 import { SafeHtmlPipe } from '../pipe/safe-html.pipe';
 import { MustMatchDirective } from '../directives/must-match.directive';
+import { EditorModule } from '@tinymce/tinymce-angular';
 @NgModule({
   declarations: [
     CommonHeaderComponent, //header component share
@@ -54,6 +55,7 @@ import { MustMatchDirective } from '../directives/must-match.directive';
     NgxTinymceModule.forRoot({
       baseURL: '//cdnjs.cloudflare.com/ajax/libs/tinymce/4.9.0/',
     }),
+    EditorModule
   ],
   exports: [
     CommonHeaderComponent, //header component share
@@ -78,7 +80,8 @@ import { MustMatchDirective } from '../directives/must-match.directive';
     NgSelectModule, // angular dropdown
     NgxTinymceModule,
     SafeHtmlPipe,
-    MustMatchDirective
+    MustMatchDirective,
+    EditorModule
   ]
 })
 export class SharedModule { }

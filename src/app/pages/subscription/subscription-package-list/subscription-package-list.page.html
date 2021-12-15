@@ -33,7 +33,7 @@
                       </mat-form-field>
                     </ion-item>
                   </div>
-                  <div class="table-segment">
+                  <!-- <div class="table-segment">
                     <ion-segment [(ngModel)]="tableValueType" (ionChange)="deletedOrNot($event)" color="secondary">
                       <ion-segment-button value="0">
                         <ion-label>
@@ -46,7 +46,7 @@
                         </ion-label>
                       </ion-segment-button>
                     </ion-segment>
-                  </div>
+                  </div> -->
                   <div class="search-wrapper">
                     <ion-searchbar showCancelButton="focus" debounce="500" placeholder="Search item ...." [(ngModel)]="searchTerm" (ionChange)="searchList($event)"></ion-searchbar>
                   </div>
@@ -144,7 +144,7 @@
                 </div>
               </div>
               <div class="card-footer">
-                  <div class="action">
+                  <div class="action" [ngClass]="{disabled: tableData?.data.length == 0}">
                     <ion-button matTooltip="Refresh" matTooltipPosition="above" size="small" color="secondary" (click)="onRefresh()">
                         <mat-icon>refresh</mat-icon>
                     </ion-button>
@@ -180,7 +180,7 @@
                         </li>
                         <li> <span class="ran-separator pull-right margin-top-3"></span> </li>
                         <li>
-                            Page <a>1</a> of 10
+                          Page <a>{{ tableData?.currentPage + 1 }}</a> of {{ tableData?.totalPage + 1 }} 
                         </li>
                         <li> <span class="ran-separator pull-right margin-top-3"></span> </li>
                         <li class="circle-border" matTooltip="Next" matTooltipPosition="above" (click)="setPage(tableData.currentPage + 1)" [ngClass]="{disabled:tableData?.currentPage === tableData?.totalPage}">

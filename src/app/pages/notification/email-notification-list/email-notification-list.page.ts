@@ -32,9 +32,9 @@ export class EmailNotificationListPage implements OnInit {
   tableData;
   deleteApi;
   deleteLoading = false;
-  setprimaryapi;
-  unsetprimaryapi;
   tableValueType;
+  restoreApi;
+  restoreLoading = false;
   tableHeaderData = [
     {
       column_name: "etAction",
@@ -53,8 +53,7 @@ export class EmailNotificationListPage implements OnInit {
 
   private tableListSubscribe: Subscription;
   private deleteDataSubscribe: Subscription;
-  private unsetprimaryDataSubscribe:Subscription;
-  private setprimaryDataSubscribe:Subscription;
+  private restoreDataSubscribe: Subscription;
   // Variables end
 
   ngOnInit() {
@@ -72,9 +71,9 @@ export class EmailNotificationListPage implements OnInit {
     this.onRefresh();
 
     // delete api
-    this.deleteApi = 'emailTemplate/delete/';
-    this.setprimaryapi = 'emailTemplate/delete/';
-    this.unsetprimaryapi = 'emailTemplate/delete/';
+    this.deleteApi = 'emailTemplate/delete';
+    // restore api
+    this.restoreApi = 'emailTemplate/restore'
   }
 
   async presentToast(_msg, _type) {
@@ -137,17 +136,10 @@ export class EmailNotificationListPage implements OnInit {
     if(_identifier == 'delete')
     {
       headers = "Delete"
-      messages = "Are you sure want to delete this item?";
-    }
-    else if(_identifier == 'unsetprimary')
-    {
-      headers = "Unset Primary"
-      messages = "Are you want to change unset primary from this?";
-    }
-    else if(_identifier == 'setprimary')
-    {
-      headers = "Set Primary"
-      messages = "Are you want to change primary from this?";
+      messages = "Are you sure want to delete this template?";
+    }else if(_identifier == 'restore'){
+      headers = "Restore"
+      messages = "Are you sure want to restore this template?";
     }
     const alert = await this.alertController.create({
       cssClass: 'aleart-popupBox',
@@ -168,12 +160,8 @@ export class EmailNotificationListPage implements OnInit {
             console.log('Confirm Okay');
             if(_identifier == 'delete'){
               this.deleteData(_id);
-            }
-            else if(_identifier == 'unsetprimary'){
-              this.unsetprimary(_id);
-            }
-            else if(_identifier == 'setprimary'){
-              this.setprimary(_id);
+            }else if(_identifier == 'restore'){
+              this.restoreDeleteData(_id);
             }
           }
         }
@@ -286,12 +274,11 @@ export class EmailNotificationListPage implements OnInit {
     // Referesh end
 
     // Delete start
-    deleteData(_id)
-    {
+    deleteData(_id){
       console.log('id>>', _id);
-      
+      let sentValues = {'etId': _id};
       this.deleteLoading = true;
-      this.deleteDataSubscribe = this.http.delete(this.deleteApi+_id).subscribe(
+      this.deleteDataSubscribe = this.http.put(this.deleteApi, sentValues).subscribe(
         (res:any) => {
           this.deleteLoading = false;
           console.log("Edit data  res >", res.return_data);
@@ -309,15 +296,15 @@ export class EmailNotificationListPage implements OnInit {
       );
     }
     // Delete end
-    // unsetprimaryDataSubscribe start
-    unsetprimary(_id)
-    {
+
+    // Restore delete data start
+    restoreDeleteData(_id){
       console.log('id>>', _id);
-      
-      this.deleteLoading = true;
-      this.unsetprimaryDataSubscribe = this.http.delete(this.unsetprimaryapi+_id).subscribe(
+      let sentValues = {'etId': _id};
+      this.restoreLoading = true;
+      this.restoreDataSubscribe = this.http.put(this.restoreApi, sentValues).subscribe(
         (res:any) => {
-          this.deleteLoading = false;
+          this.restoreLoading = false;
           console.log("Edit data  res >", res.return_data);
           if(res.status == 200){
             this.commonUtils.presentToast('success', res.message);
@@ -328,35 +315,11 @@ export class EmailNotificationListPage implements OnInit {
         },
         errRes => {
           // this.selectLoadingDepend = false;
-          this.deleteLoading = false;
+          this.restoreLoading = false;
         }
       );
     }
-    // unsetprimaryDataSubscribe end
-    // setprimaryDataSubscribe start
-    setprimary(_id)
-    {
-      console.log('id>>', _id);
-      
-      this.deleteLoading = true;
-      this.setprimaryDataSubscribe = this.http.delete(this.setprimaryapi+_id).subscribe(
-        (res:any) => {
-          this.deleteLoading = false;
-          console.log("Edit data  res >", res.return_data);
-          if(res.status == 200){
-            this.commonUtils.presentToast('success', res.message);
-            this.onRefresh();
-          }else {
-            this.commonUtils.presentToast('error', res.message);
-          }
-        },
-        errRes => {
-          // this.selectLoadingDepend = false;
-          this.deleteLoading = false;
-        }
-      );
-    }
-    // setprimaryDataSubscribe end
+    // Restore delete data end
 
     // Deleted or not start
     deletedOrNot(ev: any) {
@@ -377,6 +340,9 @@ export class EmailNotificationListPage implements OnInit {
     }
     if(this.deleteDataSubscribe !== undefined){
       this.deleteDataSubscribe.unsubscribe();
+    }
+    if(this.restoreDataSubscribe !== undefined){
+      this.restoreDataSubscribe.unsubscribe();
     }
   }
 

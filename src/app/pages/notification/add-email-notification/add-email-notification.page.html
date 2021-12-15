@@ -6,7 +6,7 @@
     <div class="page-wrapper">
       <div class="form-layout">
         <div class="card-outer">
-          <div class="card card-box">
+          <div class="card card-box" *ngIf="!editLoading">
             <form #addEmailnoticForm="ngForm" (ngSubmit)="onSubmitForm(addEmailnoticForm)" >
               <div class="card-header">
                   <div class="card-header-tittle">
@@ -22,7 +22,7 @@
                       <!-- Template For -->
                       <ion-col size-xs="12" size-sm="4" size-md="4"  size-lg="4">
                         <div class="form-item ngsel">
-                        <!--<ion-badge class="pillBtn" color="primary" (click)="AddTemplate('AddTemplate_modal', get_user_dtls, '');">
+                          <!--<ion-badge class="pillBtn" color="primary" (click)="AddTemplate('AddTemplate_modal', get_user_dtls, '');">
                             <ion-icon name="add-outline"></ion-icon>
                             Add
                           </ion-badge>
@@ -38,7 +38,7 @@
                                    name="etAction"
                                    bindValue="etAction" 
                                    [(ngModel)]="model.etAction"
-                                   (change)="selectTemplates(Templates.etTags)">
+                                   (change)="getTags(model.etAction)">
                           </ng-select>
                           <label>Template For</label>
                         </div>
@@ -77,27 +77,27 @@
                           <label>Set Default</label>
                         </div>
                       </ion-col>
-                      <!-- Useable tag -->
-                      <ion-col size-xs="12" size-sm="12" size-md="12"  size-lg="12" *ngIf="selectdTag">
-                        <div class="card-outer">
-                          <div class="card card-box">
-                            <div class="card-header">
-                              <div class="card-header-tittle">
-                                Useable tags for template body:
-                              </div>
-                            </div>
-                            <div class="card-body">
-                              {{selectdTag}}
-                            </div>
-                          </div>
-                        </div>
+                      <!-- Message Text -->
+                      <ion-col size-xs="12" size-sm="4" size-md="4"  size-lg="4">
+                        <div class="form-item ngsel">
+                           <ng-select [items]="selectFieldVariable" 
+                                    bindLabel="name" 
+                                    name="selectVariable"
+                                    placeholder="Select field"
+                                    bindValue="value" 
+                                    [(ngModel)]="model.selectVariable"
+                                    (change)="selectFieldForTags(model.selectVariable)">
+                           </ng-select>
+                           <label>Select field</label>
+                         </div>
                       </ion-col>
                       <!-- Template Description -->
                       <ion-col size-xs="12" size-sm="12" size-md="12"  size-lg="12">
                         <div class="form-item">
                           <ion-label>Template Body </ion-label>
                           <div class="text-editor">
-                            <tinymce [ngClass]="{'readOnly': model?.etType == 'DEFAULT'}" #msgText (click)="getCursorPosition(msgText, model.etBody)" (keyup)="getCursorPosition(msgText, model.etBody)" name="etBody" type="text" [(ngModel)]="model.etBody" required></tinymce>
+                            <!-- <tinymce [ngClass]="{'readOnly': model?.etType == 'DEFAULT'}" #msgText (click)="getCursorPosition(msgText, model.etBody)" (keyup)="getCursorPosition(msgText, model.etBody)" name="etBody" type="text" [(ngModel)]="model.etBody" required></tinymce> -->
+                            <editor name="etBody" [(ngModel)]="model.etBody" required [init]="tinyMceConfig"></editor>
                           </div>
                         </div>
                       </ion-col>
