@@ -253,6 +253,7 @@ export class InstituteViewPage implements OnInit {
     license_deletedOrNot(ev: any) {
       console.log('Segment changed', ev);
       this.license_tableValueType = ev.detail.value;
+      this.pageNo = 0;
       this.license_onListDate(this.license_listing_url, this.license_pageNo, this.license_displayRecord, this.license_sortColumnName, this.license_sortOrderName, this.license_tableValueType, this.license_searchTerm);
     }
     // Deleted or not end
@@ -577,6 +578,7 @@ export class InstituteViewPage implements OnInit {
     deletedOrNot(ev: any) {
       console.log('Segment changed', ev);
       this.tableValueType = ev.detail.value;
+      this.pageNo = 0;
       this.onListDate(this.listing_url, this.pageNo, this.displayRecord, this.sortColumnName, this.sortOrderName, this.tableValueType, this.searchTerm);
     }
     // Deleted or not end

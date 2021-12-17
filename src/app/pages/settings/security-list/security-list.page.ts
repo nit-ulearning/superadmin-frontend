@@ -30,6 +30,7 @@ export class SecurityListPage implements OnInit {
   sortColumnName = '';
   sortOrderName = '';
   tableData;
+  tableListData = [];
   tableValueType;
   deleteApi;
   restoreApi;
@@ -64,6 +65,12 @@ export class SecurityListPage implements OnInit {
       sortingButtonName: ""
     },
   ];
+
+  // ......check uncheck start....
+  itemcheckClick = false;
+  checkedList = [];
+  allselectModel;
+  // check uncheck end
 
   private tableListSubscribe: Subscription;
   private deleteDataSubscribe: Subscription;
@@ -199,6 +206,64 @@ export class SecurityListPage implements OnInit {
   // Aleart end
 
   /*----------------Table list data start----------------*/
+    // select all check box start
+    allSelectItem(event) {
+      if (event.target.checked) {
+        this.itemcheckClick = false;
+        // console.log('check item selkectedddddddddddddd');
+        for (let i = 0 ; i < this.tableListData.length; i++) {
+          // if(this.checkedList.includes(this.items[i].id) === false)
+          if (this.checkedList.indexOf(this.tableListData[i]) === -1 && this.tableListData[i] !== null) {
+            this.checkedList.push(this.tableListData[i]);
+            this.tableListData[i].isSelected = true;
+
+          }
+        }
+      } else if (this.itemcheckClick == false) {
+        // console.log('not check item selectionnnnnnnnnnn')
+        this.checkedList = [];
+        for (let i = 0 ; i < this.tableListData.length; i++) {
+          if (this.checkedList.indexOf(this.tableListData[i]) === -1)
+          {
+            this.tableListData[i].isSelected = false;
+
+          }
+        }
+      }
+
+      console.log('checked item all @@ >>', this.checkedList);
+      console.log('tableListData item all @@ >>', this.tableListData);
+    }
+    // Select all checkbox end
+
+    // Select single checkbox start
+    onCheckboxSelect(option, event) {
+      if (event.target.checked) {
+        if (this.checkedList.indexOf(option) === -1) {
+          this.checkedList.push(option);
+        }
+      } else {
+          for (let i = 0 ; i < this.tableListData.length; i++) {
+            if (this.checkedList[i] == option) {
+              this.checkedList.splice(i, 1);
+          }
+        }
+      }
+
+      if (this.tableListData.length <= this.checkedList.length) {
+      this.allselectModel = true;
+      console.log('length 4');
+      } else {
+        console.log('length 0');
+        this.allselectModel = false;
+        this.itemcheckClick = true;
+
+      }
+
+      console.log('checked item single >>', this.checkedList);
+    }
+    // Select single checkbox end
+
     // Display records start
     displayRecord = '10';
     displayRecords = [
@@ -226,6 +291,19 @@ export class SecurityListPage implements OnInit {
           this.isListLoading = false;
           console.log('res', res);
           this.tableData = res;
+          this.tableListData = res.data;
+
+          //---------  check item show start ----------
+          if(this.tableListData && this.checkedList){
+            for (let i = 0 ; i < this.tableListData.length; i++) {
+              for (let j = 0 ; j < this.checkedList.length; j++) {
+                if(this.checkedList[j].instId ==  this.tableListData[i].instId){
+                  this.tableListData[i].isSelected = true;
+                }
+              }
+            }
+          }
+          // check item show end
         },
         errRes => {
           // this.selectLoadingDepend = false;
@@ -301,6 +379,7 @@ export class SecurityListPage implements OnInit {
     deletedOrNot(ev: any) {
       console.log('Segment changed', ev);
       this.tableValueType = ev.detail.value;
+      this.pageNo = 0;
       this.onListDate(this.listing_url, this.pageNo, this.displayRecord, this.sortColumnName, this.sortOrderName, this.tableValueType, this.searchTerm);
     }
     // Deleted or not end
@@ -397,6 +476,129 @@ export class SecurityListPage implements OnInit {
       );
     }
     // sentCredential to email end
+
+    // ---------------- Click Delete Item start ---------------------
+    deleteLodershow = false; 
+    alldeleteLoaderShow = false;
+    async onClickDeleteItem(_identifire, _item, _items, _index){
+      const alert = await this.alertController.create({
+        cssClass: 'aleart-popupBox',
+        header: 'Delete',
+        message: 'Do you really want to delete selected institute ?',
+        buttons: [
+          {
+            text: 'Cancel',
+            role: 'cancel',
+            cssClass: 'popup-cancel-btn',
+            handler: (blah) => {
+              // console.log('Confirm Cancel: blah');
+            }
+          }, {
+            text: 'Ok',
+            cssClass: 'popup-ok-btn',
+            handler: () => {
+
+              // ------------ single item delete start ------------
+              if(_identifire == 'single'){
+                console.log('_item', _item);
+                
+                let sentValues = {'instId': _item.instId};
+                _item.deleteLodershow = true;
+                this.deleteDataSubscribe = this.http.put("institute/delete", sentValues).subscribe(
+                  (res:any) => {
+                    _item.deleteLodershow = false;
+                    console.log("Edit data  res >", res.return_data);
+                    if(res.status == 200){
+                      _items.splice( _index, 1 );
+                      this.commonUtils.presentToast('success', res.return_message);
+                      if(_items.length == 0){
+                        this.allselectModel = false;
+                      }
+                      this.commonUtils.presentToast('success', res.message);
+                      this.onRefresh();
+                    }else {
+                      this.commonUtils.presentToast('error', res.message);
+                    }
+                  },
+                  errRes => {
+                    // this.selectLoadingDepend = false;
+                    _item.deleteLodershow = false;
+                  }
+                );
+              // ------------ single item delete end ------------
+              }else{
+                let checkItemIdArray = [];
+                if(this.checkedList){
+                  this.checkedList.forEach(element => {
+                    checkItemIdArray.push(element.instId);
+                  });
+                }
+                if(_items){
+                  _items.forEach(element => {
+                    this.checkedList.forEach(element1 => {
+                      if(element.instId == element1.instId){
+                        element.deleteLodershow = true; //loader show
+                        this.alldeleteLoaderShow = true;
+                      }
+                    });
+                  });
+                }
+                
+                this.deleteDataSubscribe = this.http.put(this.listing_url+'_actonall?action=delete&'+this.listing_url+'_id=', checkItemIdArray).subscribe(
+                (res:any) => {
+                  if(res.status == 200){
+                    if(_items){
+                      for (let i = 0 ; i < _items.length; i++) {
+                        for (let j = 0 ; j < this.checkedList.length; j++) {
+                          if ( _items[i].id == this.checkedList[j].id ) {
+                            // _items.splice(i, i);
+                            
+                            this.checkedList = [];
+                            // _items.splice(_items.indexOf(_items[i]), 1);
+                            this.deleteLodershow = false; //loader hide
+                            this.alldeleteLoaderShow = false;
+                            // console.log('delete items >>', _items);
+                            // console.log('delete this.checkedList >>', this.checkedList);
+                            
+                            this.allselectModel = false; 
+                          }
+                        }
+                      };
+                      if(_items.length == 0){
+                        this.allselectModel = false;
+                        this.checkedList = [];
+                        checkItemIdArray = [];
+                      }
+                    }
+                    this.commonUtils.presentToast('success', res.message);
+                    this.onRefresh();
+                  }else {
+                    this.commonUtils.presentToast('error', res.message);
+                  }
+                },errRes => {
+                  this.deleteLodershow = false; //loader hide
+                  this.alldeleteLoaderShow = false;
+                  _items.forEach(element => {
+                    this.checkedList.forEach(element1 => {
+                      if(element.instId == element1.instId){
+                        element.deleteLodershow = false;
+                        this.alldeleteLoaderShow = false;
+                      }
+                    });
+                  });
+                }); 
+              }
+              
+  
+            }
+          }
+        ]
+      });
+  
+      await alert.present();
+
+    }
+    // Click Delete Item end
 
   /*----------------Table list data end----------------*/
 

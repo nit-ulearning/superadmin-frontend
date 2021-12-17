@@ -48,28 +48,25 @@
                         </div>
                       </ion-col>
                       <!-- Institute -->
-                      <ion-col size-xs="12" size-sm="6" size-md="4"  size-lg="4" [ngClass]="{ 'readOnly' : instEdit }">
-                        <div class="form-item">
-                          <mat-label>Institutes</mat-label>
-                          <ng-select [items]="institutes" 
+                      <ion-col size-xs="12" size-sm="6" size-md="4"  size-lg="4">
+                        <div class="form-item ngsel">
+                          <ng-select [ngClass]="{ 'disabled' : instEdit || hideInstitute }" [items]="institutes" 
                                    bindLabel="instName" 
                                    name="instId"
                                    placeholder="Select Institutes"
                                    bindValue="instId" 
                                    [(ngModel)]="model.instId"
                                    (change)="ngsel(model.instId)"
-                                   [ngClass]="{ 'readOnly' : instEdit }"
                                    required>
                           </ng-select>
-                          <!-- </mat-form-field> -->
+                          <label>Institutes</label>
                         </div>
                       </ion-col>
                       
 
                       <!-- Validity -->
                       <ion-col size-xs="12" size-sm="6" size-md="4"  size-lg="4">
-                        <div class="form-item">
-                            <mat-label>Validity</mat-label>
+                        <div class="form-item ngsel">
                             <ng-select [items]="validity" 
                                    bindLabel="name" 
                                    name="pkValidityType"
@@ -79,6 +76,7 @@
                                    (change)="ngsel(model.pkValidityType)"
                                    required >
                           </ng-select>
+                          <label>Validity</label>
                         </div>
                       </ion-col>
 

@@ -106,6 +106,7 @@ export class AddLicensePage implements OnInit {
   private formSubmitSubscribe: Subscription;
   private editDataSubscribe: Subscription;
   private getInstitutes:Subscription;
+  hideInstitute = false;
   // Variables end
 
   constructor(
@@ -118,6 +119,10 @@ export class AddLicensePage implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.commonFunction();
+  }
+
+  ionViewWillEnter() {
     this.commonFunction();
   }
 
@@ -141,8 +146,20 @@ export class AddLicensePage implements OnInit {
       this.getInstituteList_api ="institute/geteditlicenselist";
       this.getInstituteList();
     }else if(this.parms_action_name == 'add'){
-      this.getInstituteList_api ="institute/getlist";
-      this.getInstituteList();
+      
+      if(this.parms_action_id == 'id'){
+        this.getInstituteList_api ="institute/getlist";
+        this.getInstituteList();
+        
+      }else {
+        this.getInstituteList_api ="institute/geteditlicenselist";
+        this.getInstituteList();
+        this.model = {
+          instId : parseInt(this.parms_action_id),
+        }
+        this.hideInstitute = true;
+      }
+      
     }
 
     // form_api Api
@@ -152,19 +169,20 @@ export class AddLicensePage implements OnInit {
   {
       // this.instId = value;
   }
-  getInstituteList()
-  {
-    console.log("HHH");
+  getInstituteList(){
+    this.editLoading = true;
     this.getInstitutes = this.http.get(this.getInstituteList_api).subscribe(
         (res:any) => {
           console.log("Get template for  >", res[0].etAction); 
           console.log("Get template for length",res.length);
           this.institutes = res; 
           console.log("Get template for length",this.institutes);
-
+          
+          this.editLoading = false;
         },
         errRes => {
-           console.log("Get template for  >", errRes);  
+           console.log("Get template for  >", errRes); 
+           this.editLoading = false; 
         }
       );
   }
@@ -377,6 +395,9 @@ export class AddLicensePage implements OnInit {
     }
     if(this.editDataSubscribe !== undefined ){
       this.editDataSubscribe.unsubscribe();
+    }
+    if(this.getInstitutes !== undefined ){
+      this.getInstitutes.unsubscribe();
     }
   }
   // destroy subscription end

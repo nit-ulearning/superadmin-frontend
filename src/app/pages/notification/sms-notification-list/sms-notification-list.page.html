@@ -119,6 +119,11 @@
                                 <ion-button *ngIf="!statusChange && tableValueType == 0" matTooltip="Disable" matTooltipPosition="above" size="small" color="medium" (click)="clickActionBtn(statusChange, 'status')">
                                   <mat-icon>visibility_off</mat-icon>
                                 </ion-button>
+
+                                <div class="toggleSwitch" *ngIf="tableValueType == 0" (click)="presentAlert('primarySet', item)" >
+                                  <mat-slide-toggle color="primary" [(ngModel)]="item.isPrimary"></mat-slide-toggle>
+                                </div>
+
                                 <ion-button *ngIf="tableValueType == 1" matTooltip="Restore" matTooltipPosition="above" size="small" color="warning" (click)="presentAlert('restore', item.stId)">
                                   <mat-icon>restore_from_trash</mat-icon>
                                 </ion-button>

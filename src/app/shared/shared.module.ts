@@ -14,6 +14,7 @@ import {MatInputModule} from '@angular/material/input';
 import {MatSelectModule} from '@angular/material/select';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatDatepickerModule} from '@angular/material/datepicker';
+import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 // Material module end
 import { NgApexchartsModule } from 'ng-apexcharts';
 import { NgSelectModule } from '@ng-select/ng-select'; // angular dropdown
@@ -48,6 +49,7 @@ import { EditorModule } from '@tinymce/tinymce-angular';
     MatTooltipModule,
     MatDatepickerModule,
     MatNativeDateModule,
+    MatSlideToggleModule,
     // Material module end
     NgApexchartsModule,
     NgxGaugeModule,
@@ -74,6 +76,7 @@ import { EditorModule } from '@tinymce/tinymce-angular';
     MatTooltipModule,
     MatDatepickerModule,
     MatNativeDateModule,
+    MatSlideToggleModule,
     // Material module end
     NgApexchartsModule,
     NgxGaugeModule,

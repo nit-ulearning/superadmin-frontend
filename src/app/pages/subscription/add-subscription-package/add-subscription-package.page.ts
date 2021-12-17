@@ -39,6 +39,7 @@ export class AddSubscriptionPackagePage implements OnInit {
   editForm_api;
   institutes;
   instEdit = false;
+  hideInstitute = false;
   getInstituteList_api;
   private formSubmitSubscribe: Subscription;
   private editDataSubscribe: Subscription;
@@ -55,6 +56,10 @@ export class AddSubscriptionPackagePage implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.commonFunction();
+  }
+
+  ionViewWillEnter() {
     this.commonFunction();
   }
 
@@ -77,6 +82,14 @@ export class AddSubscriptionPackagePage implements OnInit {
       this.init();
 
       this.editForm_api = 'package/update/'+this.parms_action_id;
+    }else if(this.parms_action_name == 'add'){
+      
+      if(this.parms_action_id !== 'id'){
+        this.model = {
+          instId : parseInt(this.parms_action_id),
+        }
+        this.hideInstitute = true;
+      }
     }
 
     // form_api Api

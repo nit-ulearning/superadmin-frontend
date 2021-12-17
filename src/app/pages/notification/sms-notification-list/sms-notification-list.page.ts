@@ -54,6 +54,7 @@ export class SmsNotificationListPage implements OnInit {
   private tableListSubscribe: Subscription;
   private deleteDataSubscribe: Subscription;
   private restoreDataSubscribe: Subscription;
+  private primaryDataSubscribe: Subscription;
   // Variables end
 
   ngOnInit() {
@@ -74,6 +75,27 @@ export class SmsNotificationListPage implements OnInit {
   }
   
   /*----------------Table list data start----------------*/
+    // Set primary start
+    primarySetData(_id){
+      console.log('id>>', _id);
+      let sentValues = {'stId': _id};
+      this.primaryDataSubscribe = this.http.put('smsTemplate/setPrimaryAndNonPrimary', sentValues).subscribe(
+        (res:any) => {
+          console.log("Edit data  res >", res.return_data);
+          if(res.status == 200){
+            this.commonUtils.presentToast('success', res.message);
+            this.onRefresh();
+          }else {
+            this.commonUtils.presentToast('error', res.message);
+          }
+        },
+        errRes => {
+
+        }
+      );
+    }
+    // Set primary end
+
     // Display records start
     displayRecord = '10';
     displayRecords = [
@@ -223,6 +245,7 @@ export class SmsNotificationListPage implements OnInit {
     deletedOrNot(ev: any) {
       console.log('Segment changed', ev);
       this.tableValueType = ev.detail.value;
+      this.pageNo = 0;
       this.onListDate(this.listing_url, this.pageNo, this.displayRecord, this.sortColumnName, this.sortOrderName, this.tableValueType, this.searchTerm);
     }
     // Deleted or not end
@@ -241,6 +264,14 @@ export class SmsNotificationListPage implements OnInit {
     }else if(_identifier == 'restore'){
       headers = "Restore"
       messages = "Are you sure want to restore this template?";
+    }else if(_identifier == 'primarySet'){
+      headers = "Primary"
+      if(_id.isPrimary == 0){
+        messages = "Are you sure want change this to set primary?";
+      }else {
+        messages = "Are you sure want change this to set non-primary?";
+      }
+      
     }
     const alert = await this.alertController.create({
       cssClass: 'aleart-popupBox',
@@ -265,6 +296,8 @@ export class SmsNotificationListPage implements OnInit {
               this.deleteData(_id);
             }else if(_identifier == 'restore'){
               this.restoreDeleteData(_id);
+            }else if(_identifier == 'primarySet'){
+              this.primarySetData(_id.stId);
             }
           }
         }
@@ -326,4 +359,24 @@ export class SmsNotificationListPage implements OnInit {
     this.isListLoading = false;
   }
 
+  // ----------- destroy unsubscription start ---------
+  ngOnDestroy() {
+    if(this.tableListSubscribe !== undefined){
+      this.tableListSubscribe.unsubscribe();
+    }
+    if(this.deleteDataSubscribe !== undefined){
+      this.deleteDataSubscribe.unsubscribe();
+    }
+    if(this.restoreDataSubscribe !== undefined){
+      this.restoreDataSubscribe.unsubscribe();
+    }
+    if(this.primaryDataSubscribe !== undefined){
+      this.primaryDataSubscribe.unsubscribe();
+    }
+    if(this.getSMSTemplateListing !== undefined){
+      this.getSMSTemplateListing.unsubscribe();
+    }
+  }
+  // ----------- destroy unsubscription end ---------
+  
 }

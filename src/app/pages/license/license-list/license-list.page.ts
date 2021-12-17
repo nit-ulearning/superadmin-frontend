@@ -215,6 +215,7 @@ export class LicenseListPage implements OnInit {
     deletedOrNot(ev: any) {
       console.log('Segment changed', ev);
       this.tableValueType = ev.detail.value;
+      this.pageNo = 0;
       this.onListDate(this.listing_url, this.pageNo, this.displayRecord, this.sortColumnName, this.sortOrderName, this.tableValueType, this.searchTerm);
     }
     // Deleted or not end

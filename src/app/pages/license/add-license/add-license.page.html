@@ -6,7 +6,7 @@
     <div class="page-wrapper">
       <div class="form-layout">
         <div class="card-outer">
-          <div class="card card-box">
+          <div class="card card-box" *ngIf="!editLoading">
             <form #addLicenseForm="ngForm" (ngSubmit)="onSubmitForm(addLicenseForm)">
               <div class="card-header">
                   <div class="card-header-tittle">
@@ -58,7 +58,7 @@
                       <ion-col size-xs="12" size-sm="6" size-md="4"  size-lg="4">
                         <div class="form-item ngsel">
                           
-                          <ng-select [items]="institutes" 
+                          <ng-select [ngClass]="{disabled: hideInstitute}" [items]="institutes" 
                                    bindLabel="instName" 
                                    placeholder="Select Institute"
                                    name="instId"
