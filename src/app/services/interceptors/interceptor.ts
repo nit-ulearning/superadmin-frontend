@@ -75,7 +75,7 @@ export class InterceptorProvider implements HttpInterceptor {
     console.log('newParams >>>>>>>', get_global_params);
     
     if(get_global_params == null || get_global_params.token == null){
-      authorization = 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkZXZlbG9wZXIubml0c29sdXRpb25AZ21haWwuY29tIiwiZXhwIjoxNjQwNDE0NDA0LCJpYXQiOjE2MzkxMTg0MDR9.jzou16OqI4oScjXFzTdhS3cRp-tb6N-uIzBm0OKHq0Y'
+      authorization = 'Bearer'
       console.log('appkey false');
     }else {
       authorization = 'Bearer '+get_global_params.token;
@@ -130,7 +130,7 @@ export class InterceptorProvider implements HttpInterceptor {
             this.commonUtils.presentToast('error', 'Could not sign you up, please try again');
           }else if(error.status === 500){
             this.commonUtils.presentToast('error', 'Token not valid');
-            // this.authService.logout();
+            this.authService.logout();
             /* this.commonUtils.presentToast('success', 'Internal Server Error');
             this.commonUtils.presentToast('info', 'Internal Server Error'); */
           }else if(error.status === 401){
