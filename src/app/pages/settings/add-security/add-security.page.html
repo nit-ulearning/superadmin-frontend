@@ -41,7 +41,7 @@
                         <div class="form-item">
                           <mat-form-field appearance="outline">
                             <mat-label>Registration Date</mat-label>
-                            <input (change)="changeDateFormat('registrationDate', model.chkRegDate)" (keydown)="disableDate()" matInput placeholder="Registration Date" type="date" name="chkRegDate" [(ngModel)]="model.chkRegDate" required>
+                            <input (change)="changeDateFormat('registrationDate', model.chkRegDate)" matInput placeholder="Registration Date" type="date" name="chkRegDate" [(ngModel)]="model.chkRegDate" required>
                           </mat-form-field>
                         </div>
                       </ion-col>
@@ -52,7 +52,7 @@
                         <div class="form-item">
                           <mat-form-field appearance="outline">
                             <mat-label>Establishment Date</mat-label>
-                            <input (change)="changeDateFormat('establishmentDate', model.chkEstDate)" (keydown)="disableDate()" matInput placeholder="Establishment Date" type="date" name="chkEstDate" [(ngModel)]="model.chkEstDate" required>
+                            <input (change)="changeDateFormat('establishmentDate', model.chkEstDate)" matInput placeholder="Establishment Date" type="date" name="chkEstDate" [(ngModel)]="model.chkEstDate" required>
                           </mat-form-field>
                         </div>
                       </ion-col>
@@ -161,7 +161,7 @@
                         <div class="form-item">
                           <mat-form-field appearance="outline">
                             <mat-label>Date of Birth</mat-label>
-                            <input (change)="changeDateFormat('dateOfBirth', model.chkAmdDob)" (keydown)="disableDate()" matInput placeholder="Date of Birth" type="date" name="chkAmdDob" [(ngModel)]="model.chkAmdDob" required>
+                            <input (change)="changeDateFormat('dateOfBirth', model.chkAmdDob)" matInput placeholder="Date of Birth" type="date" name="chkAmdDob" [(ngModel)]="model.chkAmdDob" required>
                           </mat-form-field>
                         </div>
                       </ion-col>

@@ -75,7 +75,7 @@ export class InterceptorProvider implements HttpInterceptor {
     console.log('newParams >>>>>>>', get_global_params);
     
     if(get_global_params == null || get_global_params.token == null){
-      authorization = 'Bearer'
+      authorization = 'Bearer '
       console.log('appkey false');
     }else {
       authorization = 'Bearer '+get_global_params.token;
